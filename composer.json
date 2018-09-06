@@ -1,0 +1,21 @@
+{
+  "require": {
+    "medev-core/slim": "@dev",
+    "lcobucci/jwt": "^3.2",
+    "catfan/medoo": "^1.5",
+    "monolog/monolog": "^1.23"
+  },
+  "autoload": {
+    "psr-4": {
+      "MedevAuth\\":"src/"
+    }
+  },
+  "repositories": [
+  {
+    "type": "vcs",
+    "url":  "https://TangoMajom@bitbucket.org/medevservices/medev-core-slim.git"
+  }
+],
+  "name": "Medev Suite Auth Server",
+  "description": "Securing MedevSuite API via OAuth and JWT based solution."
+}
