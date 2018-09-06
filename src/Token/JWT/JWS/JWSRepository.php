@@ -15,7 +15,10 @@ use Lcobucci\JWT\Signer\Keychain;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
 use Lcobucci\JWT\Token;
 use MedevAuth\Token\JWT\JWS\JWSConfiguration;
+use MedevAuth\Token\JWT\JWT;
+use MedevAuth\Token\TokenEntity;
 use MedevSuite\Application\Auth\OAuth\Token\TokenRepository;
+use Psr\Container\ContainerInterface;
 use Slim\Container;
 
 abstract class JWSRepository implements TokenRepository
@@ -25,7 +28,7 @@ abstract class JWSRepository implements TokenRepository
      */
     private $config;
 
-    public function __construct(Container $container, JWSConfiguration $config)
+    public function __construct(ContainerInterface $container, JWSConfiguration $config)
     {
         $this->config = $config;
         parent::__construct($container);
@@ -73,28 +76,26 @@ abstract class JWSRepository implements TokenRepository
         return (new Parser())->parse($jwsString);
     }
 
-    public function validateToken($serializedToken)
+    public function validateToken(Token $token)
     {
-        $jws = $this->deserialize($serializedToken);
-
-        if (!$this->isSignatureValid($jws)) {
+        if (!$this->isSignatureValid($token)) {
             throw new \Exception("Invalid token signature");
         }
 
-        if ($this->isTokenBlacklisted($jws->getHeader("jti"))) {
+        if ($this->isTokenBlacklisted($token->getHeader("jti"))) {
             throw new \Exception("Token is blacklisted");
         }
 
-        return $jws;
+        return $token;
     }
 
-    public function isSignatureValid(Token $jws)
+    public function isSignatureValid(Token $token)
     {
         $signer = new Sha256();
         $keychain = new Keychain();
 
-        return $jws->verify($signer, $keychain->getPublicKey($this->config->getPublicKey()));
+        return $token->verify($signer, $keychain->getPublicKey($this->config->getPublicKey()));
     }
 
-    public abstract function isTokenBlacklisted($tokenId);
+    public abstract function isTokenBlacklisted(Token $token);
 }

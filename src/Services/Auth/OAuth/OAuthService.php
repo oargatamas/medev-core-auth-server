@@ -11,9 +11,11 @@ namespace MedevAuth\Services\Auth\OAuth;
 
 
 use MedevAuth\Services\Auth\OAuth\Action\GrantAccess;
+use MedevAuth\Services\Auth\OAuth\Action\RevokeToken;
 use MedevAuth\Services\Auth\OAuth\GrantType\GrantType;
 use MedevSlim\Core\APIService\APIService;
 use MedevSlim\Core\APIService\Interfaces\ServiceConfiguration;
+use MedevSuite\Application\Auth\OAuth\Token\JWT\Middleware\JWSRequestValidator;
 use Psr\Container\ContainerInterface;
 use Slim\App;
 use Slim\Interfaces\RouteGroupInterface;
@@ -45,6 +47,7 @@ class OAuthService extends APIService
     protected function registerRoutes(App $app, ContainerInterface $container)
     {
         $app->post("/token",new GrantAccess($container, $this));
+        $app->post("/token/revoke/{tokenId}",new RevokeToken($container))->add(new JWSRequestValidator($container->get("OauthAccessTokenRepository")));
     }
 
     /**
@@ -56,6 +59,10 @@ class OAuthService extends APIService
         //No middleware needed for this service
     }
 
+    protected function registerIOCComponents(ContainerInterface $container)
+    {
+        // Not used here.
+    }
 
     /**
      * @param GrantType $grantType

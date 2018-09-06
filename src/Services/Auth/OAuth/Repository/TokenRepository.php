@@ -9,15 +9,19 @@
 namespace MedevSuite\Application\Auth\OAuth\Token;
 
 
+
+
 use Lcobucci\JWT\Token;
+
 
 interface TokenRepository
 {
+
     public function generateToken($args = []);
 
     public function persistToken(Token $token);
 
-    public function revokeToken(Token $token);
+    public function revokeToken($tokenId);
 
-    public function validateToken($serializedToken);
+    public function validateToken(Token $token);
 }

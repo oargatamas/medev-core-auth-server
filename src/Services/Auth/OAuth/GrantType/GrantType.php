@@ -10,11 +10,13 @@ namespace MedevAuth\Services\Auth\OAuth\GrantType;
 
 
 
+use MedevSlim\Core\APIAction\APIAction;
 use MedevSuite\Application\Auth\OAuth\Token\TokenRepository;
+use Psr\Container\ContainerInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-abstract class GrantType
+abstract class GrantType extends APIAction
 {
 
     /**
@@ -23,16 +25,23 @@ abstract class GrantType
     protected $accessTokenRepository;
 
 
+    public function __construct(ContainerInterface $container)
+    {
+        $this->accessTokenRepository = $container->get("OauthAccessTokenRepository");
+        parent::__construct($container,[]);
+    }
+
+
     public abstract function getName();
 
-
-    public function __invoke(Request $request, Response $response, $args)
+    protected function onPermissionGranted(Request $request, Response $response, $args)
     {
         $result = $this->validateCredentials($request);
         if($result){
             return $this->grantAccess($response,$result);
         }
     }
+
 
     protected abstract function validateCredentials(Request $request);
 

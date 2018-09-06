@@ -12,6 +12,7 @@ namespace MedevAuth\Services\Auth\OAuth\GrantType\Password;
 use MedevAuth\Services\Auth\OAuth\GrantType\GrantType;
 use MedevAuth\Services\Auth\OAuth\Repository\UserRepository;
 use MedevSuite\Application\Auth\OAuth\Token\TokenRepository;
+use Psr\Container\ContainerInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -30,9 +31,14 @@ class PasswordGrant extends GrantType
 
 
 
-    public function __construct($grantWithRefreshToken = false)
+    public function __construct(ContainerInterface $container,$grantWithRefreshToken = false)
     {
         $this->grantWithRefreshToken = $grantWithRefreshToken;
+        $this->userRepository = $container->get("OauthUserRepository");
+        if($grantWithRefreshToken){
+            $this->refreshTokenRepository = $container->get("OauthRefreshTokenRepository");
+        }
+        parent::__construct($container);
     }
 
 
@@ -74,15 +80,5 @@ class PasswordGrant extends GrantType
     public function getName()
     {
         return "password";
-    }
-
-    public function setRefreshTokenProvider(TokenRepository $tokenRepository)
-    {
-        $this->refreshTokenRepository = $tokenRepository;
-    }
-
-    public function setUserDataProvider(UserRepository $userRepository)
-    {
-        $this->userRepository = $userRepository;
     }
 }

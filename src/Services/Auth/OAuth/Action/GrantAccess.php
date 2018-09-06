@@ -10,8 +10,10 @@ namespace MedevAuth\Services\Auth\OAuth\Action;
 
 
 
+use Exception;
 use MedevAuth\Services\Auth\OAuth\OAuthService;
 use MedevSlim\Core\APIAction\APIAction;
+use MedevSlim\Core\APIService\Exceptions\ForbiddenException;
 use Psr\Container\ContainerInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -27,6 +29,14 @@ class GrantAccess extends APIAction
     }
 
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @param $args
+     * @return mixed
+     * @throws \MedevSlim\Core\APIService\Exceptions\UnauthorizedException
+     * @throws \MedevSlim\Core\APIService\Exceptions\ForbiddenException
+     */
     protected function onPermissionGranted(Request $request, Response $response, $args)
     {
         $body = $request->getParsedBody();
