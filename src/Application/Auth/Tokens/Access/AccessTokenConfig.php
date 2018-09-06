@@ -10,42 +10,43 @@ namespace MedevAuth\Application\Tokens\Access;
 
 
 use MedevAuth\Token\JWT\JWS\JWSConfiguration;
+use MedevSlim\Utils\UUID\UUID;
 
 class AccessTokenConfig extends JWSConfiguration
 {
 
     public function getISS()
     {
-        // TODO: Implement getISS() method.
+        return "https://suite.medev.hu";
     }
 
     public function getSUB()
     {
-        // TODO: Implement getSUB() method.
+        return "Suite API Access";
     }
 
     public function getAUD()
     {
-        // TODO: Implement getAUD() method.
+        return "https://suite.medev.hu";
     }
 
     public function getEXP()
     {
-        // TODO: Implement getEXP() method.
+        return time() + 300000; // 5 minutes
     }
 
     public function getNBF()
     {
-        // TODO: Implement getNBF() method.
+        return time();
     }
 
     public function getIAT()
     {
-        // TODO: Implement getIAT() method.
+        return time();
     }
 
     public function getJTI()
     {
-        // TODO: Implement getJTI() method.
+        return UUID::v5(UUID::NAMESPACE_URL,"auth.suite.medev.hu/access_token");
     }
 }
