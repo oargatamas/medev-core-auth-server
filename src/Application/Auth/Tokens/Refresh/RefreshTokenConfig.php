@@ -6,7 +6,7 @@
  * Time: 12:11
  */
 
-namespace MedevAuth\Application\Tokens\Refresh;
+namespace MedevAuth\Application\Auth\Tokens\Refresh;
 
 
 use MedevAuth\Token\JWT\JWS\JWSConfiguration;
@@ -27,7 +27,7 @@ class RefreshTokenConfig extends JWSConfiguration
 
     public function getAUD()
     {
-        return "https://suite.medev.hu";
+        return "https://api.suite.medev.hu";
     }
 
     public function getEXP()

@@ -13,9 +13,9 @@ namespace MedevAuth\Services\Auth\OAuth;
 use MedevAuth\Services\Auth\OAuth\Action\GrantAccess;
 use MedevAuth\Services\Auth\OAuth\Action\RevokeToken;
 use MedevAuth\Services\Auth\OAuth\GrantType\GrantType;
+use MedevAuth\Token\JWT\JWS\Middleware\JWSRequestValidator;
 use MedevSlim\Core\APIService\APIService;
-use MedevSlim\Core\APIService\Interfaces\ServiceConfiguration;
-use MedevSuite\Application\Auth\OAuth\Token\JWT\Middleware\JWSRequestValidator;
+
 use Psr\Container\ContainerInterface;
 use Slim\App;
 use Slim\Interfaces\RouteGroupInterface;

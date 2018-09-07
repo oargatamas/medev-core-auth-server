@@ -6,7 +6,7 @@
  * Time: 12:11
  */
 
-namespace MedevAuth\Application\Tokens\Access;
+namespace MedevAuth\Application\Auth\Tokens\Access;
 
 
 use MedevAuth\Token\JWT\JWS\JWSConfiguration;
@@ -27,7 +27,7 @@ class AccessTokenConfig extends JWSConfiguration
 
     public function getAUD()
     {
-        return "https://suite.medev.hu";
+        return "https://api.suite.medev.hu";
     }
 
     public function getEXP()

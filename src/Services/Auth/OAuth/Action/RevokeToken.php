@@ -1,17 +1,10 @@
 <?php
 
-use MedevSuite\Application\Auth\OAuth\Token\TokenRepository;
-
-/**
- * Created by PhpStorm.
- * User: Oarga-Tamas
- * Date: 2018. 09. 06.
- * Time: 11:24
- */
 
 namespace MedevAuth\Services\Auth\OAuth\Action;
 
 
+use MedevAuth\Services\Auth\OAuth\Repository\TokenRepository;
 use MedevSlim\Core\APIAction\APIAction;
 use Slim\Http\Request;
 use Slim\Http\Response;

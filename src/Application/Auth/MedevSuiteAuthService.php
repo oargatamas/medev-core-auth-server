@@ -9,17 +9,23 @@
 namespace MedevAuth\Application\Auth;
 
 
-use MedevAuth\Application\Tokens\Access\AccessTokenConfig;
-use MedevAuth\Application\Tokens\Refresh\RefreshTokenConfig;
+use MedevAuth\Application\Auth\Tokens\Access\AccessTokenRepository;
+use MedevAuth\Application\Auth\Tokens\Refresh\RefreshTokenConfig;
+use MedevAuth\Application\Auth\Tokens\Refresh\RefreshTokenRepository;
+use MedevAuth\Application\Auth\Users\UserRepository;
+use MedevAuth\Application\Auth\Tokens\Access\AccessTokenConfig;
 use MedevAuth\Services\Auth\OAuth\OAuthService;
-use MedevAuth\TokenRepositories\Application\AccessTokenRepository;
-use MedevAuth\TokenRepositories\Application\RefreshTokenRepository;
+
 use Psr\Container\ContainerInterface;
 
 class MedevSuiteAuthService extends OAuthService
 {
     protected function registerIOCComponents(ContainerInterface $container)
     {
+        $container["OauthUserRepository"] = function($container){
+            return new UserRepository($container);
+        };
+
         $container["OauthAccessTokenConfig"] = function ($container) {
             return new AccessTokenConfig();
         };
@@ -35,6 +41,7 @@ class MedevSuiteAuthService extends OAuthService
         $container["OauthRefreshTokenRepository"] = function ($container) {
             return new RefreshTokenRepository($container);
         };
+
 
     }
 }

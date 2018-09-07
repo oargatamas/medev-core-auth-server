@@ -6,15 +6,12 @@
  * Time: 9:50
  */
 
-namespace MedevSuite\Application\Auth\OAuth\Token\JWT\Middleware;
+namespace MedevAuth\Token\JWT\JWS\Middleware;
 
 use Exception;
-use Lcobucci\JWT\Token\Parser;
-use MedevAuth\APIService\Exceptions\UnauthorizedException;
-use MedevAuth\Token\JWT\JWS\JWSValidator;
-use MedevSuite\Application\Auth\OAuth\Token\JWT\JWS\JWS;
-use MedevSuite\Application\Auth\OAuth\Token\JWT\JWS\JWSRepository;
-use MedevSuite\Application\Auth\OAuth\Token\TokenRepository;
+
+use MedevAuth\Token\JWT\JWS\JWSRepository;
+use MedevSlim\Core\APIService\Exceptions\UnauthorizedException;
 use Psr\Container\ContainerInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -28,9 +25,9 @@ class JWSRequestValidator
      */
     private $jwsRepo;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(JWSRepository $repository)
     {
-        $this->jwsRepo = $container->get("OauthAccessTokenRepository");
+        $this->jwsRepo = $repository;
     }
 
 

@@ -6,12 +6,11 @@
  * Time: 11:02
  */
 
-namespace MedevAuth\TokenRepositories\Application;
+namespace MedevAuth\Application\Auth\Tokens\Refresh;
 
 
 use Lcobucci\JWT\Token;
-use MedevAuth\Token\JWT\JWS\JWSConfiguration;
-use MedevSuite\Application\Auth\OAuth\Token\JWT\JWS\JWSRepository;
+use MedevAuth\Token\JWT\JWS\JWSRepository;
 use Medoo\Medoo;
 use Psr\Container\ContainerInterface;
 
@@ -25,8 +24,8 @@ class RefreshTokenRepository extends JWSRepository
     public function __construct(ContainerInterface $container)
     {
         $this->database = $container->get("database");
-        $config = $container->get("refresh_token_config");
-        parent::__construct($container, $config);
+        $config = $container->get("OauthRefreshTokenConfig");
+        parent::__construct($config);
     }
 
 

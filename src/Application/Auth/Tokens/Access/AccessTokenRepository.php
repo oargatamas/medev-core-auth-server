@@ -6,31 +6,25 @@
  * Time: 10:05
  */
 
-namespace MedevAuth\TokenRepositories\Application;
+namespace MedevAuth\Application\Auth\Tokens\Access;
 
 
 use Lcobucci\JWT\Token;
-use MedevAuth\Token\JWT\JWS\JWSConfiguration;
-use MedevAuth\Token\TokenEntity;
-use MedevSuite\Application\Auth\OAuth\Token\JWT\JWS\JWSRepository;
+use MedevAuth\Token\JWT\JWS\JWSRepository;
 use Medoo\Medoo;
 use Psr\Container\ContainerInterface;
-use Slim\Container;
+
 
 class AccessTokenRepository extends JWSRepository
 {
 
-    /**
-     * @var Medoo
-     */
-    private $database;
 
 
-    public function __construct(Container $container)
+
+    public function __construct(ContainerInterface $container)
     {
-        $this->database = $container->get("database");
         $config = $container->get("OauthAccessTokenConfig");
-        parent::__construct($container, $config);
+        parent::__construct($config);
     }
 
 

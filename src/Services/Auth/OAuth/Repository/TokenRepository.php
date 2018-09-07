@@ -6,7 +6,7 @@
  * Time: 10:21
  */
 
-namespace MedevSuite\Application\Auth\OAuth\Token;
+namespace MedevAuth\Services\Auth\OAuth\Repository;
 
 
 

@@ -6,7 +6,7 @@
  * Time: 16:02
  */
 
-namespace MedevSuite\Application\Auth\OAuth\Token\JWT\JWS;
+namespace MedevAuth\Token\JWT\JWS;
 
 
 use Lcobucci\JWT\Builder;
@@ -14,12 +14,9 @@ use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\Signer\Keychain;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
 use Lcobucci\JWT\Token;
-use MedevAuth\Token\JWT\JWS\JWSConfiguration;
-use MedevAuth\Token\JWT\JWT;
-use MedevAuth\Token\TokenEntity;
-use MedevSuite\Application\Auth\OAuth\Token\TokenRepository;
+use MedevAuth\Services\Auth\OAuth\Repository\TokenRepository;
 use Psr\Container\ContainerInterface;
-use Slim\Container;
+
 
 abstract class JWSRepository implements TokenRepository
 {
@@ -28,10 +25,9 @@ abstract class JWSRepository implements TokenRepository
      */
     private $config;
 
-    public function __construct(ContainerInterface $container, JWSConfiguration $config)
+    public function __construct(JWSConfiguration $config)
     {
         $this->config = $config;
-        parent::__construct($container);
     }
 
     public function generateToken($args = [])

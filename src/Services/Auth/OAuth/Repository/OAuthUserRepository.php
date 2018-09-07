@@ -11,7 +11,7 @@ namespace MedevAuth\Services\Auth\OAuth\Repository;
 
 
 
-interface UserRepository
+interface OAuthUserRepository
 {
     public function IsCredentialsValid($username, $password);
     public function getUserData($username);

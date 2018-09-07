@@ -10,8 +10,8 @@ namespace MedevAuth\Services\Auth\OAuth\GrantType\Password;
 
 
 use MedevAuth\Services\Auth\OAuth\GrantType\GrantType;
-use MedevAuth\Services\Auth\OAuth\Repository\UserRepository;
-use MedevSuite\Application\Auth\OAuth\Token\TokenRepository;
+use MedevAuth\Services\Auth\OAuth\Repository\OAuthUserRepository;
+use MedevAuth\Services\Auth\OAuth\Repository\TokenRepository;
 use Psr\Container\ContainerInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -24,7 +24,7 @@ class PasswordGrant extends GrantType
      */
     private $refreshTokenRepository;
     /**
-     * @var UserRepository
+     * @var OAuthUserRepository
      */
     private $userRepository;
     private $grantWithRefreshToken;

@@ -10,7 +10,6 @@ namespace MedevAuth\Services\Auth\OAuth\Action;
 
 
 
-use Exception;
 use MedevAuth\Services\Auth\OAuth\OAuthService;
 use MedevSlim\Core\APIAction\APIAction;
 use MedevSlim\Core\APIService\Exceptions\ForbiddenException;
