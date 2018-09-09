@@ -31,9 +31,9 @@ class AccessTokenRepository extends JWSRepository
     protected function getPrivateClaims($args = [])
     {
         return [
-            "usr_id" => $args["user_id"],
-            "ip" => $args["ip_address"],
-            "scopes" => $args["user_scopes"]
+            //"usr_id" => $args["user_id"],
+            //"ip" => $args["ip_address"],
+            //"scopes" => $args["user_scopes"]
         ];
     }
 

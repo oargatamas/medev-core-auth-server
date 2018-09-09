@@ -59,7 +59,8 @@ abstract class JWSRepository implements TokenRepository
         $signer = new Sha256();
         $keychain = new Keychain();
 
-        $token->sign($signer, $keychain->getPrivateKey($this->config->getPrivateKey()));
+        //Todo move passprhase to JWS config
+        $token->sign($signer, $keychain->getPrivateKey($this->config->getPrivateKey(),"test"));
 
         $token = $token->getToken();
 

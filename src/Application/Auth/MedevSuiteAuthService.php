@@ -22,16 +22,22 @@ class MedevSuiteAuthService extends OAuthService
 {
     protected function registerIOCComponents(ContainerInterface $container)
     {
-        $container["OauthUserRepository"] = function($container){
+        $container["OauthUserRepository"] = function ($container) {
             return new UserRepository($container);
         };
 
         $container["OauthAccessTokenConfig"] = function ($container) {
-            return new AccessTokenConfig();
+            $publicKey = "file://../config/publicKey.pem";
+            $privateKey = "file://../config/privateKey.pem";
+            $passPhrase = "test";
+            return new AccessTokenConfig($publicKey, $privateKey, $passPhrase);
         };
 
         $container["OauthRefreshTokenConfig"] = function ($container) {
-            return new RefreshTokenConfig();
+            $publicKey = "file://../config/publicKey.pem";
+            $privateKey = "file://../config/privateKey.pem";
+            $passPhrase = "test";
+            return new RefreshTokenConfig($publicKey, $privateKey, $passPhrase);
         };
 
         $container["OauthAccessTokenRepository"] = function ($container) {

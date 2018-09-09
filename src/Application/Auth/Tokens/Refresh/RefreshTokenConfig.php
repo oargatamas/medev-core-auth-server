@@ -15,6 +15,14 @@ use MedevSlim\Utils\UUID\UUID;
 class RefreshTokenConfig extends JWSConfiguration
 {
 
+    public function __construct($publicKey,$privateKey,$passPhrase = "")
+    {
+        $this->publicKey = $publicKey;
+        $this->privateKey = $privateKey;
+        $this->passPhrase = $passPhrase;
+    }
+
+
     public function getISS()
     {
         return "https://suite.medev.hu";

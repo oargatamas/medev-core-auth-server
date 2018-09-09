@@ -10,8 +10,9 @@ namespace MedevAuth\Services\Auth\OAuth\GrantType;
 
 
 
+use MedevAuth\Services\Auth\OAuth\Repository\TokenRepository;
 use MedevSlim\Core\APIAction\APIAction;
-use MedevSuite\Application\Auth\OAuth\Token\TokenRepository;
+use MedevSlim\Core\APIService\Exceptions\UnauthorizedException;
 use Psr\Container\ContainerInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -39,6 +40,8 @@ abstract class GrantType extends APIAction
         $result = $this->validateCredentials($request);
         if($result){
             return $this->grantAccess($response,$result);
+        }else{
+            throw new UnauthorizedException();
         }
     }
 

@@ -43,7 +43,7 @@ class UserRepository implements OAuthUserRepository
                 ]
             ]);
 
-        if(isset($user) && password_verify($password,$user["password"])){
+        if(isset($user["password"]) && password_verify($password,$user["password"])){
             return true;
         }else{
             return false;

@@ -12,27 +12,22 @@ use MedevAuth\Token\JWT\JWTConfiguration;
 
 abstract class JWSConfiguration implements JWTConfiguration
 {
-    private $privateKey;
-    private $publicKey;
+    protected $privateKey;
+    protected $publicKey;
+    protected $passPhrase;
 
     public function getPrivateKey()
     {
         return $this->privateKey;
     }
 
-    public function setPrivateKey($pathToKey)
-    {
-        $this->privateKey = $pathToKey;
-    }
 
     public function getPublicKey()
     {
         return $this->publicKey;
     }
 
-    public function setPublicKey($pathToKey)
-    {
-        $this->publicKey = $pathToKey;
+    public function getPassPhrase(){
+        return $this->passPhrase;
     }
-
 }

@@ -47,14 +47,19 @@ class PasswordGrant extends GrantType
         $username = $request->getParsedBodyParam("username","");
         $password = $request->getParsedBodyParam("password","");
 
-        return $this->userRepository->IsCredentialsValid($username,$password);
+        if($this->userRepository->IsCredentialsValid($username,$password)){
+            $this->container->logger->debug("User Credentials are valid");
+            return $this->userRepository->getUserData($username);
+        }
+        $this->container->logger->debug("Invalid User credentials");
+        return false;
     }
 
     protected function grantAccess(Response $response, $args = [])
     {
         $data = [];
 
-        $accessToken = $this->accessTokenRepository->generateToken($args);
+        $accessToken = $this->accessTokenRepository->generateToken();
         $this->accessTokenRepository->persistToken($accessToken);
 
 
@@ -71,9 +76,10 @@ class PasswordGrant extends GrantType
         }
 
 
-        $response->withStatus(200);
-        $response->withJson($data);
-        return $response;
+        $this->container->logger->debug("Sending token(s) to client.");
+        return $response
+            ->withStatus(200)
+            ->withJson($data);
     }
 
 

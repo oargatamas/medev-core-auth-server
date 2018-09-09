@@ -32,9 +32,9 @@ class RefreshTokenRepository extends JWSRepository
     protected function getPrivateClaims($args = [])
     {
         return [
-            "usr_id" => $args["user_id"],
-            "ip" => $args["ip_address"],
-            "scopes" => "access_token"
+            //"usr_id" => $args["user_id"],
+            //"ip" => $args["ip_address"],
+            //"scopes" => "access_token"
         ];
     }
 
@@ -66,9 +66,9 @@ class RefreshTokenRepository extends JWSRepository
             "oauth_refresh_tokens",
             [
                 "id" => $token->getHeader("jti"),
-                "issuedBy" => $token->getClaim(""),
+                "issuedBy" => $token->getClaim("iss"),
                 "createdAt"=> time(),
-                "ipAddress" => $token->getClaim("ip"),
+                "ipAddress" => $token->getClaim("ip","0.0.0.0"),
                 "enabled" => true
             ]
         );

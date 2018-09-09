@@ -40,10 +40,14 @@ class GrantAccess extends APIAction
     {
         $body = $request->getParsedBody();
 
+        $this->container->logger->debug("handling authorization request.0",$body);
+
         if(isset($body["grant_type"]) && $this->authService->hasGrantType($body["grant_type"])){
+            $this->container->logger->debug("valid grant type.");
             $handler = $this->authService->getGrantType($body["grant_type"]);
             return $handler($request,$response,$args);
         }else{
+            $this->container->logger->debug("grant type not registered.");
             throw new ForbiddenException();
         }
     }

@@ -160,7 +160,7 @@
             "source": {
                 "type": "git",
                 "url": "https://TangoMajom@bitbucket.org/medevservices/medev-core-slim.git",
-                "reference": "14dbe1597c4877805c14e0ebc9e81f67b90af304"
+                "reference": "e3041aaad21dd5520daa6b97718d4abef8cf3123"
             },
             "require": {
                 "catfan/medoo": "^1.5",
@@ -185,7 +185,7 @@
                 }
             ],
             "description": "Custom core functionality and usage patterns for Slim applications",
-            "time": "2018-09-07T09:21:00+00:00"
+            "time": "2018-09-08T11:35:05+00:00"
         },
         {
             "name": "monolog/monolog",
