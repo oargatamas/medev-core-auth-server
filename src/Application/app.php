@@ -1,7 +1,7 @@
 <?php
 
 
-use MedevAuth\Application\Auth\MedevSuiteAuthService;
+use MedevAuth\Application\Auth\MedevSuiteCustomAuthService;
 use MedevAuth\Services\Auth\OAuth\GrantType\Password\PasswordGrant;
 use MedevAuth\Services\Auth\OAuth\GrantType\RefreshToken\RefreshTokenGrant;
 
@@ -18,7 +18,7 @@ require_once __DIR__."/Setup/logging.php";
 
 
 $container["logger"]->debug("Initialising OAuth Service.");
-$authorization = new MedevSuiteAuthService($application);
+$authorization = new MedevSuiteCustomAuthService($application);
 $authorization->register("/oauth");
 
 $authorization->addGrantType(new PasswordGrant($container, true));

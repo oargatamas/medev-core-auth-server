@@ -18,7 +18,7 @@ use MedevAuth\Services\Auth\OAuth\OAuthService;
 
 use Psr\Container\ContainerInterface;
 
-class MedevSuiteAuthService extends OAuthService
+class MedevSuiteCustomAuthService extends OAuthService
 {
     protected function registerIOCComponents(ContainerInterface $container)
     {
