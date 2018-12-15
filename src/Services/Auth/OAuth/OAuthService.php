@@ -23,16 +23,21 @@ use Slim\Interfaces\RouteGroupInterface;
 class OAuthService extends APIService
 {
 
+    public static $ACCESS_TOKEN_REPO  = "OauthAccessTokenRepository";
+    public static $REFRESH_TOKEN_REPO = "OauthRefreshTokenRepository";
+    public static $CLIENT_REPO        = "OauthClientRepository";
+    public static $USER_REPO          = "OauthUserRepository";
+    public static $SCOPE_REPO         = "OauthScopeRepository";
+    public static $AUTH_CODE_REPO     = "OauthAuthCodeRepository";
+
+
     /**
      * @var GrantType[]
      */
     private $grantTypes;
 
 
-    /**
-     * OAuthService constructor.
-     * @param App $app
-     */
+
     public function __construct(App $app)
     {
         $this->grantTypes = [];
@@ -40,51 +45,46 @@ class OAuthService extends APIService
     }
 
 
-    /**
-     * @param App $app
-     * @param ContainerInterface $container
-     */
     protected function registerRoutes(App $app, ContainerInterface $container)
     {
         $app->post("/token",new GrantAccess($container, $this));
-        $app->post("/token/revoke/{tokenId}",new RevokeToken($container))->add(new JWSRequestValidator($container->get("OauthAccessTokenRepository")));
+        $app->post("/token/revoke/{tokenId}",new RevokeToken($container))->add(new JWSRequestValidator($container->get(OAuthService::$ACCESS_TOKEN_REPO)));
     }
 
-    /**
-     * @param RouteGroupInterface $group
-     * @param ContainerInterface $container
-     */
+
     protected function registerMiddlewares(RouteGroupInterface $group, ContainerInterface $container)
     {
         //No middleware needed for this service
     }
 
-    protected function registerIOCComponents(ContainerInterface $container)
+    protected function registerContainerComponents(ContainerInterface $container)
     {
-        // Not used here.
+        //Not used here
     }
 
-    /**
-     * @param GrantType $grantType
-     */
+
     public function addGrantType(GrantType $grantType){
         $this->grantTypes[$grantType->getName()] = $grantType;
     }
 
-    /**
-     * @param string $grantType
-     * @return bool
-     */
+
     public function hasGrantType($grantType = ""){
         return isset($this->grantTypes[$grantType]);
     }
 
-    /**
-     * @param $type
-     * @return GrantType
-     */
+
     public function getGrantType($type){
         return $this->grantTypes[$type];
     }
 
+
+    public function getServiceName()
+    {
+        return "AuthorizationService";
+    }
+
+    protected function getLogger()
+    {
+        // TODO: Implement getLogger() method.
+    }
 }

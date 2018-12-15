@@ -10,79 +10,62 @@ namespace MedevAuth\Services\Auth\OAuth\GrantType\Password;
 
 
 use MedevAuth\Services\Auth\OAuth\GrantType\GrantType;
-use MedevAuth\Services\Auth\OAuth\Repository\OAuthUserRepository;
-use MedevAuth\Services\Auth\OAuth\Repository\TokenRepository;
+use MedevAuth\Services\Auth\OAuth\Repository\UserRepositoryInterface;
+use MedevSlim\Core\APIService\Exceptions\UnauthorizedException;
 use Psr\Container\ContainerInterface;
 use Slim\Http\Request;
-use Slim\Http\Response;
 
 class PasswordGrant extends GrantType
 {
 
     /**
-     * @var TokenRepository
-     */
-    private $refreshTokenRepository;
-    /**
-     * @var OAuthUserRepository
+     * @var UserRepositoryInterface
      */
     private $userRepository;
-    private $grantWithRefreshToken;
 
-
-
-    public function __construct(ContainerInterface $container,$grantWithRefreshToken = false)
+    public function __construct(ContainerInterface $container, $provideRefreshTokens = false)
     {
-        $this->grantWithRefreshToken = $grantWithRefreshToken;
-        $this->userRepository = $container->get("OauthUserRepository");
-        if($grantWithRefreshToken){
-            $this->refreshTokenRepository = $container->get("OauthRefreshTokenRepository");
-        }
-        parent::__construct($container);
+        $requiredParams = [
+            "grant_type",
+            "client_id",
+            "client_secret",
+            "username",
+            "password"
+        ];
+        parent::__construct($container, $provideRefreshTokens, $requiredParams);
     }
 
 
-    protected function validateCredentials(Request $request)
+    /**
+     * @param Request $request
+     * @return Request
+     * @throws UnauthorizedException
+     */
+    protected function validateRequest(Request $request)
     {
-        $username = $request->getParsedBodyParam("username","");
-        $password = $request->getParsedBodyParam("password","");
-
-        if($this->userRepository->IsCredentialsValid($username,$password)){
-            $this->container->logger->debug("User Credentials are valid");
-            return $this->userRepository->getUserData($username);
-        }
-        $this->container->logger->debug("Invalid User credentials");
-        return false;
-    }
-
-    protected function grantAccess(Response $response, $args = [])
-    {
-        $data = [];
-
-        $accessToken = $this->accessTokenRepository->generateToken();
-        $this->accessTokenRepository->persistToken($accessToken);
+        $clientId = $request->getParsedBodyParam("client_id");
+        $clientSecret = $request->getParsedBodyParam("client_secret");
+        $username = $request->getParsedBodyParam("username");
+        $password = $request->getParsedBodyParam("password");
 
 
-        $data["token_type"] = "Bearer";
-        $data["access_token"] = $accessToken;
+        $client = $this->clientRepository->validateClient($clientId,$clientSecret,isset($clientSecret));
 
+        $user = $this->userRepository->validateUser($username, $password);
 
-        if ($this->grantWithRefreshToken) {
+        $oldRefreshToken = $this->refreshTokenRepository->getTokenForUser($user);
 
-            $refreshToken = $this->refreshTokenRepository->generateToken($args);
-            $this->refreshTokenRepository->persistToken($accessToken);
-
-            $data["refresh_token"] = $refreshToken;
-        }
-
-
-        $this->container->logger->debug("Sending token(s) to client.");
-        return $response
-            ->withStatus(200)
-            ->withJson($data);
+        return $request->withAttributes([
+            "old_refresh_token" => $oldRefreshToken,
+            "user_entity" => $user,
+            "client_entity" => $client
+        ]);
     }
 
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return "password";

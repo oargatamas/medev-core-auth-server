@@ -18,6 +18,7 @@ require_once __DIR__."/Setup/logging.php";
 
 
 $container["logger"]->debug("Initialising OAuth Service.");
+
 $authorization = new MedevSuiteCustomAuthService($application);
 $authorization->register("/oauth");
 

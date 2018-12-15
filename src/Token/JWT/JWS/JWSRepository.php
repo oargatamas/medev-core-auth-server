@@ -14,85 +14,79 @@ use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\Signer\Keychain;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
 use Lcobucci\JWT\Token;
-use MedevAuth\Services\Auth\OAuth\Repository\TokenRepository;
+use MedevAuth\Services\Auth\OAuth\Entity\ClientEntityInterface;
+use MedevAuth\Services\Auth\OAuth\Entity\UserEntityInterface;
+use MedevAuth\Services\Auth\OAuth\GrantType\Password\PasswordGrant;
+use MedevAuth\Services\Auth\OAuth\Entity\TokenEntityInterface;
+use MedevAuth\Services\Auth\OAuth\Repository\TokenRepositoryInterface;
+use MedevAuth\Token\JWT\JWT;
+use MedevSlim\Core\APIService\Exceptions\UnauthorizedException;
+use MedevSlim\Utils\UUID\UUID;
 use Psr\Container\ContainerInterface;
 
 
-abstract class JWSRepository implements TokenRepository
+abstract class JWSRepository implements TokenRepositoryInterface
 {
-    /**
-     * @var JWSConfiguration
-     */
+
     private $config;
 
-    public function __construct(JWSConfiguration $config)
+    public function __construct(ContainerInterface $container)
     {
-        $this->config = $config;
+        $this->config = $container->get("ApplicationConfig")["jwt"]; //Todo init config
     }
 
-    public function generateToken($args = [])
+    /**
+     * @param ClientEntityInterface $client
+     * @param UserEntityInterface $user
+     * @param array $scopes
+     * @return TokenEntityInterface|SignedJWT
+     */
+    public function generateToken(ClientEntityInterface $client, UserEntityInterface $user, array $scopes)
     {
-        $token = new Builder();
+        $token = new SignedJWT();
 
-        //Setting public claims
-        $token->setHeader("jti", $this->config->getJTI());
-        $token->set("sub", $this->config->getSUB());
-        $token->set("iss", $this->config->getISS());
-        $token->set("aud", $this->config->getAUD());
-        $token->set("iat", $this->config->getIAT());
-        $token->set("exp", $this->config->getEXP());
-        $token->set("nbf", $this->config->getNBF());
-
-        //Private claims will be set by the final implementation
-        foreach ($this->getPrivateClaims($args) as $key => $value) {
-            $token->set($key, $value);
-        }
-
-        return $this->applySignature($token);
-    }
-
-    protected abstract function getPrivateClaims($args = []);
-
-
-    protected function applySignature(Builder $token)
-    {
-        $signer = new Sha256();
-        $keychain = new Keychain();
-
-        //Todo move passprhase to JWS config
-        $token->sign($signer, $keychain->getPrivateKey($this->config->getPrivateKey(),"test"));
-
-        $token = $token->getToken();
+        $token->setIdentifier(UUID::v4()); //Todo double check whether the V4 is fine.
+        $token->setUser($user);
+        $token->setClient($client);
+        $token->setScopes($scopes);
+        $token->setPrivateKey($this->config->privateKey);
 
         return $token;
     }
 
 
-    public function deserialize($jwsString)
+    /**
+     * @param string $tokenString
+     * @return TokenEntityInterface|SignedJWT
+     * @throws UnauthorizedException
+     */
+    public function validateSerializedToken($tokenString)
     {
-        return (new Parser())->parse($jwsString);
-    }
+        /* @var SignedJWT $token*/
+        $token = $this->parseToken($tokenString);
+        $token->setPrivateKey($this->config->privateKey);
 
-    public function validateToken(Token $token)
-    {
-        if (!$this->isSignatureValid($token)) {
-            throw new \Exception("Invalid token signature");
+        if (!$token->verifySignature($this->config->publicKey)) {
+            //"Invalid token signature"
+            throw new UnauthorizedException();
         }
 
-        if ($this->isTokenBlacklisted($token->getHeader("jti"))) {
-            throw new \Exception("Token is blacklisted");
+        if ($this->isTokenBlacklisted($token)) {
+            //"Token is blacklisted"
+            throw new UnauthorizedException();
         }
 
         return $token;
     }
 
-    public function isSignatureValid(Token $token)
-    {
-        $signer = new Sha256();
-        $keychain = new Keychain();
 
-        return $token->verify($signer, $keychain->getPublicKey($this->config->getPublicKey()));
+    /**
+     * @param string $tokenString
+     * @return TokenEntityInterface|JWT
+     */
+    public function parseToken($tokenString)
+    {
+        return JWT::fromString($tokenString);
     }
 
-    public abstract function isTokenBlacklisted(Token $token);
 }

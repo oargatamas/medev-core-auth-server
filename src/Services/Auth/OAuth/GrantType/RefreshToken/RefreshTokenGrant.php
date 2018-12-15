@@ -10,50 +10,56 @@ namespace MedevAuth\Services\Auth\OAuth\GrantType\RefreshToken;
 
 
 
+use MedevAuth\Services\Auth\OAuth\Entity\TokenEntityInterface;
 use MedevAuth\Services\Auth\OAuth\GrantType\GrantType;
-use MedevSuite\Application\Auth\OAuth\Token\TokenRepository;
+use MedevSlim\Core\APIService\Exceptions\APIException;
+use Psr\Container\ContainerInterface;
 use Slim\Http\Request;
-use Slim\Http\Response;
+
 
 class RefreshTokenGrant extends GrantType
 {
 
+
+    public function __construct(ContainerInterface $container, $provideRefreshTokens = false)
+    {
+        $requiredParams = [
+            "grant_type",
+            "client_id",
+            "refresh_token"
+        ];
+        parent::__construct($container, $provideRefreshTokens, $requiredParams);
+    }
+
+
     /**
-     * @var TokenRepository
+     * @param Request $request
+     * @return Request
+     * @throws APIException
      */
-    private $refreshTokenRepository;
+    protected function validateRequest(Request $request)
+    {
+        $clientId = $request->getParsedBodyParam("client_id");
+        $clientSecret = $request->getParsedBodyParam("client_secret");
+        $refreshToken = $request->getParsedBodyParam("refresh_token");
+
+
+        $this->clientRepository->validateClient($clientId,$clientSecret,isset($clientSecret));
+
+        /** @var TokenEntityInterface $token */
+        $token = $this->refreshTokenRepository->validateSerializedToken($refreshToken);
+
+
+        return $request->withAttributes([
+            "old_refresh_token" => $token,
+            "user_entity" => $token->getUser(),
+            "client_entity" => $token->getClient()
+        ]);
+    }
 
 
     public function getName()
     {
         return "refresh_token";
-    }
-
-    protected function validateCredentials(Request $request)
-    {
-        $refreshToken = $request->getParsedBodyParam("refresh_token","");
-
-        return $this->refreshTokenRepository->validateToken($refreshToken);
-    }
-
-
-    protected function grantAccess(Response $response, $args = [])
-    {
-        $data = [];
-
-        $accessToken = $this->accessTokenRepository->generateToken($args);
-        $this->accessTokenRepository->persistToken($accessToken);
-
-        $data["token_type"] = "Bearer";
-        $data["access_token"] = $accessToken;
-
-        $response->withStatus(200);
-        $response->withJson($data);
-        return $response;
-    }
-
-    public function setRefreshTokenProvider(TokenRepository $tokenRepository)
-    {
-        $this->refreshTokenRepository = $tokenRepository;
     }
 }

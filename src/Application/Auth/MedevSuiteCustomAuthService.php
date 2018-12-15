@@ -20,7 +20,8 @@ use Psr\Container\ContainerInterface;
 
 class MedevSuiteCustomAuthService extends OAuthService
 {
-    protected function registerIOCComponents(ContainerInterface $container)
+
+    protected function registerContainerComponents(ContainerInterface $container)
     {
         $container["OauthUserRepository"] = function ($container) {
             return new UserRepository($container);
@@ -47,7 +48,5 @@ class MedevSuiteCustomAuthService extends OAuthService
         $container["OauthRefreshTokenRepository"] = function ($container) {
             return new RefreshTokenRepository($container);
         };
-
-
     }
 }
