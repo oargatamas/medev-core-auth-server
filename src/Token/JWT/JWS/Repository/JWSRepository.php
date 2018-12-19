@@ -6,26 +6,24 @@
  * Time: 16:02
  */
 
-namespace MedevAuth\Token\JWT\JWS;
+namespace MedevAuth\Token\JWT\JWS\Repository;
 
 
-use Lcobucci\JWT\Builder;
-use Lcobucci\JWT\Parser;
-use Lcobucci\JWT\Signer\Keychain;
-use Lcobucci\JWT\Signer\Rsa\Sha256;
+
 use Lcobucci\JWT\Token;
-use MedevAuth\Services\Auth\OAuth\Entity\ClientEntityInterface;
-use MedevAuth\Services\Auth\OAuth\Entity\UserEntityInterface;
-use MedevAuth\Services\Auth\OAuth\GrantType\Password\PasswordGrant;
-use MedevAuth\Services\Auth\OAuth\Entity\TokenEntityInterface;
-use MedevAuth\Services\Auth\OAuth\Repository\TokenRepositoryInterface;
+use MedevAuth\Services\Auth\OAuth\Entity\Client;
+use MedevAuth\Services\Auth\OAuth\Entity\GenericToken;
+use MedevAuth\Services\Auth\OAuth\Entity\User;
+use MedevAuth\Services\Auth\OAuth\Repository\SQLRepository;
+use MedevAuth\Services\Auth\OAuth\Repository\TokenRepository;
+use MedevAuth\Token\JWT\JWS\SignedJWT;
 use MedevAuth\Token\JWT\JWT;
 use MedevSlim\Core\APIService\Exceptions\UnauthorizedException;
 use MedevSlim\Utils\UUID\UUID;
 use Psr\Container\ContainerInterface;
 
 
-abstract class JWSRepository implements TokenRepositoryInterface
+abstract class JWSRepository extends SQLRepository implements TokenRepository
 {
 
     private $config;
@@ -36,12 +34,12 @@ abstract class JWSRepository implements TokenRepositoryInterface
     }
 
     /**
-     * @param ClientEntityInterface $client
-     * @param UserEntityInterface $user
-     * @param array $scopes
-     * @return TokenEntityInterface|SignedJWT
+     * @param Client $client
+     * @param User $user
+     * @param string[] $scopes
+     * @return GenericToken|SignedJWT
      */
-    public function generateToken(ClientEntityInterface $client, UserEntityInterface $user, array $scopes)
+    public function generateToken(Client $client, User $user, $scopes)
     {
         $token = new SignedJWT();
 
@@ -57,13 +55,14 @@ abstract class JWSRepository implements TokenRepositoryInterface
 
     /**
      * @param string $tokenString
-     * @return TokenEntityInterface|SignedJWT
+     * @return Token|SignedJWT
      * @throws UnauthorizedException
      */
     public function validateSerializedToken($tokenString)
     {
         /* @var SignedJWT $token*/
         $token = $this->parseToken($tokenString);
+
         $token->setPrivateKey($this->config->privateKey);
 
         if (!$token->verifySignature($this->config->publicKey)) {
@@ -82,7 +81,7 @@ abstract class JWSRepository implements TokenRepositoryInterface
 
     /**
      * @param string $tokenString
-     * @return TokenEntityInterface|JWT
+     * @return GenericToken|JWT
      */
     public function parseToken($tokenString)
     {

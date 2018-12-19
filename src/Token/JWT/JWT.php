@@ -11,40 +11,16 @@ namespace MedevAuth\Token\JWT;
 
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Parser;
-use Lcobucci\JWT\Signer\Key;
-use Lcobucci\JWT\Signer\Rsa\Sha256;
 use Lcobucci\JWT\Token;
-use MedevAuth\Services\Auth\OAuth\Entity\ClientEntityInterface;
-use MedevAuth\Services\Auth\OAuth\Entity\TokenEntityInterface;
-use MedevAuth\Services\Auth\OAuth\Entity\UserEntityInterface;
+use MedevAuth\Services\Auth\OAuth\Entity\GenericToken;
 
-class JWT implements TokenEntityInterface
+class JWT extends GenericToken
 {
 
     /**
      * @var Token
      */
     protected $jwt;
-    /**
-     * @var string
-     */
-    protected $identifier;
-    /**
-     * @var int
-     */
-    protected $expiration;
-    /**
-     * @var array
-     */
-    protected $scopes;
-    /**
-     * @var ClientEntityInterface
-     */
-    protected $client;
-    /**
-     * @var UserEntityInterface
-     */
-    protected $user;
 
 
 
@@ -77,96 +53,6 @@ class JWT implements TokenEntityInterface
 
 
     /**
-     * @param string $identifier
-     */
-    public function setIdentifier($identifier)
-    {
-        $this->identifier = $identifier;
-    }
-
-    /**
-     * @return string
-     */
-    public function getIdentifier()
-    {
-        return $this->identifier;
-    }
-
-    /**
-     * @return int
-     */
-    public function getExpiration()
-    {
-        return $this->expiration;
-    }
-
-    /**
-     * @param int $expiration
-     */
-    public function setExpiration($expiration)
-    {
-        $this->expiration = $expiration;
-    }
-
-    /**
-     * @return array
-     */
-    public function getScopes()
-    {
-        return $this->scopes;
-    }
-
-    /**
-     * @param array $scopes
-     */
-    public function setScopes($scopes)
-    {
-        $this->scopes = $scopes;
-    }
-
-
-    /**
-     * @param string $scope
-     */
-    public function addScope($scope)
-    {
-        $this->scopes[] = $scope;
-    }
-
-    /**
-     * @return ClientEntityInterface
-     */
-    public function getClient()
-    {
-        return $this->client;
-    }
-
-    /**
-     * @param ClientEntityInterface $client
-     */
-    public function setClient(ClientEntityInterface $client)
-    {
-        $this->client = $client;
-    }
-
-    /**
-     * @return UserEntityInterface
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
-     * @param UserEntityInterface $user
-     */
-    public function setUser(UserEntityInterface $user)
-    {
-        $this->user = $user;
-    }
-
-
-    /**
      * @return string
      */
     public function finalizeToken()
@@ -178,7 +64,7 @@ class JWT implements TokenEntityInterface
             ->setIssuedAt(time())
             ->setNotBefore(time())
             ->setExpiration($this->expiration)
-            ->set("scopes", $this->scopes)
+            ->set("scopes", $this->scopes) //Todo Move key to static field
             ->getToken();
 
         return $token->__toString();
