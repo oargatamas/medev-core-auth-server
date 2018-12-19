@@ -9,24 +9,24 @@
 namespace MedevAuth\Services\Auth\OAuth\Entity;
 
 
-abstract class Token extends DatabaseEntity
+abstract class GenericToken extends DatabaseEntity
 {
     /**
      * @var int
      */
-    private $expiration;
+    protected $expiration;
     /**
      * @var string[]
      */
-    private $scopes;
+    protected $scopes;
     /**
      * @var Client
      */
-    private $client;
+    protected $client;
     /**
      * @var User
      */
-    private $user;
+    protected $user;
 
 
     /**

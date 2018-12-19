@@ -14,19 +14,19 @@ abstract class DatabaseEntity
     /**
      * @var string
      */
-    private $id;
+    protected $identifier;
 
     /**
      * @return string
      */
     public function getIdentifier(){
-        return $this->id;
+        return $this->identifier;
     }
 
     /**
      * @param string $identifier
      */
     public function setIdentifier($identifier){
-        $this->id = $identifier;
+        $this->identifier = $identifier;
     }
 }
