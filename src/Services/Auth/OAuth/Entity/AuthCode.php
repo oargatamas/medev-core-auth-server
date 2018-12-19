@@ -11,19 +11,41 @@ namespace MedevAuth\Services\Auth\OAuth\Entity;
 
 class AuthCode extends DatabaseEntity
 {
+
+    /**
+     * @var string
+     */
+    private $code;
+    /**
+     * @var Client
+     */
+    private $client;
+
+    /**
+     * @return string
+     */
     public function getCode(){
-
+        return $this->code;
     }
 
-    public function setCode(){
-
+    /**
+     * @param string $code
+     */
+    public function setCode($code){
+        $this->code = $code;
     }
 
+    /**
+     * @return Client
+     */
     public function getClient(){
-
+        return $this->client;
     }
 
-    public function setClient(ClientEntityInterface $client){
-
+    /**
+     * @param Client $client
+     */
+    public function setClient(Client $client){
+        $this->client = $client;
     }
 }

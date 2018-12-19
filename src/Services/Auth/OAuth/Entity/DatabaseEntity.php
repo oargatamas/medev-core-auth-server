@@ -11,12 +11,21 @@ namespace MedevAuth\Services\Auth\OAuth\Entity;
 
 abstract class DatabaseEntity
 {
+    /**
+     * @var string
+     */
     private $id;
 
+    /**
+     * @return string
+     */
     public function getIdentifier(){
         return $this->id;
     }
 
+    /**
+     * @param string $identifier
+     */
     public function setIdentifier($identifier){
         $this->id = $identifier;
     }

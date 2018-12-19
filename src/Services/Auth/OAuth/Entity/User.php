@@ -11,11 +11,23 @@ namespace MedevAuth\Services\Auth\OAuth\Entity;
 
 class User extends DatabaseEntity
 {
-    public function getUsername(){
 
+    /**
+     * @var string
+     */
+    private $username;
+
+    /**
+     * @return string
+     */
+    public function getUsername(){
+        return $this->username;
     }
 
-    public function setUsername(){
-
+    /**
+     * @param string $username
+     */
+    public function setUsername($username){
+        $this->username = $username;
     }
 }
