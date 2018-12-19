@@ -13,7 +13,7 @@ namespace MedevAuth\Services\Auth\OAuth\Repository;
 
 
 
-class UserRepository extends DBRepository
+interface UserRepository
 {
 
     /**
@@ -21,7 +21,5 @@ class UserRepository extends DBRepository
      * @param string $password
      * @return bool
      */
-    public function validateUser($username, $password){
-
-    }
+    public function validateUser($username, $password);
 }

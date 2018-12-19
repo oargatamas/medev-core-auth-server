@@ -11,7 +11,7 @@ namespace MedevAuth\Services\Auth\OAuth\Repository;
 
 use Medoo\Medoo;
 
-class DBRepository
+class SQLRepository
 {
 
     /**
@@ -22,18 +22,13 @@ class DBRepository
     /**
      * @return Medoo
      */
-    public function getDb()
-    {
+    public function getDb(){
         return $this->db;
     }
-
     /**
      * @param Medoo $db
      */
-    public function setDb($db)
-    {
+    public function setDb($db){
         $this->db = $db;
     }
-
-
 }

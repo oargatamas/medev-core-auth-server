@@ -11,23 +11,19 @@ namespace MedevAuth\Services\Auth\OAuth\Repository;
 
 use MedevAuth\Services\Auth\OAuth\Entity\Client;
 
-class ClientRepository extends DBRepository
+interface ClientRepository
 {
 
     /**
      * @param string $clientIdentifier
      * @return Client
      */
-    public function getClientEntity($clientIdentifier){
-
-    }
+    public function getClientEntity($clientIdentifier);
 
     /**
      * @param Client $clientIdentifier
      * @param string $secret
      * @param bool $validateSecret
      */
-    public function validateClient(Client $clientIdentifier, $secret, $validateSecret){
-
-    }
+    public function validateClient(Client $clientIdentifier, $secret, $validateSecret);
 }

@@ -16,67 +16,54 @@ namespace MedevAuth\Services\Auth\OAuth\Repository;
 
 
 use MedevAuth\Services\Auth\OAuth\Entity\Client;
-use MedevAuth\Services\Auth\OAuth\Entity\Token;
+use MedevAuth\Services\Auth\OAuth\Entity\GenericToken;
 use MedevAuth\Services\Auth\OAuth\Entity\User;
 
-class TokenRepository extends DBRepository
+interface TokenRepository
 {
 
     /**
      * @param Client $client
      * @param User $user
-     * @param array $scopes
+     * @param string[] $scopes
      */
-    public function generateToken(Client $client, User $user, array $scopes){
-
-    }
+    public function generateToken(Client $client, User $user, $scopes);
 
 
     /**
-     * @param User $user
+     * @param string $tokenIdentifier
      */
-    public function getTokenForUser(User $user){
-
-    }
+    public function getToken($tokenIdentifier);
 
 
     /**
-     * @param Token $token
+     * @param GenericToken $token
      */
-    public function persistToken(Token $token){
+    public function persistToken(GenericToken $token);
 
-    }
+    /**
+     * @param string $tokenIdentifier
+     */
+    public function revokeToken($tokenIdentifier);
 
 
     /**
-     * @param $tokenIdentifier
+     * @param string $tokenString
      */
-    public function revokeToken($tokenIdentifier){
-
-    }
+    public function validateSerializedToken($tokenString);
 
 
     /**
-     * @param $tokenString
+     * @param GenericToken $token
+     * @return bool
      */
-    public function validateSerializedToken($tokenString){
-
-    }
-
-
-    /**
-     * @param Token $token
-     */
-    public function isTokenBlackListed(Token $token){
-
-    }
+    public function isTokenBlackListed(GenericToken $token);
 
 
     /**
      * @param $tokenString
+     * @return GenericToken
      */
-    public function parseToken($tokenString){
-
-    }
+    public function parseToken($tokenString);
 
 }

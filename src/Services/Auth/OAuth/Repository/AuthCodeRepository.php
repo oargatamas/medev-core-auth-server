@@ -11,43 +11,33 @@ namespace MedevAuth\Services\Auth\OAuth\Repository;
 
 use MedevAuth\Services\Auth\OAuth\Entity\AuthCode;
 
-class AuthCodeRepository extends DBRepository
+interface AuthCodeRepository
 {
     /**
      * @return AuthCode
      */
-    public function getNewAuthCode(){
-
-    }
+    public function getNewAuthCode();
 
     /**
      * @param AuthCode $authCode
      */
-    public function persistNewAuthCode(AuthCode $authCode){
-
-    }
+    public function persistNewAuthCode(AuthCode $authCode);
 
     /**
      * @param $codeIdentifier
      * @return bool
      */
-    public function revokeAuthCode($codeIdentifier){
-
-    }
+    public function revokeAuthCode($codeIdentifier);
 
     /**
      * @param $codeIdentifier
      * @return bool
      */
-    public function isAuthCodeRevoked($codeIdentifier){
-
-    }
+    public function isAuthCodeRevoked($codeIdentifier);
 
     /**
      * @param AuthCode $authCode
      * @return bool
      */
-    public function validateAuthCode(AuthCode $authCode){
-
-    }
+    public function validateAuthCode(AuthCode $authCode);
 }
