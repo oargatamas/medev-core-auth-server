@@ -12,14 +12,16 @@ namespace MedevAuth\Services\Auth\OAuth\Repository;
 
 
 
-use MedevAuth\Services\Auth\OAuth\Entity\UserEntityInterface;
 
-interface UserRepositoryInterface
+class UserRepository extends DBRepository
 {
+
     /**
      * @param string $username
      * @param string $password
-     * @return UserEntityInterface
+     * @return bool
      */
-    public function validateUser($username, $password);
+    public function validateUser($username, $password){
+
+    }
 }

@@ -9,25 +9,36 @@
 namespace MedevAuth\Services\Auth\OAuth\Repository;
 
 
-use MedevAuth\Services\Auth\OAuth\Entity\ClientEntityInterface;
-use MedevAuth\Services\Auth\OAuth\Entity\UserEntityInterface;
 
-interface ScopeRepository
+
+use MedevAuth\Services\Auth\OAuth\Entity\Client;
+use MedevAuth\Services\Auth\OAuth\Entity\User;
+
+class ScopeRepository extends DBRepository
 {
-    /**
-     * @param UserEntityInterface $user
-     * @return string[]
-     */
-    public function getUserScopes(UserEntityInterface $user);
 
     /**
-     * @param ClientEntityInterface $client
+     * @param User $user
      * @return string[]
      */
-    public function getClientScopes(ClientEntityInterface $client);
+    public function getUserScopes(User $user){
+
+    }
+
+
+    /**
+     * @param Client $client
+     * @return string[]
+     */
+    public function getClientScopes(Client $client){
+
+    }
+
 
     /**
      * @return string[]
      */
-    public function getRefreshTokenScopes();
+    public function getRefreshTokenScopes(){
+
+    }
 }
