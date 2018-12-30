@@ -59,7 +59,6 @@ class OAuthService extends APIService
 
     protected function registerContainerComponents(ContainerInterface $container)
     {
-        //Not used here
     }
 
 

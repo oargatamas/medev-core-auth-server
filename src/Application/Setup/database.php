@@ -2,7 +2,7 @@
 
 use Medoo\Medoo;
 
-$container["database"] = function ($container) {
+$container["database"] = function () {
     $db = new Medoo(
         ['database_type' => 'mysql',
             'database_name' => 'medevsuite_auth',

@@ -23,30 +23,6 @@ class MedevSuiteCustomAuthService extends OAuthService
 
     protected function registerContainerComponents(ContainerInterface $container)
     {
-        $container["OauthUserRepository"] = function ($container) {
-            return new UserRepository($container);
-        };
 
-        $container["OauthAccessTokenConfig"] = function ($container) {
-            $publicKey = "file://../config/publicKey.pem";
-            $privateKey = "file://../config/privateKey.pem";
-            $passPhrase = "test";
-            return new AccessTokenConfig($publicKey, $privateKey, $passPhrase);
-        };
-
-        $container["OauthRefreshTokenConfig"] = function ($container) {
-            $publicKey = "file://../config/publicKey.pem";
-            $privateKey = "file://../config/privateKey.pem";
-            $passPhrase = "test";
-            return new RefreshTokenConfig($publicKey, $privateKey, $passPhrase);
-        };
-
-        $container["OauthAccessTokenRepository"] = function ($container) {
-            return new AccessTokenRepository($container);
-        };
-
-        $container["OauthRefreshTokenRepository"] = function ($container) {
-            return new RefreshTokenRepository($container);
-        };
     }
 }

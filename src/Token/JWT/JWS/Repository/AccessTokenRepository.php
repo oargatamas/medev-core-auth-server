@@ -10,16 +10,19 @@ namespace MedevAuth\Token\JWT\JWS\Repository;
 
 
 use MedevAuth\Services\Auth\OAuth\Entity\GenericToken;
+use MedevAuth\Token\JWT\JWS\SignedJWT;
 
 class AccessTokenRepository extends JWSRepository
 {
 
     /**
      * @param string $tokenIdentifier
+     * @return SignedJWT
      */
     public function getToken($tokenIdentifier)
     {
-        // TODO: Implement getToken() method.
+        // As we are not storing access tokens, the get token will return null
+        return null;
     }
 
     /**
@@ -27,7 +30,7 @@ class AccessTokenRepository extends JWSRepository
      */
     public function persistToken(GenericToken $token)
     {
-        // TODO: Implement persistToken() method.
+        // We are not storing access tokens due to the expiration of the JWT
     }
 
     /**
@@ -35,7 +38,7 @@ class AccessTokenRepository extends JWSRepository
      */
     public function revokeToken($tokenIdentifier)
     {
-        // TODO: Implement revokeToken() method.
+        // Due to the expiration of the JWT, access tokens should not be revoked
     }
 
     /**
@@ -44,6 +47,7 @@ class AccessTokenRepository extends JWSRepository
      */
     public function isTokenBlackListed(GenericToken $token)
     {
-        // TODO: Implement isTokenBlackListed() method.
+        // Due to the expiration of the JWT, access tokens are not blacklisted at all
+        return false;
     }
 }

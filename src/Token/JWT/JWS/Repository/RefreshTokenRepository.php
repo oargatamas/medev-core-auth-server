@@ -44,6 +44,16 @@ class RefreshTokenRepository extends JWSRepository
      */
     public function isTokenBlackListed(GenericToken $token)
     {
-        // TODO: Implement isTokenBlackListed() method.
+        $isBlackListed = $this->db->has(
+            "RefreshTokens",
+            [
+                "AND" => [
+                    "Id" => $token->getIdentifier(),
+                    "IsBlackListed" => 1
+                ]
+            ]
+        );
+
+        return $isBlackListed;
     }
 }

@@ -14,15 +14,15 @@ use MedevSlim\Core\ErrorHandlers\PHPRuntimeHandler;
 
 
 $container["errorHandler"] = function () use ($container) {
-    return new APIExceptionHandler($container->get('settings')['displayErrorDetails']);
+    return new APIExceptionHandler($container->get('settings')['displayErrorDetails'],$container["logger"]);
 };
 
-$container["phpErrorHandler"] = function () {
-    return new PHPRuntimeHandler();
+$container["phpErrorHandler"] = function () use ($container) {
+    return new PHPRuntimeHandler($container["logger"]);
 };
-$container["notFoundHandler"] = function () {
-    return new NotFoundHandler();
+$container["notFoundHandler"] = function () use ($container) {
+    return new NotFoundHandler($container["logger"]);
 };
-$container["notAllowedHandler"] = function () {
-    return new NotAllowedHandler();
+$container["notAllowedHandler"] = function () use ($container) {
+    return new NotAllowedHandler($container["logger"]);
 };
