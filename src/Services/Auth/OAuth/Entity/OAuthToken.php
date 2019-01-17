@@ -9,25 +9,54 @@
 namespace MedevAuth\Services\Auth\OAuth\Entity;
 
 
-abstract class GenericToken extends DatabaseEntity
+class OAuthToken extends DatabaseEntity
 {
+
+    /**
+     * @var \DateTime
+     */
+    protected $createdAt;
+
     /**
      * @var int
      */
     protected $expiration;
+
     /**
      * @var string[]
      */
     protected $scopes;
+
     /**
      * @var Client
      */
     protected $client;
+
     /**
      * @var User
      */
     protected $user;
 
+    /**
+     * @var bool
+     */
+    protected $isRevoked;
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt(): \DateTime
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param \DateTime $createdAt
+     */
+    public function setCreatedAt(\DateTime $createdAt): void
+    {
+        $this->createdAt = $createdAt;
+    }
 
     /**
      * @return int
@@ -93,7 +122,26 @@ abstract class GenericToken extends DatabaseEntity
     }
 
     /**
+     * @return bool
+     */
+    public function isRevoked(): bool
+    {
+        return $this->isRevoked;
+    }
+
+    /**
+     * @param bool $isRevoked
+     */
+    public function setIsRevoked(bool $isRevoked): void
+    {
+        $this->isRevoked = $isRevoked;
+    }
+
+    /**
      * @return string
      */
-    public abstract function finalizeToken();
+    public function finalizeToken()
+    {
+        return $this->identifier;
+    }
 }

@@ -12,10 +12,9 @@ namespace MedevAuth\Token\JWT\JWS;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Signer\Key;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
-use Lcobucci\JWT\Token;
-use MedevAuth\Token\JWT\JWT;
+use MedevAuth\Token\JWT\OAuthJWT;
 
-class SignedJWT extends JWT
+class OAuthJWS extends OAuthJWT
 {
     /**
      * @var Key

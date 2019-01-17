@@ -12,44 +12,24 @@ namespace MedevAuth\Token\JWT;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\Token;
-use MedevAuth\Services\Auth\OAuth\Entity\GenericToken;
+use MedevAuth\Services\Auth\OAuth\Entity\OAuthToken;
 
-class JWT extends GenericToken
+class OAuthJWT extends OAuthToken
 {
 
     /**
-     * @var Token
+     * @var \Lcobucci\JWT\Token
      */
     protected $jwt;
 
 
-
     /**
-     * @param string $serializedToken
-     * @return JWT
-     */
-    public static function fromString($serializedToken){
-        $jwt = (new Parser())->parse($serializedToken);
-
-        $token = new JWT();
-        $token->setJwt($jwt);
-
-        $token->setIdentifier($jwt->getHeader("jti"));
-        $token->setExpiration($jwt->getClaim("exp"));
-        $token->setScopes($jwt->getClaim("scopes"));
-        //Todo find out how can we add Client, User and Privatekey content from here
-
-        return $token;
-    }
-
-    /**
-     * @param Token $jwt
+     * @param \Lcobucci\JWT\Token $jwt
      */
     public function setJwt(Token $jwt)
     {
         $this->jwt = $jwt;
     }
-
 
 
     /**
