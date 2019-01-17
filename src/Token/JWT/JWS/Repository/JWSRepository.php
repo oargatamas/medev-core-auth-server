@@ -10,6 +10,7 @@ namespace MedevAuth\Token\JWT\JWS\Repository;
 
 
 
+use Exception;
 use Lcobucci\JWT\Parser;
 use MedevAuth\Services\Auth\OAuth\Entity\Client;
 use MedevAuth\Services\Auth\OAuth\Entity\User;
@@ -49,7 +50,11 @@ abstract class JWSRepository extends SQLRepository implements TokenRepository
 
     public function validateSerializedToken($tokenString)
     {
-        $token = $this->parseToken($tokenString);
+        try{
+            $token = $this->parseToken($tokenString);
+        }catch (Exception $e){
+            throw new UnauthorizedException($e->getMessage());
+        }
 
         $token->setPrivateKey($this->config->privateKey);
 
