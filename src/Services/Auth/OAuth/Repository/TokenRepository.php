@@ -19,6 +19,7 @@ use MedevAuth\Services\Auth\OAuth\Entity\Client;
 use MedevAuth\Services\Auth\OAuth\Entity\OAuthToken;
 use MedevAuth\Services\Auth\OAuth\Entity\User;
 use MedevAuth\Services\Auth\OAuth\Repository\Exception\RepositoryException;
+use MedevSlim\Core\APIService\Exceptions\UnauthorizedException;
 
 interface TokenRepository
 {
@@ -54,7 +55,8 @@ interface TokenRepository
 
     /**
      * @param string $tokenString
-     * @throws RepositoryException
+     * @throws UnauthorizedException
+     * @return OAuthToken
      */
     public function validateSerializedToken($tokenString);
 

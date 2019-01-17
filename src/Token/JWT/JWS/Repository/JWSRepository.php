@@ -16,6 +16,7 @@ use MedevAuth\Services\Auth\OAuth\Entity\User;
 use MedevAuth\Services\Auth\OAuth\Repository\Exception\RepositoryException;
 use MedevAuth\Services\Auth\OAuth\Repository\TokenRepository;
 use MedevAuth\Token\JWT\JWS\OAuthJWS;
+use MedevSlim\Core\APIService\Exceptions\UnauthorizedException;
 use MedevSlim\Core\Database\SQL\SQLRepository;
 use MedevSlim\Utils\UUID\UUID;
 use Medoo\Medoo;
@@ -34,7 +35,7 @@ abstract class JWSRepository extends SQLRepository implements TokenRepository
 
     public function generateToken(Client $client, User $user, $scopes)
     {
-        $token = new OAuthJWS();
+        $token = new OAuthJWS();//Todo give privatekey to it somehow
 
         $token->setIdentifier(UUID::v4()); //Todo double check whether the V4 is fine.
         $token->setUser($user);
@@ -53,12 +54,14 @@ abstract class JWSRepository extends SQLRepository implements TokenRepository
         $token->setPrivateKey($this->config->privateKey);
 
         if (!$token->verifySignature($this->config->publicKey)) {
-            throw new RepositoryException("Invalid token signature.");
+            throw new UnauthorizedException("Invalid token signature.");
         }
 
         if ($this->isTokenBlacklisted($token)) {
-            throw new RepositoryException("Token blacklisted.");
+            throw new UnauthorizedException("Token blacklisted.");
         }
+
+        return $token;
     }
 
 
@@ -66,7 +69,7 @@ abstract class JWSRepository extends SQLRepository implements TokenRepository
     {
         $jwt = (new Parser())->parse($tokenString);
 
-        $token = new OAuthJWS();
+        $token = new OAuthJWS();//Todo give private key to it somehow
         $token->setJwt($jwt);
 
         $token->setIdentifier($jwt->getHeader("jti"));
