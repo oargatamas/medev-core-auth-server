@@ -13,13 +13,15 @@ namespace MedevAuth\Services\Auth\OAuth\Repository;
 
 
 
+use MedevAuth\Services\Auth\OAuth\Repository\Exception\RepositoryException;
+
 interface UserRepository
 {
 
     /**
      * @param string $username
      * @param string $password
-     * @return bool
+     * @throws RepositoryException
      */
     public function validateUser($username, $password);
 }
