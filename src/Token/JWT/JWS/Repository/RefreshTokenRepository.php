@@ -9,47 +9,61 @@
 namespace MedevAuth\Token\JWT\JWS\Repository;
 
 
-use MedevAuth\Services\Auth\OAuth\Entity\GenericToken;
+
+use MedevAuth\Services\Auth\OAuth\Entity\OAuthToken;
+use MedevAuth\Services\Auth\OAuth\Repository\Exception\RepositoryException;
+
 
 class RefreshTokenRepository extends JWSRepository
 {
 
-    /**
-     * @param string $tokenIdentifier
-     */
-    public function getToken($tokenIdentifier)
+    public function persistToken(OAuthToken $token)
     {
-        // TODO: Implement getToken() method.
+        $this->db->insert("OAuth_RefreshTokens",
+                [
+                    "Id" => $token->getIdentifier(),
+                    "UserId" => $token->getUser()->getIdentifier(),
+                    "ClientId" => $token->getClient()->getIdentifier(),
+                    "IsRevoked" => false,
+                    "CreatedAt" => $token->getCreatedAt()->getTimestamp() ,
+                    "Expiration" => $token->getCreatedAt()->getTimestamp() + $token->getExpiration(),
+                ]
+            );
+
+        //Todo test is briefly
+        $result = $this->db->error();
+        if(!is_null($result)){
+            throw new RepositoryException(implode(" - ",$result));
+        }
     }
 
-    /**
-     * @param GenericToken $token
-     */
-    public function persistToken(GenericToken $token)
-    {
-        // TODO: Implement persistToken() method.
-    }
 
-    /**
-     * @param string $tokenIdentifier
-     */
     public function revokeToken($tokenIdentifier)
     {
-        // TODO: Implement revokeToken() method.
+        $this->db->update("OAuth_RefreshTokens",
+            [
+                "IsRevoked" => true
+            ],
+            [
+                "Id" => $tokenIdentifier
+            ]);
+
+        //Todo test is briefly
+        $result = $this->db->error();
+        if(!is_null($result)){
+            throw new RepositoryException(implode(" - ",$result));
+        }
     }
 
-    /**
-     * @param GenericToken $token
-     * @return bool
-     */
-    public function isTokenBlackListed(GenericToken $token)
+
+    public function isTokenBlackListed(OAuthToken $token)
     {
         $isBlackListed = $this->db->has(
             "RefreshTokens",
             [
                 "AND" => [
                     "Id" => $token->getIdentifier(),
-                    "IsBlackListed" => 1
+                    "IsBlackListed" => true
                 ]
             ]
         );

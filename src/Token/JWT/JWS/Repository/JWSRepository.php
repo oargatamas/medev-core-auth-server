@@ -10,17 +10,15 @@ namespace MedevAuth\Token\JWT\JWS\Repository;
 
 
 
-use Lcobucci\JWT\Token;
+use Lcobucci\JWT\Parser;
 use MedevAuth\Services\Auth\OAuth\Entity\Client;
-use MedevAuth\Services\Auth\OAuth\Entity\GenericToken;
 use MedevAuth\Services\Auth\OAuth\Entity\User;
-use MedevAuth\Services\Auth\OAuth\Repository\SQLRepository;
+use MedevAuth\Services\Auth\OAuth\Repository\Exception\RepositoryException;
 use MedevAuth\Services\Auth\OAuth\Repository\TokenRepository;
-use MedevAuth\Token\JWT\JWS\SignedJWT;
-use MedevAuth\Token\JWT\JWT;
-use MedevSlim\Core\APIService\Exceptions\UnauthorizedException;
+use MedevAuth\Token\JWT\JWS\OAuthJWS;
+use MedevSlim\Core\Database\SQL\SQLRepository;
 use MedevSlim\Utils\UUID\UUID;
-use Psr\Container\ContainerInterface;
+use Medoo\Medoo;
 
 
 abstract class JWSRepository extends SQLRepository implements TokenRepository
@@ -28,20 +26,15 @@ abstract class JWSRepository extends SQLRepository implements TokenRepository
 
     private $config;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(Medoo $db)
     {
-        $this->config = $container->get("ApplicationConfig")["jwt"]; //Todo init config
+        parent::__construct($db);
     }
 
-    /**
-     * @param Client $client
-     * @param User $user
-     * @param string[] $scopes
-     * @return GenericToken|SignedJWT
-     */
+
     public function generateToken(Client $client, User $user, $scopes)
     {
-        $token = new SignedJWT();
+        $token = new OAuthJWS();
 
         $token->setIdentifier(UUID::v4()); //Todo double check whether the V4 is fine.
         $token->setUser($user);
@@ -53,39 +46,35 @@ abstract class JWSRepository extends SQLRepository implements TokenRepository
     }
 
 
-    /**
-     * @param string $tokenString
-     * @return Token|SignedJWT
-     * @throws UnauthorizedException
-     */
     public function validateSerializedToken($tokenString)
     {
-        /* @var SignedJWT $token*/
         $token = $this->parseToken($tokenString);
 
         $token->setPrivateKey($this->config->privateKey);
 
         if (!$token->verifySignature($this->config->publicKey)) {
-            //"Invalid token signature"
-            throw new UnauthorizedException();
+            throw new RepositoryException("Invalid token signature.");
         }
 
         if ($this->isTokenBlacklisted($token)) {
-            //"Token is blacklisted"
-            throw new UnauthorizedException();
+            throw new RepositoryException("Token blacklisted.");
         }
-
-        return $token;
     }
 
 
-    /**
-     * @param string $tokenString
-     * @return GenericToken|JWT
-     */
     public function parseToken($tokenString)
     {
-        return JWT::fromString($tokenString);
+        $jwt = (new Parser())->parse($tokenString);
+
+        $token = new OAuthJWS();
+        $token->setJwt($jwt);
+
+        $token->setIdentifier($jwt->getHeader("jti"));
+        $token->setExpiration($jwt->getClaim("exp"));
+        $token->setScopes($jwt->getClaim("scopes"));
+        //Todo find out how can we add Client, User and Privatekey content from here
+
+        return $token;
     }
 
 }

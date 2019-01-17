@@ -16,8 +16,9 @@ namespace MedevAuth\Services\Auth\OAuth\Repository;
 
 
 use MedevAuth\Services\Auth\OAuth\Entity\Client;
-use MedevAuth\Services\Auth\OAuth\Entity\GenericToken;
+use MedevAuth\Services\Auth\OAuth\Entity\OAuthToken;
 use MedevAuth\Services\Auth\OAuth\Entity\User;
+use MedevAuth\Services\Auth\OAuth\Repository\Exception\RepositoryException;
 
 interface TokenRepository
 {
@@ -26,43 +27,49 @@ interface TokenRepository
      * @param Client $client
      * @param User $user
      * @param string[] $scopes
+     * @return OAuthToken
      */
     public function generateToken(Client $client, User $user, $scopes);
 
 
     /**
      * @param string $tokenIdentifier
+     * @throws RepositoryException
      */
-    public function getToken($tokenIdentifier);
+    //public function getToken($tokenIdentifier);
 
 
     /**
-     * @param GenericToken $token
+     * @param OAuthToken $token
+     * @throws RepositoryException
      */
-    public function persistToken(GenericToken $token);
+    public function persistToken(OAuthToken $token);
 
     /**
      * @param string $tokenIdentifier
+     * @throws RepositoryException
      */
     public function revokeToken($tokenIdentifier);
 
 
     /**
      * @param string $tokenString
+     * @throws RepositoryException
      */
     public function validateSerializedToken($tokenString);
 
 
     /**
-     * @param GenericToken $token
+     * @param OAuthToken $token
      * @return bool
      */
-    public function isTokenBlackListed(GenericToken $token);
+    public function isTokenBlackListed(OAuthToken $token);
 
 
     /**
      * @param $tokenString
-     * @return GenericToken
+     * @return OAuthToken
+     * @throws RepositoryException
      */
     public function parseToken($tokenString);
 
