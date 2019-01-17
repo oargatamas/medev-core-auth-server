@@ -15,7 +15,7 @@ class OAuthToken extends DatabaseEntity
 {
 
     /**
-     * @var \DateTime
+     * @var DateTime
      */
     protected $createdAt;
 
