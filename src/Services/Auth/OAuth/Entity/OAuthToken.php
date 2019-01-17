@@ -9,6 +9,8 @@
 namespace MedevAuth\Services\Auth\OAuth\Entity;
 
 
+use DateTime;
+
 class OAuthToken extends DatabaseEntity
 {
 
@@ -45,7 +47,7 @@ class OAuthToken extends DatabaseEntity
     /**
      * @return \DateTime
      */
-    public function getCreatedAt(): \DateTime
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
@@ -53,7 +55,7 @@ class OAuthToken extends DatabaseEntity
     /**
      * @param \DateTime $createdAt
      */
-    public function setCreatedAt(\DateTime $createdAt): void
+    public function setCreatedAt(DateTime $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
