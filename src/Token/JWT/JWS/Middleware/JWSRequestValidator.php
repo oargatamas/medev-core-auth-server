@@ -47,8 +47,8 @@ class JWSRequestValidator
         //this will throw Exception if the token not valid.
         $jws = $this->jwsRepo->validateSerializedToken($tokenString);
 
-        $request->withAttribute("access_token", $jws); //Todo move key to static field
-        $request->withAttribute("scopes", $jws->getClaim("scopes")); //Todo move key to static field
+        //$request->withAttribute("access_token", $jws); //Todo move key to static field
+        $request->withAttribute("scopes", $jws->getScopes()); //Todo move key to static field
 
         $response = $next($request, $response);
         return $response;
