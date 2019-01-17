@@ -10,22 +10,26 @@ namespace MedevAuth\Services\Auth\OAuth\Repository;
 
 
 use MedevAuth\Services\Auth\OAuth\Entity\AuthCode;
+use MedevAuth\Services\Auth\OAuth\Entity\Client;
+use MedevAuth\Services\Auth\OAuth\Repository\Exception\RepositoryException;
 
 interface AuthCodeRepository
 {
     /**
+     * @param Client $client
      * @return AuthCode
      */
-    public function getNewAuthCode();
+    public function getNewAuthCode(Client $client);
 
     /**
      * @param AuthCode $authCode
+     * @throws RepositoryException
      */
     public function persistNewAuthCode(AuthCode $authCode);
 
     /**
      * @param $codeIdentifier
-     * @return bool
+     * @throws RepositoryException
      */
     public function revokeAuthCode($codeIdentifier);
 
@@ -37,7 +41,7 @@ interface AuthCodeRepository
 
     /**
      * @param AuthCode $authCode
-     * @return bool
+     * @throws RepositoryException
      */
     public function validateAuthCode(AuthCode $authCode);
 }

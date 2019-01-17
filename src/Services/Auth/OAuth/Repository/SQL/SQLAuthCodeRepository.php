@@ -9,62 +9,104 @@
 namespace MedevAuth\Services\Auth\OAuth\Repository\SQL;
 
 
+use DateTime;
 use MedevAuth\Services\Auth\OAuth\Entity\AuthCode;
+use MedevAuth\Services\Auth\OAuth\Entity\Client;
 use MedevAuth\Services\Auth\OAuth\Repository\AuthCodeRepository;
+use MedevAuth\Services\Auth\OAuth\Repository\Exception\RepositoryException;
 use MedevSlim\Core\Database\SQL\SQLRepository;
+use MedevSlim\Utils\RandomString;
 use Medoo\Medoo;
 
+
+
+/**
+ * Class SQLAuthCodeRepository
+ * @package MedevAuth\Services\Auth\OAuth\Repository\SQL
+ * {@inheritdoc}
+ */
 class SQLAuthCodeRepository extends SQLRepository implements AuthCodeRepository
 {
-    /**
-     * SQLAuthCodeRepository constructor.
-     * @param Medoo $db
-     */
+
     public function __construct(Medoo $db)
     {
         parent::__construct($db);
     }
 
-    /**
-     * @return AuthCode
-     */
-    public function getNewAuthCode()
+
+    public function getNewAuthCode(Client $client)
     {
-        // TODO: Implement getNewAuthCode() method.
+        $now = new DateTime();
+
+        $authCode = new AuthCode();
+
+        $authCode->setClient($client);
+        $authCode->setIdentifier(RandomString::generate(20));
+        $authCode->setCreatedAt($now->getTimestamp());
+        $authCode->setExpiresAt($now->modify("+5 minutes")->getTimestamp());
+        $authCode->setRedirectUri($client->getRedirectUri());
+
+        return $authCode;
     }
 
-    /**
-     * @param AuthCode $authCode
-     */
     public function persistNewAuthCode(AuthCode $authCode)
     {
-        // TODO: Implement persistNewAuthCode() method.
+        $this->db->insert("OAuth_AuthCodes",[
+            "Id" => $authCode->getIdentifier(),
+            "ClientId" => $authCode->getClient()->getIdentifier(),
+            "RedirectURI" => $authCode->getRedirectUri(),
+            "CreatedAt" => $authCode->getCreatedAt(),
+            "Expiration" => $authCode->getExpiresAt(),
+        ]);
+
+        //Todo test is briefly
+        $result = $this->db->error();
+        if(!is_null($result)){
+            throw new RepositoryException(implode(" - ",$result));
+        }
     }
 
-    /**
-     * @param $codeIdentifier
-     * @return bool
-     */
+
     public function revokeAuthCode($codeIdentifier)
     {
-        // TODO: Implement revokeAuthCode() method.
+        $this->db->update("OAuth_AuthCodes",
+            [
+                "IsRevoked" => true
+            ],
+            [
+                "Id" => $codeIdentifier
+            ]);
+
+        //Todo test is briefly
+        $result = $this->db->error();
+        if(!is_null($result)){
+            throw new RepositoryException(implode(" - ",$result));
+        }
     }
 
-    /**
-     * @param $codeIdentifier
-     * @return bool
-     */
+
     public function isAuthCodeRevoked($codeIdentifier)
     {
-        // TODO: Implement isAuthCodeRevoked() method.
+        $result = $this->db->has("OAuth_AuthCodes",
+            [
+                "Id" => $codeIdentifier,
+                "IsRevoked" => true
+            ]);
+
+        return $result;
     }
 
-    /**
-     * @param AuthCode $authCode
-     * @return bool
-     */
     public function validateAuthCode(AuthCode $authCode)
     {
-        // TODO: Implement validateAuthCode() method.
+        $result = $this->db->has("OAuth_AuthCodes",
+            [
+                "Id" => $authCode->getIdentifier(),
+                "IsRevoked" => false,
+                "ExpiresAt[>]" => date('Y\-m\-d\ h:i:s')
+            ]);
+
+        if(!$result){
+            throw new RepositoryException("Authcode ".$authCode->getIdentifier()." not valid.");
+        }
     }
 }

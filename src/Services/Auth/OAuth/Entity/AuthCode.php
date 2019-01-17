@@ -13,27 +13,21 @@ class AuthCode extends DatabaseEntity
 {
 
     /**
-     * @var string
-     */
-    private $code;
-    /**
      * @var Client
      */
     private $client;
-
     /**
-     * @return string
+     * @var string
      */
-    public function getCode(){
-        return $this->code;
-    }
-
+    private $redirectUri;
     /**
-     * @param string $code
+     * @var int
      */
-    public function setCode($code){
-        $this->code = $code;
-    }
+    private $createdAt;
+    /**
+     * @var int
+     */
+    private $expiresAt;
 
     /**
      * @return Client
@@ -48,4 +42,58 @@ class AuthCode extends DatabaseEntity
     public function setClient(Client $client){
         $this->client = $client;
     }
+
+    /**
+     * @return int
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param int $createdAt
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    /**
+     * @return int
+     */
+    public function getExpiresAt()
+    {
+        return $this->expiresAt;
+    }
+
+    /**
+     * @param int $expiresAt
+     */
+    public function setExpiresAt($expiresAt)
+    {
+        $this->expiresAt = $expiresAt;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRedirectUri(): string
+    {
+        if($this->redirectUri){
+            return $this->client->getRedirectUri();
+        }else{
+            return $this->redirectUri;
+        }
+
+    }
+
+    /**
+     * @param string $redirectUri
+     */
+    public function setRedirectUri(string $redirectUri)
+    {
+        $this->redirectUri = $redirectUri;
+    }
+
 }
