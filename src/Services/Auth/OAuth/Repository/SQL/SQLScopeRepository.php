@@ -15,40 +15,49 @@ use MedevAuth\Services\Auth\OAuth\Repository\ScopeRepository;
 use MedevSlim\Core\Database\SQL\SQLRepository;
 use Medoo\Medoo;
 
+
+/**
+ * Class SQLScopeRepository
+ * @package MedevAuth\Services\Auth\OAuth\Repository\SQL
+ * {@inheritdoc}
+ */
 class SQLScopeRepository extends SQLRepository implements ScopeRepository
 {
-    /**
-     * SQLAuthCodeRepository constructor.
-     * @param Medoo $db
-     */
+
     public function __construct(Medoo $db)
     {
         parent::__construct($db);
     }
 
-    /**
-     * @param User $user
-     * @return string[]
-     */
+
     public function getUserScopes(User $user)
     {
-        // TODO: Implement getUserScopes() method.
+        $result = $this->db->select("OAuth_UserScopes",
+            ["ScopeId"],
+            ["UserId" => $user->getIdentifier()]
+        );
+
+        $userScopes = array_reduce($result, 'array_merge', array());;
+
+        return $userScopes;
     }
 
-    /**
-     * @param Client $client
-     * @return string[]
-     */
+
     public function getClientScopes(Client $client)
     {
-        // TODO: Implement getClientScopes() method.
+        $result = $this->db->select("OAuth_ClientScopes",
+            ["ScopeId"],
+            ["ClientId" => $client->getIdentifier()]
+        );
+
+        $clientScopes = array_reduce($result, 'array_merge', array());;
+
+        return $clientScopes;
     }
 
-    /**
-     * @return string[]
-     */
+
     public function getRefreshTokenScopes()
     {
-        // TODO: Implement getRefreshTokenScopes() method.
+        return ["get:accesstoken"];
     }
 }
