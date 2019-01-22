@@ -14,7 +14,6 @@ use Exception;
 use Lcobucci\JWT\Parser;
 use MedevAuth\Services\Auth\OAuth\Entity\Client;
 use MedevAuth\Services\Auth\OAuth\Entity\User;
-use MedevAuth\Services\Auth\OAuth\Repository\Exception\RepositoryException;
 use MedevAuth\Services\Auth\OAuth\Repository\TokenRepository;
 use MedevAuth\Token\JWT\JWS\OAuthJWS;
 use MedevSlim\Core\APIService\Exceptions\UnauthorizedException;
