@@ -10,13 +10,13 @@ namespace MedevAuth\Services\Auth\OAuth\GrantType;
 
 
 
-use MedevAuth\Services\Auth\OAuth\Entity\ClientEntityInterface;
-use MedevAuth\Services\Auth\OAuth\Entity\TokenEntityInterface;
-use MedevAuth\Services\Auth\OAuth\Entity\UserEntityInterface;
+use MedevAuth\Services\Auth\OAuth\Entity\Client;
+use MedevAuth\Services\Auth\OAuth\Entity\OAuthToken;
+use MedevAuth\Services\Auth\OAuth\Entity\User;
 use MedevAuth\Services\Auth\OAuth\OAuthService;
-use MedevAuth\Services\Auth\OAuth\Repository\ClientRepositoryInterface;
+use MedevAuth\Services\Auth\OAuth\Repository\ClientRepository;
 use MedevAuth\Services\Auth\OAuth\Repository\ScopeRepository;
-use MedevAuth\Services\Auth\OAuth\Repository\TokenRepositoryInterface;
+use MedevAuth\Services\Auth\OAuth\Repository\TokenRepository;
 use MedevSlim\Core\APIAction\APIAction;
 use MedevSlim\Core\APIService\Exceptions\BadRequestException;
 use MedevSlim\Core\APIService\Exceptions\UnauthorizedException;
@@ -39,12 +39,12 @@ abstract class GrantType extends APIAction
     protected $requiredParams;
 
     /**
-     * @var TokenRepositoryInterface
+     * @var TokenRepository
      */
     protected $accessTokenRepository, $refreshTokenRepository;
 
     /**
-     * @var ClientRepositoryInterface
+     * @var ClientRepository
      */
     protected $clientRepository;
 
@@ -89,15 +89,15 @@ abstract class GrantType extends APIAction
      */
     protected function grantAccess(Request $request, Response $response)
     {
-        /** @var TokenEntityInterface $oldRefreshToken */
+        /** @var OAuthToken $oldRefreshToken */
         $oldRefreshToken = $request->getAttribute("old_refresh_token");
-        /** @var UserEntityInterface $user */
+        /** @var User $user */
         $user = $request->getAttribute("user_entity");
-        /** @var ClientEntityInterface $client */
+        /** @var Client $client */
         $client = $request->getAttribute("client_entity");
 
 
-        $accessToken = $this->accessTokenRepository->generateToken($client->getIdentifier(),$user->getIdentifier(),$this->scopeRepository->getUserScopes($user));
+        $accessToken = $this->accessTokenRepository->generateToken($client,$user,$this->scopeRepository->getUserScopes($user));
         $this->accessTokenRepository->persistToken($accessToken);
 
         $data = [];
@@ -106,7 +106,7 @@ abstract class GrantType extends APIAction
         $data["expires_in"] = $accessToken->getExpiration();
 
         if($this->provideRefreshTokens){
-            $refreshToken = $this->refreshTokenRepository->generateToken($client->getIdentifier(),$user->getIdentifier(),$this->scopeRepository->getRefreshTokenScopes());
+            $refreshToken = $this->refreshTokenRepository->generateToken($client,$user,$this->scopeRepository->getRefreshTokenScopes());
             $this->refreshTokenRepository->revokeToken($oldRefreshToken->getIdentifier());
             $this->refreshTokenRepository->persistToken($refreshToken);
             $data["refresh_token"] = $refreshToken->finalizeToken();

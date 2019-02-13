@@ -23,12 +23,12 @@ use Slim\Interfaces\RouteGroupInterface;
 class OAuthService extends APIService
 {
 
-    public static $ACCESS_TOKEN_REPO  = "OauthAccessTokenRepository";
-    public static $REFRESH_TOKEN_REPO = "OauthRefreshTokenRepository";
-    public static $CLIENT_REPO        = "OauthClientRepository";
-    public static $USER_REPO          = "OauthUserRepository";
-    public static $SCOPE_REPO         = "OauthScopeRepository";
-    public static $AUTH_CODE_REPO     = "OauthAuthCodeRepository";
+    const ACCESS_TOKEN_REPO  = "OauthAccessTokenRepository";
+    const REFRESH_TOKEN_REPO = "OauthRefreshTokenRepository";
+    const CLIENT_REPO        = "OauthClientRepository";
+    const USER_REPO          = "OauthUserRepository";
+    const SCOPE_REPO         = "OauthScopeRepository";
+    const AUTH_CODE_REPO     = "OauthAuthCodeRepository";
 
 
     /**
@@ -47,8 +47,7 @@ class OAuthService extends APIService
 
     protected function registerRoutes(App $app, ContainerInterface $container)
     {
-        $app->post("/token",new GrantAccess($container, $this));
-        $app->post("/token/revoke/{tokenId}",new RevokeToken($container))->add(new JWSRequestValidator($container->get(OAuthService::$ACCESS_TOKEN_REPO)));
+
     }
 
 
@@ -73,6 +72,7 @@ class OAuthService extends APIService
 
 
     public function getGrantType($type){
+        //Todo improve error handling
         return $this->grantTypes[$type];
     }
 

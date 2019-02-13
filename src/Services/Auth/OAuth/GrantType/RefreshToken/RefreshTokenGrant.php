@@ -10,7 +10,7 @@ namespace MedevAuth\Services\Auth\OAuth\GrantType\RefreshToken;
 
 
 
-use MedevAuth\Services\Auth\OAuth\Entity\TokenEntityInterface;
+
 use MedevAuth\Services\Auth\OAuth\GrantType\GrantType;
 use MedevSlim\Core\APIService\Exceptions\APIException;
 use Psr\Container\ContainerInterface;

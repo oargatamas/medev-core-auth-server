@@ -44,7 +44,6 @@ class GrantAccess extends APIAction
             $handler = $this->authService->getGrantType($body["grant_type"]);
             return $handler($request,$response,$args);
         }else{
-
             throw new ForbiddenException();
         }
     }
