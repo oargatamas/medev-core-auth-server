@@ -26,12 +26,8 @@ class GetClientData extends APIRepositoryAction
         $clientId = $args["client_id"]; //Todo move to constant
 
         $storedData = $this->database->get("OAuth_Clients",
-            [
-                "Id","Name","Secret","RedirectURI","Status"
-            ],
-            [
-                "Id" => $clientId
-            ]
+            ["Id","Name","Secret","RedirectURI","Status"],
+            ["Id" => $clientId]
         );
 
         $grantTypes = $this->database->select("OAuth_ClientGrantTypes", //From Table
