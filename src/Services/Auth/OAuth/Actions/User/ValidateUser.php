@@ -26,7 +26,7 @@ class ValidateUser extends APIRepositoryAction
         $password = $args["password"]; //Todo move to constant
 
         $storedData = $this->database->get("OAuth_Users",
-            ["UserName", "Email", "Password"],
+            ["Password"],
             [
                 "AND" => [
                     "OR" =>[
