@@ -3,27 +3,27 @@
  * Created by PhpStorm.
  * User: OargaTamas
  * Date: 2019. 02. 13.
- * Time: 16:20
+ * Time: 16:00
  */
 
-namespace MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS;
+namespace MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\AccessToken;
 
 
-
-use MedevAuth\Services\Auth\OAuth\Actions\Scope\GetRefreshTokenScopes;
+use Lcobucci\JWT\Signer\Key;
 use MedevAuth\Services\Auth\OAuth\Entity\Client;
+use MedevAuth\Services\Auth\OAuth\Entity\Token\JWT\Signed\OAuthJWS;
 use MedevAuth\Services\Auth\OAuth\Entity\User;
-use MedevAuth\Token\JWT\JWS\OAuthJWS;
+use MedevAuth\Utils\CryptUtils;
 use MedevSlim\Core\Action\Repository\APIRepositoryAction;
 use MedevSlim\Utils\UUID\UUID;
 
-class GenerateRefreshToken extends APIRepositoryAction
+class GenerateAccessToken extends APIRepositoryAction
 {
 
     /**
      * @param $args
      * @return OAuthJWS
-     * @throws \Exception
+     * @throws \MedevAuth\Services\Auth\OAuth\Exceptions\OAuthException
      */
     public function handleRequest($args)
     {
@@ -32,16 +32,17 @@ class GenerateRefreshToken extends APIRepositoryAction
         /** @var Client $client */
         $client = $args["client"]; //Todo move to constant
         /** @var string[] $scopes */
-        $scopes = (new GetRefreshTokenScopes($this->service))->handleRequest($args);
-
+        $scopes = $args["scopes"]; //Todo move to constant
+        /** @var Key $tokenPrivateKey */
+        $tokenSigningKey = CryptUtils::getKeyFromConfig($this->config["auth"]["token"]["private_key"]);
 
         $token = new OAuthJWS();
 
-        $token->setIdentifier(UUID::v4()); //Todo double check whether the V4 is fine.
+        $token->setIdentifier(UUID::v4());
         $token->setUser($user);
         $token->setClient($client);
         $token->setScopes($scopes);
-        $token->setPrivateKey($this->config->privateKey); //Todo solve it
+        $token->setPrivateKey($tokenSigningKey);
 
         return $token;
     }

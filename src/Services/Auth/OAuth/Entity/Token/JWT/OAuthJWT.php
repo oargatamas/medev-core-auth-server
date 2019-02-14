@@ -11,7 +11,7 @@ namespace MedevAuth\Services\Auth\OAuth\Entity\Token\JWT;
 
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Token;
-use MedevAuth\Services\Auth\OAuth\Entity\OAuthToken;
+use MedevAuth\Services\Auth\OAuth\Entity\Token\OAuthToken;
 
 class OAuthJWT extends OAuthToken
 {
@@ -28,6 +28,11 @@ class OAuthJWT extends OAuthToken
     public function setJwt(Token $jwt)
     {
         $this->jwt = $jwt;
+        $this->isRevoked = false;
+    }
+
+    public function isExpired(){
+        return $this->jwt->isExpired();
     }
 
 

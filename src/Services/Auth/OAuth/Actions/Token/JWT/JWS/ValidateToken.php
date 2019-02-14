@@ -9,6 +9,8 @@
 namespace MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS;
 
 use MedevAuth\Services\Auth\OAuth\Entity\Token\JWT\Signed\OAuthJWS;
+use MedevAuth\Services\Auth\OAuth\Exceptions\OAuthException;
+use MedevAuth\Utils\CryptUtils;
 use MedevSlim\Core\Action\Repository\APIRepositoryAction;
 use MedevSlim\Core\Service\Exceptions\UnauthorizedException;
 
@@ -19,23 +21,24 @@ class ValidateToken extends APIRepositoryAction
      * @param $args
      * @return OAuthJWS
      * @throws UnauthorizedException
+     * @throws OAuthException
      */
     public function handleRequest($args)
     {
-        try{
-            /** @var OAuthJWS $token */
-            $token = $this->parseToken($args);
-        }catch (\Exception $e){
-            throw new UnauthorizedException($e->getMessage());
-        }
+        /** @var OAuthJWS $token */
+        $token = $args["token"]; //Todo move to constant
 
-        $token->setPrivateKey($this->config->privateKey);
+        $tokenVerificationKey = CryptUtils::getKeyFromConfig($this->config["auth"]["token"]["public_key"]);
 
-        if (!$token->verifySignature($this->config->publicKey)) {
+        if (!$token->verifySignature($tokenVerificationKey)) {
             throw new UnauthorizedException("Invalid token signature.");
         }
 
-        if ($this->isTokenBlacklisted($token)) {
+        if ($token->isExpired()) {
+            throw new UnauthorizedException("Token expired.");
+        }
+
+        if ($token->isRevoked()) {
             throw new UnauthorizedException("Token blacklisted.");
         }
 

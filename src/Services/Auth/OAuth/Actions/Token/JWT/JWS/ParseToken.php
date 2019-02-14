@@ -10,19 +10,31 @@ namespace MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS;
 
 
 use Lcobucci\JWT\Parser;
-use MedevAuth\Token\JWT\JWS\OAuthJWS;
+use MedevAuth\Services\Auth\OAuth\Actions\Client\GetClientData;
+use MedevAuth\Services\Auth\OAuth\Actions\User\GetUserData;
+use MedevAuth\Services\Auth\OAuth\Entity\Token\JWT\Signed\OAuthJWS;
+use MedevAuth\Utils\CryptUtils;
 use MedevSlim\Core\Action\Repository\APIRepositoryAction;
 
-class ParseToken extends APIRepositoryAction
+/**
+ * Class ParseToken
+ * @package MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS
+ */
+abstract class ParseToken extends APIRepositoryAction
 {
 
     /**
      * @param $args
      * @return OAuthJWS
+     * @throws \Exception
      */
     public function handleRequest($args)
     {
         $jwt = (new Parser())->parse($args["token"]);
+
+        $client = (new GetClientData($this->service))->handleRequest(["client_id" => $jwt->getClaim("cli")]);
+        $user = (new GetUserData($this->service))->handleRequest(["user_id" => $jwt->getClaim("usr")]);;
+        $privateKey = CryptUtils::getKeyFromConfig($this->config["auth"]["token"]["private_key"]);
 
         $token = new OAuthJWS();
         $token->setJwt($jwt);
@@ -30,8 +42,16 @@ class ParseToken extends APIRepositoryAction
         $token->setIdentifier($jwt->getHeader("jti"));
         $token->setExpiration($jwt->getClaim("exp"));
         $token->setScopes($jwt->getClaim("scopes"));
-        //Todo add Client, User and PrivateKey data here via actions or from config
+        $token->setClient($client);
+        $token->setUser($user);
+        $token->setPrivateKey($privateKey);
 
-        return $token;
+        return $this->withServerState($token);
     }
+
+    /**
+     * @param OAuthJWS $token
+     * @return OAuthJWS
+     */
+    protected abstract function withServerState(OAuthJWS $token);
 }

@@ -77,6 +77,7 @@ class OAuthToken extends DatabaseEntity
         $this->expiration = $expiration;
     }
 
+
     /**
      * @return string[]
      */

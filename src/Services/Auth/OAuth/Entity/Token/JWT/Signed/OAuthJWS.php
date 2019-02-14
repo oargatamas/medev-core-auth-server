@@ -12,7 +12,7 @@ namespace MedevAuth\Services\Auth\OAuth\Entity\Token\JWT\Signed;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Signer\Key;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
-use MedevAuth\Token\JWT\OAuthJWT;
+use MedevAuth\Services\Auth\OAuth\Entity\Token\JWT\OAuthJWT;
 
 class OAuthJWS extends OAuthJWT
 {
