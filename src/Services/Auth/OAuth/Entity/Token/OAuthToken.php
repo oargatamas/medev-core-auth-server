@@ -6,10 +6,13 @@
  * Time: 11:58
  */
 
-namespace MedevAuth\Services\Auth\OAuth\Entity;
+namespace MedevAuth\Services\Auth\OAuth\Entity\Token;
 
 
 use DateTime;
+use MedevAuth\Services\Auth\OAuth\Entity\Client;
+use MedevAuth\Services\Auth\OAuth\Entity\DatabaseEntity;
+use MedevAuth\Services\Auth\OAuth\Entity\User;
 
 class OAuthToken extends DatabaseEntity
 {

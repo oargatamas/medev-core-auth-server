@@ -6,7 +6,7 @@
  * Time: 10:15
  */
 
-namespace MedevAuth\Token\JWT\JWS;
+namespace MedevAuth\Services\Auth\OAuth\Entity\Token\JWT\Signed;
 
 
 use Lcobucci\JWT\Builder;

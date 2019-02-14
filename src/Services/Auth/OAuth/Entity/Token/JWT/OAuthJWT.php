@@ -6,11 +6,10 @@
  * Time: 17:04
  */
 
-namespace MedevAuth\Token\JWT;
+namespace MedevAuth\Services\Auth\OAuth\Entity\Token\JWT;
 
 
 use Lcobucci\JWT\Builder;
-use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\Token;
 use MedevAuth\Services\Auth\OAuth\Entity\OAuthToken;
 
