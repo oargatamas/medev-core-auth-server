@@ -82,3 +82,23 @@ CREATE TABLE IF NOT EXISTS OAuth_ClientScopes(
 	PRIMARY KEY (ClientId, UserId, ScopeId)
 ) ENGINE=INNODB;
 
+CREATE TABLE IF NOT EXISTS OAuth_GrantTypes(
+  Id INT NOT NULL,
+  GrantName VARCHAR(20) NOT NULL,
+  PRIMARY  KEY (GrantId)
+  UNIQUE (GrantName)
+) ENGINE=INNODB;
+
+CREATE TABLE IF NOT EXISTS OAuth_ClientGrantTypes(
+  ClientId INT NOT NULL,
+  GrantId INT NOT NULL,
+  PRIMARY KEY (ClientId, GrantId)
+) ENGINE=INNODB;
+
+
+INSERT INTO OAuth_GrantTypes VALUES (1,'authorization_code');
+INSERT INTO OAuth_GrantTypes VALUES (2,'password');
+INSERT INTO OAuth_GrantTypes VALUES (3,'client_credentials');
+INSERT INTO OAuth_GrantTypes VALUES (4,'refresh_token');
+INSERT INTO OAuth_GrantTypes VALUES (5,'device_code');
+
