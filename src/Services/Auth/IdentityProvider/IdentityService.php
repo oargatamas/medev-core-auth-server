@@ -18,7 +18,6 @@ use MedevAuth\Services\Auth\IdentityProvider\Actions\PasswordForgot\RenderForgot
 use MedevAuth\Services\Auth\IdentityProvider\Actions\Register\RegisterServlet;
 use MedevAuth\Services\Auth\IdentityProvider\Actions\Register\RenderRegisterView;
 use MedevSlim\Core\Service\View\TwigAPIService;
-use Psr\Container\ContainerInterface;
 use Slim\App;
 
 class IdentityService extends TwigAPIService
@@ -51,10 +50,10 @@ class IdentityService extends TwigAPIService
         $app->post("/forgot", new ForgotPasswordServlet($this))->setName($this->getServiceName());
     }
 
-    protected function registerContainerComponents(ContainerInterface $container)
+
+
+    protected function getTemplatePath()
     {
-        parent::registerContainerComponents($container);
+        return __DIR__."/View";
     }
-
-
 }
