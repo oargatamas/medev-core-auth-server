@@ -9,11 +9,11 @@
 namespace MedevAuth\Services\Auth\IdentityProvider\Actions\Register;
 
 
-use MedevSlim\Core\Action\Servlet\APIServletAction;
+use MedevSlim\Core\Action\Servlet\APIServlet;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-class RegisterServlet extends APIServletAction
+class RegisterServlet extends APIServlet
 {
 
     /**
