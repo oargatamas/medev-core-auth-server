@@ -17,10 +17,11 @@ use MedevAuth\Services\Auth\IdentityProvider\Actions\PasswordForgot\ForgotPasswo
 use MedevAuth\Services\Auth\IdentityProvider\Actions\PasswordForgot\RenderForgotPasswordView;
 use MedevAuth\Services\Auth\IdentityProvider\Actions\Register\RegisterServlet;
 use MedevAuth\Services\Auth\IdentityProvider\Actions\Register\RenderRegisterView;
-use MedevSlim\Core\Service\APIService;
+use MedevSlim\Core\Service\View\TwigAPIService;
+use Psr\Container\ContainerInterface;
 use Slim\App;
 
-class IdentityService extends APIService
+class IdentityService extends TwigAPIService
 {
 
     /**
@@ -33,19 +34,27 @@ class IdentityService extends APIService
 
     /**
      * @param App $app
+     * @throws \Exception
      */
     protected function registerRoutes(App $app)
     {
-        $app->get("/login",new RenderLoginView($this));
-        $app->post("/login",new LoginServlet($this));
+        $app->get("/login",new RenderLoginView($this))->setName($this->getServiceName());
+        $app->post("/login",new LoginServlet($this))->setName($this->getServiceName());
 
-        $app->get("/logout", new RenderLogoutView($this));
-        $app->post("/logout", new LogoutServlet($this));
+        $app->get("/logout", new RenderLogoutView($this))->setName($this->getServiceName());
+        $app->post("/logout", new LogoutServlet($this))->setName($this->getServiceName());
 
-        $app->get("/register", new RenderRegisterView($this));
-        $app->post("/register", new RegisterServlet($this));
+        $app->get("/register", new RenderRegisterView($this))->setName($this->getServiceName());
+        $app->post("/register", new RegisterServlet($this))->setName($this->getServiceName());
 
-        $app->get("/forgot", new RenderForgotPasswordView($this));
-        $app->post("/forgot", new ForgotPasswordServlet($this));
+        $app->get("/forgot", new RenderForgotPasswordView($this))->setName($this->getServiceName());
+        $app->post("/forgot", new ForgotPasswordServlet($this))->setName($this->getServiceName());
     }
+
+    protected function registerContainerComponents(ContainerInterface $container)
+    {
+        parent::registerContainerComponents($container);
+    }
+
+
 }
