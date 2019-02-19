@@ -2,17 +2,18 @@
 /**
  * Created by PhpStorm.
  * User: OargaTamas
- * Date: 2019. 02. 13.
- * Time: 16:15
+ * Date: 2019. 02. 18.
+ * Time: 15:02
  */
 
-namespace MedevAuth\Services\Auth\OAuth\Actions\GrantType;
+namespace MedevAuth\Services\Auth\IdentityProvider\Actions\Login;
 
 
+use MedevSlim\Core\Action\Servlet\APIServletAction;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-class AuthorizationCodeGrant extends GrantType
+class RenderLoginView extends APIServletAction
 {
 
     /**

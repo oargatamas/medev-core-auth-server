@@ -2,18 +2,18 @@
 /**
  * Created by PhpStorm.
  * User: OargaTamas
- * Date: 2019. 02. 13.
- * Time: 16:15
+ * Date: 2019. 02. 19.
+ * Time: 10:58
  */
 
-namespace MedevAuth\Services\Auth\OAuth\Actions\GrantType;
+namespace MedevAuth\Services\Auth\IdentityProvider\Actions\PasswordForgot;
 
 
-
+use MedevSlim\Core\Action\Servlet\APIServletAction;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-class RefreshTokenGrant extends GrantType
+class RenderForgotPasswordView extends APIServletAction
 {
 
     /**

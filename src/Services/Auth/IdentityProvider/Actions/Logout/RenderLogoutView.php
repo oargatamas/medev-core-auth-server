@@ -2,20 +2,18 @@
 /**
  * Created by PhpStorm.
  * User: OargaTamas
- * Date: 2019. 02. 13.
- * Time: 16:18
+ * Date: 2019. 02. 19.
+ * Time: 10:50
  */
 
-namespace MedevAuth\Services\Auth\OAuth\Actions\GrantType;
+namespace MedevAuth\Services\Auth\IdentityProvider\Actions\Logout;
 
 
 use MedevSlim\Core\Action\Servlet\APIServletAction;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-
-//Todo improve it to extend from the Authorization Grant without secret.
-class ImplicitGrant extends GrantType
+class RenderLogoutView extends APIServletAction
 {
 
     /**
