@@ -20,7 +20,7 @@ class ValidateUser extends APIRepositoryAction
      * @return void
      * @throws UnauthorizedException
      */
-    public function handleRequest($args)
+    public function handleRequest($args = [])
     {
         $username = $args["username"]; //Todo move to constant
         $password = $args["password"]; //Todo move to constant

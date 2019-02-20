@@ -21,7 +21,7 @@ class PersistAuthCode extends APIRepositoryAction
      * @return void
      * @throws RepositoryException
      */
-    public function handleRequest($args)
+    public function handleRequest($args = [])
     {
         /** @var AuthCode $authCode */
         $authCode = $args["authcode"]; //Todo move to constant

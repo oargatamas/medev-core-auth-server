@@ -19,7 +19,7 @@ class GenerateAccessToken extends GenerateToken
      * @param $args
      * @return OAuthJWS
      */
-    public function handleRequest($args)
+    public function handleRequest($args = [])
     {
         return parent::handleRequest($args);
     }

@@ -21,7 +21,7 @@ class GetUserData extends APIRepositoryAction
      * @return User
      * @throws UnauthorizedException
      */
-    public function handleRequest($args)
+    public function handleRequest($args = [])
     {
         $userId = $args["user_id"]; //Todo move to constant
 

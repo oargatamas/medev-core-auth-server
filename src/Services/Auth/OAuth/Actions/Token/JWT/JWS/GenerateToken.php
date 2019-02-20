@@ -19,7 +19,7 @@ use MedevSlim\Utils\UUID\UUID;
 
 abstract class GenerateToken extends APIRepositoryAction
 {
-    public function handleRequest($args)
+    public function handleRequest($args = [])
     {
         /** @var User $user */
         $user = $args["user"]; //Todo move to constant

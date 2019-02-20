@@ -28,7 +28,7 @@ abstract class ParseToken extends APIRepositoryAction
      * @return OAuthJWS
      * @throws \Exception
      */
-    public function handleRequest($args)
+    public function handleRequest($args = [])
     {
         $jwt = (new Parser())->parse($args["token"]);
 

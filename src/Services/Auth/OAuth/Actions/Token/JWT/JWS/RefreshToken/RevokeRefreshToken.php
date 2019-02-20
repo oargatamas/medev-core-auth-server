@@ -21,7 +21,7 @@ class RevokeRefreshToken extends APIRepositoryAction
      * @return integer
      * @throws UnauthorizedException
      */
-    public function handleRequest($args)
+    public function handleRequest($args = [])
     {
         $tokenIdentifier = $args["token_id"]; //Todo move to constant
 

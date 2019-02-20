@@ -18,7 +18,7 @@ class GetRefreshTokenScopes extends APIRepositoryAction
      * @param $args
      * @return string[]
      */
-    public function handleRequest($args)
+    public function handleRequest($args = [])
     {
         return ["get:access_token"]; //Todo move to constant
     }

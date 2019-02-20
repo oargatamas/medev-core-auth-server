@@ -14,7 +14,7 @@ use MedevAuth\Services\Auth\OAuth\Entity\Token\JWT\Signed\OAuthJWS;
 
 class ParseRefreshToken extends ParseToken
 {
-    public function handleRequest($args)
+    public function handleRequest($args = [])
     {
         return parent::handleRequest($args);
     }

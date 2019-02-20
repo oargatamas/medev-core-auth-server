@@ -19,7 +19,7 @@ class GetUserScopes extends APIRepositoryAction
      * @param $args
      * @return string[]
      */
-    public function handleRequest($args)
+    public function handleRequest($args = [])
     {
         /** @var User $user */
         $user = $args["user"]; //Todo move to constant

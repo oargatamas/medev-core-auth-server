@@ -22,9 +22,9 @@ class GenerateRefreshToken extends GenerateToken
      * @return OAuthJWS
      * @throws \Exception
      */
-    public function handleRequest($args)
+    public function handleRequest($args = [])
     {
-        $args["scopes"] = (new GetRefreshTokenScopes($this->service))->handleRequest($args);
+        $args["scopes"] = (new GetRefreshTokenScopes($this->service))->handleRequest();
         return parent::handleRequest($args);
     }
 }

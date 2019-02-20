@@ -23,9 +23,9 @@ class GenerateAuthCode extends APIRepositoryAction
      * @return AuthCode
      * @throws \Exception
      */
-    public function handleRequest($args)
+    public function handleRequest($args = [])
     {
-        /** @var Client $args */
+        /** @var Client $client */
         $client = $args["client"]; //Todo move to constant
         $now = new DateTime();
 

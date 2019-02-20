@@ -20,7 +20,7 @@ class RevokeAuthCode extends APIRepositoryAction
      * @return void
      * @throws RepositoryException
      */
-    public function handleRequest($args)
+    public function handleRequest($args = [])
     {
         $codeIdentifier = $args["authcode_id"]; //Todo move to constant
 

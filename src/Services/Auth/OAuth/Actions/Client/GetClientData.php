@@ -21,7 +21,7 @@ class GetClientData extends APIRepositoryAction
      * @return Client
      * @throws UnauthorizedException
      */
-    public function handleRequest($args)
+    public function handleRequest($args = [])
     {
         $clientId = $args["client_id"]; //Todo move to constant
 

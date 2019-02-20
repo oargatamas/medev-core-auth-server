@@ -21,7 +21,7 @@ class ValidateClient extends APIRepositoryAction
      * @return void
      * @throws UnauthorizedException
      */
-    public function handleRequest($args)
+    public function handleRequest($args = [])
     {
         /** @var Client $client */
         $client = $args["client"]; //Todo move to constant;

@@ -19,7 +19,7 @@ class GetClientScopes extends APIRepositoryAction
      * @param $args
      * @return string[]
      */
-    public function handleRequest($args)
+    public function handleRequest($args = [])
     {
         /** @var Client $client */
         $client = $args["client"]; //Todo move to constant
