@@ -16,6 +16,9 @@ use MedevAuth\Services\Auth\OAuth\Entity\User;
 
 class OAuthToken extends DatabaseEntity
 {
+    const USER = "issuer_user";
+    const CLIENT = "issuer_client";
+    const SCOPES = "scopes";
 
     /**
      * @var DateTime
