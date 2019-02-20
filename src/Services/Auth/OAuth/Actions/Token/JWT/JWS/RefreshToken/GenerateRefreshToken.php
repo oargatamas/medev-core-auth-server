@@ -13,6 +13,7 @@ namespace MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\RefreshToken;
 use MedevAuth\Services\Auth\OAuth\Actions\Scope\GetRefreshTokenScopes;
 use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\GenerateToken;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\JWT\Signed\OAuthJWS;
+use MedevAuth\Services\Auth\OAuth\Entity\Token\OAuthToken;
 
 class GenerateRefreshToken extends GenerateToken
 {
@@ -24,7 +25,7 @@ class GenerateRefreshToken extends GenerateToken
      */
     public function handleRequest($args = [])
     {
-        $args["scopes"] = (new GetRefreshTokenScopes($this->service))->handleRequest();
+        $args[OAuthToken::SCOPES] = (new GetRefreshTokenScopes($this->service))->handleRequest();
         return parent::handleRequest($args);
     }
 }
