@@ -68,6 +68,8 @@ abstract class GrantAccess extends APIServlet
             $data[self::REFRESH_TOKEN] = $refreshToken->finalizeToken();
         }
 
+        $this->invalidateAuthData();
+
         return $response->withJson($data, 200);
     }
 
@@ -79,6 +81,16 @@ abstract class GrantAccess extends APIServlet
      * @throws UnauthorizedException
      */
     public abstract function validateAccessRequest(Request $request, $args = []);
+
+
+    /**
+     * @return void
+     * @throws \Exception
+     */
+    public function invalidateAuthData(){
+        //By default we do not need to do anything after tokens generated
+        //Override this method to do clean up methods like revoking authorization data
+    }
 
     /**
      * @throws \Exception
