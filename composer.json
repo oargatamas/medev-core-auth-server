@@ -1,7 +1,10 @@
 {
   "require": {
     "medev-core/slim": "@dev",
-    "lcobucci/jwt": "^3.2"
+    "lcobucci/jwt": "^3.2",
+    "defuse/php-encryption": "^2.1",
+    "ext-pdo": "*",
+    "ext-json": "*"
   },
   "autoload": {
     "psr-4": {
