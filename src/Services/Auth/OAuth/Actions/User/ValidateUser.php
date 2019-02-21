@@ -22,6 +22,7 @@ class ValidateUser extends APIRepositoryAction
      */
     public function handleRequest($args = [])
     {
+        $this->info("Validating user credentials");
         $username = $args["username"]; //Todo move to constant
         $password = $args["password"]; //Todo move to constant
 
@@ -46,5 +47,7 @@ class ValidateUser extends APIRepositoryAction
         if(!password_verify($password,$storedData["Password"])){
             throw new UnauthorizedException("Password for ".$username." is invalid");
         }
+
+        $this->info("User credentials are valid.");
     }
 }
