@@ -51,6 +51,8 @@ abstract class GrantAccess extends APIServlet
      */
     public function handleRequest(Request $request, Response $response, $args)
     {
+
+
         $this->info("Validating token request");
         $this->validateAccessRequest($request, $args);
 
@@ -108,4 +110,15 @@ abstract class GrantAccess extends APIServlet
         $this->info("Skipping refresh token generation.");
         return null;
     }
+
+    static function getParams()
+    {
+        return [
+            "client_id",
+            "grant_type",
+            "scope"
+        ];
+    }
+
+
 }

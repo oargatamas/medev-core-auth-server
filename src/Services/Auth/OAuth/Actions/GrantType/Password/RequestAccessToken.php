@@ -79,12 +79,10 @@ class RequestAccessToken extends GrantAccess
      */
     static function getParams()
     {
-        return [
-            "grant_type",
+        return array_merge(parent::getParams(),[
             "username",
-            "password",
-            "scope"
-        ];
+            "password"
+        ]);
     }
 
 
