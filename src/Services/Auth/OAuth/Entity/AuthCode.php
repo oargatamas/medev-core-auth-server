@@ -9,6 +9,9 @@
 namespace MedevAuth\Services\Auth\OAuth\Entity;
 
 
+use Defuse\Crypto\Crypto;
+use Defuse\Crypto\Key;
+
 class AuthCode extends DatabaseEntity
 {
 
@@ -16,6 +19,10 @@ class AuthCode extends DatabaseEntity
      * @var Client
      */
     private $client;
+    /**
+     * @var User
+     */
+    private $user;
     /**
      * @var string
      */
@@ -76,6 +83,22 @@ class AuthCode extends DatabaseEntity
     }
 
     /**
+     * @return User
+     */
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param User $user
+     */
+    public function setUser(User $user): void
+    {
+        $this->user = $user;
+    }
+
+    /**
      * @return string
      */
     public function getRedirectUri(): string
@@ -96,4 +119,17 @@ class AuthCode extends DatabaseEntity
         $this->redirectUri = $redirectUri;
     }
 
+    /**
+     * @param Key $encryptionKey
+     * @return string
+     * @throws \Defuse\Crypto\Exception\EnvironmentIsBrokenException
+     */
+    public function finalizeAuthCode(Key $encryptionKey){
+        $json = json_encode([
+            "user_id" => $this->user->getIdentifier(),
+            "client_id" => $this->client->getIdentifier(),
+            "redirect_uri" => $this->redirectUri
+        ]);
+        return Crypto::encrypt($json,$encryptionKey);
+    }
 }
