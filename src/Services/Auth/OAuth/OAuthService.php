@@ -10,80 +10,36 @@ namespace MedevAuth\Services\Auth\OAuth;
 
 
 
-use MedevAuth\Services\Auth\OAuth\Action\GrantAccess;
-use MedevAuth\Services\Auth\OAuth\Action\RevokeToken;
-use MedevAuth\Services\Auth\OAuth\GrantType\GrantType;
-use MedevAuth\Token\JWT\JWS\Middleware\JWSRequestValidator;
-use MedevSlim\Core\APIService\APIService;
-
-use Psr\Container\ContainerInterface;
+use MedevAuth\Services\Auth\IdentityProvider\IdentityService;
+use MedevAuth\Services\Auth\OAuth\Actions\GrantType\AuthorizationHandler;
+use MedevAuth\Services\Auth\OAuth\Actions\GrantType\GrantAccessHandler;
+use MedevSlim\Core\Service\APIService;
 use Slim\App;
-use Slim\Interfaces\RouteGroupInterface;
+
 
 class OAuthService extends APIService
 {
 
-    const ACCESS_TOKEN_REPO  = "OauthAccessTokenRepository";
-    const REFRESH_TOKEN_REPO = "OauthRefreshTokenRepository";
-    const CLIENT_REPO        = "OauthClientRepository";
-    const USER_REPO          = "OauthUserRepository";
-    const SCOPE_REPO         = "OauthScopeRepository";
-    const AUTH_CODE_REPO     = "OauthAuthCodeRepository";
-
 
     /**
-     * @var GrantType[]
+     * @return mixed
      */
-    private $grantTypes;
-
-
-
-    public function __construct(App $app)
-    {
-        $this->grantTypes = [];
-        parent::__construct($app);
-    }
-
-
-    protected function registerRoutes(App $app, ContainerInterface $container)
-    {
-
-    }
-
-
-    protected function registerMiddlewares(RouteGroupInterface $group, ContainerInterface $container)
-    {
-        //No middleware needed for this service
-    }
-
-    protected function registerContainerComponents(ContainerInterface $container)
-    {
-    }
-
-
-    public function addGrantType(GrantType $grantType){
-        $this->grantTypes[$grantType->getName()] = $grantType;
-    }
-
-
-    public function hasGrantType($grantType = ""){
-        return isset($this->grantTypes[$grantType]);
-    }
-
-
-    public function getGrantType($type){
-        //Todo improve error handling
-        return $this->grantTypes[$type];
-    }
-
-
     public function getServiceName()
     {
         return "AuthorizationService";
     }
 
-    protected function getLogger()
+    /**
+     * @param App $app
+     * @throws \Exception
+     */
+    protected function registerRoutes(App $app)
     {
-        // TODO: Implement getLogger() method.
+        //Todo consider to move it to another application
+        $idp = new IdentityService($this->application);
+        $idp->registerService("/idp");
+
+        $app->post("/authorize", new AuthorizationHandler($this));
+        $app->post("/token",new GrantAccessHandler($this));
     }
 }
