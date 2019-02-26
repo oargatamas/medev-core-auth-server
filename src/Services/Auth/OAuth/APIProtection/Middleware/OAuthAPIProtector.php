@@ -6,7 +6,7 @@
  * Time: 12:03
  */
 
-namespace MedevAuth\Services\Auth\OAuth\APIProtection;
+namespace MedevAuth\Services\Auth\OAuth\APIProtection\Middleware;
 
 
 use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\AccessToken\ParseAccessToken;

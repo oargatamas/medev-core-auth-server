@@ -9,6 +9,7 @@
 namespace MedevAuth\Services\Auth\OAuth\APIProtection\Service;
 
 
+use MedevAuth\Services\Auth\OAuth\APIProtection\Middleware\OAuthAPIProtector;
 use MedevSlim\Core\Service\APIService;
 use Slim\Interfaces\RouteGroupInterface;
 
