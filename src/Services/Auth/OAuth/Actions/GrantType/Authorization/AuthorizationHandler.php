@@ -6,10 +6,9 @@
  * Time: 8:58
  */
 
-namespace MedevAuth\Services\Auth\OAuth\Actions\GrantType;
+namespace MedevAuth\Services\Auth\OAuth\Actions\GrantType\Authorization;
 
 
-use MedevAuth\Services\Auth\OAuth\Actions\GrantType\Authorization\Authorization;
 use MedevAuth\Services\Auth\OAuth\Actions\GrantType\Flows;
 use MedevSlim\Core\Action\Servlet\APIServlet;
 use MedevSlim\Core\Service\Exceptions\BadRequestException;

@@ -6,9 +6,10 @@
  * Time: 19:31
  */
 
-namespace MedevAuth\Services\Auth\OAuth\Actions\GrantType;
+namespace MedevAuth\Services\Auth\OAuth\Actions\GrantType\AccessGrant;
 
 
+use MedevAuth\Services\Auth\OAuth\Actions\GrantType\Flows;
 use MedevSlim\Core\Action\Servlet\APIServlet;
 use MedevSlim\Core\Service\Exceptions\BadRequestException;
 use Slim\Http\Request;
@@ -39,10 +40,10 @@ class GrantAccessHandler extends APIServlet
      */
     private function getTokenHandler($grantType){
         switch ($grantType){
-            case "authorization_code" : return new AuthCode\RequestAccessToken($this->service);
-            case "password" : return new Password\RequestAccessToken($this->service);
-            case "client_credentials" : return new ClientCredentials\RequestAccessToken($this->service);
-            case "refresh_token" : return new RefreshToken\RequestAccessToken($this->service);
+            case "authorization_code" : return new Flows\AuthCode\RequestAccessToken($this->service);
+            case "password" : return new Flows\Password\RequestAccessToken($this->service);
+            case "client_credentials" : return new Flows\ClientCredentials\RequestAccessToken($this->service);
+            case "refresh_token" : return new Flows\RefreshToken\RequestAccessToken($this->service);
             default : throw new BadRequestException("Invalid/not supported grant type: ".$grantType);
         }
     }

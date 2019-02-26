@@ -6,10 +6,10 @@
  * Time: 14:00
  */
 
-namespace MedevAuth\Services\Auth\OAuth\Actions\GrantType\Password;
+namespace MedevAuth\Services\Auth\OAuth\Actions\GrantType\Flows\Password;
 
 
-use MedevAuth\Services\Auth\OAuth\Actions\GrantType\GrantAccess;
+use MedevAuth\Services\Auth\OAuth\Actions\GrantType\GrantAccess\GrantAccess;
 use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\AccessToken\GenerateAccessToken;
 use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\RefreshToken\GenerateRefreshToken;
 use MedevAuth\Services\Auth\OAuth\Actions\User\ValidateUser;

@@ -50,7 +50,6 @@ class AuthorizeRequest extends Authorization
         /** @var AuthCode $authCode */
         $authCode = $getAuthCode->handleRequest(["client" => $this->client]);
 
-
         $data = [
             "code" => $authCode->getIdentifier(),
             "state" => $this->csrfToken

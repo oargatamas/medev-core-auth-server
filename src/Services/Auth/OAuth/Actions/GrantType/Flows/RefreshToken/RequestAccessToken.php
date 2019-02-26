@@ -6,10 +6,10 @@
  * Time: 14:42
  */
 
-namespace MedevAuth\Services\Auth\OAuth\Actions\GrantType\RefreshToken;
+namespace MedevAuth\Services\Auth\OAuth\Actions\GrantType\Flows\RefreshToken;
 
 
-use MedevAuth\Services\Auth\OAuth\Actions\GrantType\GrantAccess;
+use MedevAuth\Services\Auth\OAuth\Actions\GrantType\GrantAccess\GrantAccess;
 use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\AccessToken\GenerateAccessToken;
 use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\RefreshToken\ParseRefreshToken;
 use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\RefreshToken\RevokeRefreshToken;

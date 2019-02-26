@@ -6,7 +6,7 @@
  * Time: 11:22
  */
 
-namespace MedevAuth\Services\Auth\OAuth\Actions\GrantType;
+namespace MedevAuth\Services\Auth\OAuth\Actions\GrantType\GrantAccess;
 
 
 use MedevAuth\Services\Auth\OAuth\Entity\Client;

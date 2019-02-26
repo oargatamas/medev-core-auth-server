@@ -6,10 +6,10 @@
  * Time: 19:42
  */
 
-namespace MedevAuth\Services\Auth\OAuth\Actions\GrantType\Implicit;
+namespace MedevAuth\Services\Auth\OAuth\Actions\GrantType\Flows\Implicit;
 
 
-use MedevAuth\Services\Auth\OAuth\Actions\GrantType\GrantAccess;
+use MedevAuth\Services\Auth\OAuth\Actions\GrantType\GrantAccess\GrantAccess;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\OAuthToken;
 use MedevSlim\Core\Service\Exceptions\UnauthorizedException;
 use Slim\Http\Request;
