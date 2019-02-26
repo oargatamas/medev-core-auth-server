@@ -6,7 +6,7 @@
  * Time: 11:25
  */
 
-namespace MedevAuth\Services\Auth\OAuth\APIProtection;
+namespace MedevAuth\Services\Auth\OAuth\APIProtection\Service;
 
 
 use MedevSlim\Core\Service\APIService;
