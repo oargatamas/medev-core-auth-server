@@ -31,6 +31,12 @@ class AuthorizeRequest extends Authorization
         return true;
     }
 
+    public function isPermissionRequired(Request $request, $args)
+    {
+        // TODO: Implement isPermissionRequired() method.
+        return false;
+    }
+
     public function verifyClient(Request $request, $args)
     {
         $this->scopes = $request->getParam("scopes");
@@ -54,4 +60,6 @@ class AuthorizeRequest extends Authorization
         $accessToken = $action->handleRequest($tokenInfo);
         return  $accessToken;
     }
+
+
 }

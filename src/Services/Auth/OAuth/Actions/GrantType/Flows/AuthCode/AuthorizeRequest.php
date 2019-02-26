@@ -29,6 +29,12 @@ class AuthorizeRequest extends Authorization
         return true;
     }
 
+    public function isPermissionRequired(Request $request, $args)
+    {
+        //TODO Drop a view for user in case of missing scope.
+        return false;
+    }
+
     public function verifyClient(Request $request, $args)
     {
         $validateClient = new ValidateClient($this->service);
@@ -57,6 +63,5 @@ class AuthorizeRequest extends Authorization
     {
         return array_merge(parent::getParams(), ["client_secret"]);
     }
-
 
 }
