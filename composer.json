@@ -1,22 +1,23 @@
 {
+  "name": "medev-auth/slim",
+  "description": "Securing Medev Slim applications via OAuth2 with JWT based solution.",
   "require": {
     "medev-core/slim": "@dev",
     "lcobucci/jwt": "^3.2",
     "defuse/php-encryption": "^2.1",
     "ext-pdo": "*",
-    "ext-json": "*"
+    "ext-json": "*",
+    "ext-http": "*"
   },
   "autoload": {
     "psr-4": {
-      "MedevAuth\\":"src/"
+      "MedevAuth\\": "src/"
     }
   },
   "repositories": [
-  {
-    "type": "vcs",
-    "url":  "https://TangoMajom@bitbucket.org/medevservices/medevcore-slim.git"
-  }
-],
-  "name": "MedevSlim OAuth Server",
-  "description": "Securing Medev Slim applications via OAuth2 with JWT based solution."
+    {
+      "type": "vcs",
+      "url": "https://TangoMajom@bitbucket.org/medevservices/medevcore-slim.git"
+    }
+  ]
 }
