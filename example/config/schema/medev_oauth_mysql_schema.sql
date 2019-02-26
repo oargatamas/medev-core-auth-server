@@ -36,6 +36,7 @@ CREATE TABLE IF NOT EXISTS OAuth_Clients (
 
 CREATE TABLE IF NOT EXISTS OAuth_AuthCodes (
 	Id VARCHAR(20),
+	UserId INT NOT NULL,
 	ClientId VARCHAR(100),
 	RedirectURI VARCHAR(255),
 	IsRevoked TINYINT(1) DEFAULT 1,
@@ -100,5 +101,5 @@ INSERT INTO OAuth_GrantTypes VALUES (1,'authorization_code');
 INSERT INTO OAuth_GrantTypes VALUES (2,'password');
 INSERT INTO OAuth_GrantTypes VALUES (3,'client_credentials');
 INSERT INTO OAuth_GrantTypes VALUES (4,'refresh_token');
-INSERT INTO OAuth_GrantTypes VALUES (5,'device_code');
+
 
