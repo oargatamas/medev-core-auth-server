@@ -52,7 +52,7 @@ class OAuthAPIProtector implements ComponentLogger
         }
 
         $this->info("Authorization data provided. Extracting access token from request");
-        $accessTokenString = str_replace("Bearer ","",$request->getHeaderLine("Authorization"));
+        $accessTokenString = str_replace("Bearer ","",$request->getHeader("Authorization")[0]);
         $this->info("Access token: ". $accessTokenString);
 
         try{
