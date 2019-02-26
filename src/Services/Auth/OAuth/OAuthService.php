@@ -11,8 +11,8 @@ namespace MedevAuth\Services\Auth\OAuth;
 
 
 use MedevAuth\Services\Auth\IdentityProvider\IdentityService;
-use MedevAuth\Services\Auth\OAuth\Actions\GrantType\AuthorizationHandler;
-use MedevAuth\Services\Auth\OAuth\Actions\GrantType\GrantAccessHandler;
+use MedevAuth\Services\Auth\OAuth\Actions\GrantType\AccessGrant\GrantAccessHandler;
+use MedevAuth\Services\Auth\OAuth\Actions\GrantType\Authorization\AuthorizationHandler;
 use MedevSlim\Core\Service\APIService;
 use Slim\App;
 
