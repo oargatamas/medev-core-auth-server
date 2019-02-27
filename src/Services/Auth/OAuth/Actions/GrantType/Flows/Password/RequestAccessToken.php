@@ -9,12 +9,12 @@
 namespace MedevAuth\Services\Auth\OAuth\Actions\GrantType\Flows\Password;
 
 
-use MedevAuth\Services\Auth\OAuth\Actions\GrantType\GrantAccess\GrantAccess;
+use MedevAuth\Services\Auth\OAuth\Actions\GrantType\AccessGrant\GrantAccess;
 use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\AccessToken\GenerateAccessToken;
 use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\RefreshToken\GenerateRefreshToken;
 use MedevAuth\Services\Auth\OAuth\Actions\User\ValidateUser;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\OAuthToken;
-use MedevSlim\Core\Service\Exceptions\UnauthorizedException;
+use MedevAuth\Services\Auth\OAuth\Entity\User;
 use Slim\Http\Request;
 
 /**
@@ -23,23 +23,28 @@ use Slim\Http\Request;
  */
 class RequestAccessToken extends GrantAccess
 {
-
     /**
-     * @param Request $request
-     * @param array $args
-     * @return void
-     * @throws UnauthorizedException
-     * @throws \Exception
+     * @inheritDoc
      */
     public function validateAccessRequest(Request $request, $args = [])
     {
+        parent::validateAccessRequest($request, $args);
+
+        $username = $request->getParam("username");
+        $password = $request->getParam("password");
+
         $userValidation = new ValidateUser($this->service);
         $userCredentials = [
-            "username" => $request->getParam("username"),
-            "password" => $request->getParam("password")
+            "username" => $username,
+            "password" => $password
         ];
-        $userValidation->handleRequest($userCredentials);
+        $userId = $userValidation->handleRequest($userCredentials);
+
+        $this->user = new User();
+        $this->user->setIdentifier($userId);
+        $this->user->setUsername($username);
     }
+
 
     /**
      * @throws \Exception
