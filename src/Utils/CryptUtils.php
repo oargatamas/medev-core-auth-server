@@ -24,14 +24,14 @@ class CryptUtils
      * @throws OAuthException
      */
     public static function getKeyFromConfig($keyconfig){
-        //Todo improve it to find a keys from the config root.
-        $content = $keyconfig["key"];
-        $passphrase = $keyconfig["passphrase"];
 
-        if(!isset($keyconfig["key"]) || !isset($keyconfig["passphrase"])){
+        if(!isset($keyconfig["path"])){
             throw new OAuthException("Key configuration not set properly. Key or Passphrase definition is missing in the application config.");
         }
 
-        return new Key($content,$passphrase);
+        $path = "file://".$_SERVER["DOCUMENT_ROOT"].$keyconfig["path"];
+        $passphrase = $keyconfig["passphrase"] ?? null;
+
+        return new Key($path,$passphrase);
     }
 }
