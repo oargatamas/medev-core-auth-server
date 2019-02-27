@@ -17,7 +17,7 @@ class ValidateUser extends APIRepositoryAction
 
     /**
      * @param $args
-     * @return void
+     * @return int
      * @throws UnauthorizedException
      */
     public function handleRequest($args = [])
@@ -27,7 +27,7 @@ class ValidateUser extends APIRepositoryAction
         $password = $args["password"]; //Todo move to constant
 
         $storedData = $this->database->get("OAuth_Users",
-            ["Password"],
+            ["Id","Password"],
             [
                 "AND" => [
                     "OR" =>[
@@ -49,5 +49,7 @@ class ValidateUser extends APIRepositoryAction
         }
 
         $this->info("User credentials are valid.");
+
+        return $storedData["Id"];
     }
 }
