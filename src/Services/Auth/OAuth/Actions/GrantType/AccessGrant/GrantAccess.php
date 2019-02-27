@@ -6,9 +6,11 @@
  * Time: 11:22
  */
 
-namespace MedevAuth\Services\Auth\OAuth\Actions\GrantType\GrantAccess;
+namespace MedevAuth\Services\Auth\OAuth\Actions\GrantType\AccessGrant;
 
 
+use MedevAuth\Services\Auth\OAuth\Actions\Client\GetClientData;
+use MedevAuth\Services\Auth\OAuth\Actions\Client\ValidateClient;
 use MedevAuth\Services\Auth\OAuth\Entity\Client;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\OAuthToken;
 use MedevAuth\Services\Auth\OAuth\Entity\User;
@@ -82,7 +84,18 @@ abstract class GrantAccess extends APIServlet
      * @return void
      * @throws UnauthorizedException
      */
-    public abstract function validateAccessRequest(Request $request, $args = []);
+    public function validateAccessRequest(Request $request, $args = []){
+        $getClientData = new GetClientData($this->service);
+        $this->client = $getClientData->handleRequest(["client_id" => $request->getParam("client_id")]);
+
+        $this->client->setSecret($request->getParam("client_secret"));
+
+        $validateClient = new ValidateClient($this->service);
+        $validateClient->handleRequest([
+                "client" => $this->client,
+                "grant_type" => $request->getParam("grant_type")
+            ]);
+    }
 
 
     /**
@@ -114,8 +127,8 @@ abstract class GrantAccess extends APIServlet
     static function getParams()
     {
         return [
-            "client_id",
             "grant_type",
+            "client_id",
             "scope"
         ];
     }
