@@ -30,11 +30,13 @@ class GetClientData extends APIRepositoryAction
             ["Id" => $clientId]
         );
 
-        $grantTypes = $this->database->select("OAuth_ClientGrantTypes", //From Table
+        $grantTypeData = $this->database->select("OAuth_ClientGrantTypes", //From Table
             ["[>]OAuth_GrantTypes" => ["GrantId" => "Id"]],     //Table Join section
             ["GrantName"],                                      //Select column list
             ["ClientId" => $clientId]                           //Where condition
         );
+
+        $grantTypes = array_map(function($value){ return $value["GrantName"];},$grantTypeData);
 
 
         if(empty($storedData) || is_null($storedData)){
@@ -50,4 +52,6 @@ class GetClientData extends APIRepositoryAction
 
         return $clientEntity;
     }
+
+
 }
