@@ -9,9 +9,9 @@
 namespace MedevAuth\Services\Auth\OAuth;
 
 
-
 use MedevAuth\Services\Auth\IdentityProvider\IdentityService;
 use MedevAuth\Services\Auth\OAuth\Actions\GrantType\AccessGrant\GrantAccessHandler;
+use MedevAuth\Services\Auth\OAuth\Actions\GrantType\AccessGrant\GrantFlowIdentifier;
 use MedevAuth\Services\Auth\OAuth\Actions\GrantType\Authorization\AuthorizationHandler;
 use MedevSlim\Core\Service\APIService;
 use Slim\App;
@@ -39,7 +39,11 @@ class OAuthService extends APIService
         $idp = new IdentityService($this->application);
         $idp->registerService("/idp");
 
-        $app->post("/authorize", new AuthorizationHandler($this));
-        $app->post("/token",new GrantAccessHandler($this));
+        $app->post("/authorize", new AuthorizationHandler($this))
+            ->setName($this->getServiceName());
+
+        $app->post("/token", new GrantAccessHandler($this))
+            ->add(new GrantFlowIdentifier($this))
+            ->setName($this->getServiceName());
     }
 }
