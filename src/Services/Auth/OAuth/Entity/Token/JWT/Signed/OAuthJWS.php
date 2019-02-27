@@ -19,7 +19,7 @@ class OAuthJWS extends OAuthJWT
     /**
      * @var Key
      */
-    private $privateKey; //Todo Create key object which can provide the private key and passphrase
+    private $privateKey;
 
 
     public function __construct(Key $privateKey = null)
