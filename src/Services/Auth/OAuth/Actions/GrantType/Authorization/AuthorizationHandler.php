@@ -11,7 +11,6 @@ namespace MedevAuth\Services\Auth\OAuth\Actions\GrantType\Authorization;
 
 use MedevAuth\Services\Auth\OAuth\Actions\GrantType\Flows;
 use MedevSlim\Core\Action\Servlet\APIServlet;
-use MedevSlim\Core\Service\Exceptions\BadRequestException;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -22,33 +21,10 @@ class AuthorizationHandler extends APIServlet
      */
     public function handleRequest(Request $request, Response $response, $args)
     {
-        $responseType = $request->getParam("response_type");
+        /** @var Authorization $authHandler */
+        $authHandler = $request->getAttribute("AuthFlowHandler"); //Todo move to constant
 
-        $handler = $this->getAuthHandler($responseType);
-
-        return $handler($request, $response, $args);
+        return $authHandler($request,$response,$args);
     }
-
-
-    /**
-     * @param string $responseType
-     * @return Authorization
-     * @throws BadRequestException
-     * @throws \Exception
-     */
-    private function getAuthHandler($responseType)
-    {
-        switch ($responseType) {
-            case "code" : return new Flows\Implicit\AuthorizeRequest($this->service);
-            case "token": return new Flows\AuthCode\AuthorizeRequest($this->service);
-            default : throw new BadRequestException("Invalid/not supported response type for authorization: ". $responseType);
-        }
-    }
-
-    static function getParams()
-    {
-        return ["response_type"];
-    }
-
 
 }
