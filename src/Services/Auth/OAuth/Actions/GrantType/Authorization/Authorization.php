@@ -47,9 +47,11 @@ abstract class Authorization extends APIServlet
         $this->client = $clientDataAction->handleRequest(["client_id" => $request->getParam("client_id")]);
         $this->csrfToken = $request->getParam("state");
 
+
+        $this->info("Checking user login state.");
         if($this->isLoginRequired($request,$args)){
             $this->info("End-User not logged in. Redirecting to identity provider.");
-            return $response->withRedirect("/idp/login",301); //Todo move to constant
+            return $response->withRedirect("/idp/login"); //Todo move to constant
         }
 
         $this->info("End-User logged in as ".$this->user->getUsername());
