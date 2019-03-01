@@ -9,6 +9,7 @@
 namespace MedevAuth\Services\Auth\OAuth\Actions\AuthCode;
 
 
+use DateTime;
 use MedevAuth\Services\Auth\OAuth\Actions\Client\GetClientData;
 use MedevAuth\Services\Auth\OAuth\Actions\User\GetUserData;
 use MedevAuth\Services\Auth\OAuth\Entity\AuthCode;
@@ -27,7 +28,7 @@ class GetAuthCodeData extends APIRepositoryAction
         $authCodeId = $args["auth_code_id"];
 
         $storedData = $this->database->get("OAuth_AuthCodes",
-            ["Id","UserId","ClientId","RedirectURI","IsRevoked","CreatedAt","Expiration"],
+            ["Id","UserId","ClientId","RedirectURI","IsRevoked","CreatedAt","ExpiresAt"],
             ["Id" => $authCodeId]
         );
 
@@ -37,8 +38,9 @@ class GetAuthCodeData extends APIRepositoryAction
         $authCode = new AuthCode();
         $authCode->setIdentifier($storedData["Id"]);
         $authCode->setRedirectUri($storedData["RedirectURI"]);
-        $authCode->setCreatedAt($storedData["CreatedAt"]);
-        $authCode->setExpiresAt($storedData["Expiration"]);
+        $authCode->setCreatedAt(new DateTime($storedData["CreatedAt"]));
+        $authCode->setExpiresAt(new DateTime($storedData["ExpiresAt"]));
+        $authCode->setIsRevoked($storedData["IsRevoked"]);
         $authCode->setUser($getUserData->handleRequest(["user_id" => $storedData["UserId"]]));
         $authCode->setClient($getClientData->handleRequest(["client_id" => $storedData["ClientId"]]));
 

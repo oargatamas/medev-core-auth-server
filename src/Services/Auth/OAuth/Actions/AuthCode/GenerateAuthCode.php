@@ -27,14 +27,13 @@ class GenerateAuthCode extends APIRepositoryAction
     {
         /** @var Client $client */
         $client = $args["client"]; //Todo move to constant
-        $now = new DateTime();
 
         $authCode = new AuthCode();
 
         $authCode->setClient($client);
         $authCode->setIdentifier(RandomString::generate(20));
-        $authCode->setCreatedAt($now->getTimestamp());
-        $authCode->setExpiresAt($now->modify("+5 minutes")->getTimestamp());
+        $authCode->setCreatedAt(new DateTime());
+        $authCode->setExpiresAt(new DateTime("+5 minutes"));
         $authCode->setRedirectUri($client->getRedirectUri());
         $authCode->setIsRevoked(false);
 
