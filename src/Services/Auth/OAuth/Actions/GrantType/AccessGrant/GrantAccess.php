@@ -53,8 +53,6 @@ abstract class GrantAccess extends APIServlet
      */
     public function handleRequest(Request $request, Response $response, $args)
     {
-
-
         $this->info("Validating token request");
         $this->validateAccessRequest($request, $args);
 
@@ -128,8 +126,7 @@ abstract class GrantAccess extends APIServlet
     {
         return [
             "grant_type",
-            "client_id",
-            "scope"
+            "client_id"
         ];
     }
 
