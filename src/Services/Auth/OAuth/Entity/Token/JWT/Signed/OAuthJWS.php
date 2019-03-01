@@ -22,11 +22,6 @@ class OAuthJWS extends OAuthJWT
     private $privateKey;
 
 
-    public function __construct(Key $privateKey = null)
-    {
-        $this->privateKey = $privateKey;
-    }
-
     /**
      * @param Key $privateKey
      */
@@ -45,8 +40,8 @@ class OAuthJWS extends OAuthJWT
             ->setId($this->identifier, true)
             ->setSubject($this->user->getIdentifier())
             ->setAudience($this->client->getIdentifier())
-            ->setIssuedAt(time())
-            ->setNotBefore(time())
+            ->setIssuedAt($this->createdAt->getTimestamp())
+            ->setNotBefore($this->createdAt->getTimestamp())
             ->setExpiration($this->expiration)
             ->set("scopes", $this->scopes)
             ->sign( new Sha256(), $this->privateKey)
