@@ -12,6 +12,7 @@ namespace MedevAuth\Services\Auth\OAuth;
 use MedevAuth\Services\Auth\IdentityProvider\IdentityService;
 use MedevAuth\Services\Auth\OAuth\Actions\GrantType\AccessGrant\GrantAccessHandler;
 use MedevAuth\Services\Auth\OAuth\Actions\GrantType\AccessGrant\GrantFlowIdentifier;
+use MedevAuth\Services\Auth\OAuth\Actions\GrantType\Authorization\AuthorizationFlowIdentifier;
 use MedevAuth\Services\Auth\OAuth\Actions\GrantType\Authorization\AuthorizationHandler;
 use MedevSlim\Core\Service\APIService;
 use Slim\App;
@@ -19,7 +20,8 @@ use Slim\App;
 
 class OAuthService extends APIService
 {
-
+    const ROUTE_AUTHORIZE = "authorize";
+    const ROUTE_TOKEN = "token";
 
     /**
      * @return mixed
@@ -35,15 +37,19 @@ class OAuthService extends APIService
      */
     protected function registerRoutes(App $app)
     {
+
         //Todo consider to move it to another application
         $idp = new IdentityService($this->application);
         $idp->registerService("/idp");
 
-        $app->post("/authorize", new AuthorizationHandler($this))
-            ->setName($this->getServiceName());
+        $app->get("/authorize", new AuthorizationHandler($this))
+            ->add(new AuthorizationFlowIdentifier($this))
+            ->setArgument(APIService::SERVICE_ID,$this->getServiceName())
+            ->setName(self::ROUTE_AUTHORIZE);
 
         $app->post("/token", new GrantAccessHandler($this))
             ->add(new GrantFlowIdentifier($this))
-            ->setName($this->getServiceName());
+            ->setArgument(APIService::SERVICE_ID,$this->getServiceName())
+            ->setName(self::ROUTE_TOKEN);
     }
 }
