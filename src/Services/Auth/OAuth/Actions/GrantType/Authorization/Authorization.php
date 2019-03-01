@@ -9,12 +9,16 @@
 namespace MedevAuth\Services\Auth\OAuth\Actions\GrantType\Authorization;
 
 
+use MedevAuth\Services\Auth\IdentityProvider\IdentityService;
 use MedevAuth\Services\Auth\OAuth\Actions\Client\GetClientData;
 use MedevAuth\Services\Auth\OAuth\Entity\Client;
 use MedevAuth\Services\Auth\OAuth\Entity\User;
 use MedevSlim\Core\Action\Servlet\APIServlet;
+use MedevSlim\Core\Application\MedevApp;
+use MedevSlim\Core\Service\APIService;
 use Slim\Http\Request;
 use Slim\Http\Response;
+use Slim\Interfaces\RouterInterface;
 
 /**
  * Class Authorization
@@ -38,10 +42,26 @@ abstract class Authorization extends APIServlet
     protected $csrfToken;
 
     /**
+     * @var RouterInterface
+     */
+    protected $router;
+
+    /**
+     * @inheritDoc
+     */
+    public function __construct(APIService $service)
+    {
+        $this->router = $service->getContainer()->get(MedevApp::ROUTER);
+        parent::__construct($service);
+    }
+
+
+    /**
      * @inheritDoc
      */
     public function handleRequest(Request $request, Response $response, $args)
     {
+
         $clientDataAction = new GetClientData($this->service);
 
         $this->client = $clientDataAction->handleRequest(["client_id" => $request->getParam("client_id")]);
@@ -51,7 +71,8 @@ abstract class Authorization extends APIServlet
         $this->info("Checking user login state.");
         if($this->isLoginRequired($request,$args)){
             $this->info("End-User not logged in. Redirecting to identity provider.");
-            return $response->withRedirect("/idp/login"); //Todo move to constant
+            $_SESSION["AuthParams"] = $request->getParams();
+            return $response->withRedirect($this->router->pathFor(IdentityService::ROUTE_LOGIN,[],[]));
         }
 
         $this->info("End-User logged in as ".$this->user->getUsername());
