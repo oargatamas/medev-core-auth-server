@@ -1,1 +1,9 @@
-<h1>Do the login!!!</h1>
+<h2>{{ session_id }}</h2>
+<h1 style="color:red">{{ error_msg }}</h1>
+<form method="post" action="{{ login_url }}">
+    Username<br/>
+    <input name="username" type="text"/><br/>
+    Password<br/>
+    <input name="password" type="password"/><br/>
+    <input type="submit" value="Sign in"/>
+</form>

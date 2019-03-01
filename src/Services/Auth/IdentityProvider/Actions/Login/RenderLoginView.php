@@ -24,6 +24,13 @@ class RenderLoginView extends APITwigServlet
      */
     public function handleRequest(Request $request, Response $response, $args)
     {
-        return $this->render($response,"LoginScreen.twig",[]);
+
+        $data = [
+            "login_url" => "/idp/login",
+            "session_id" => session_id(),
+            "error_msg" => $request->getParam("error")
+        ];
+
+        return $this->render($response,"LoginScreen.twig",$data);
     }
 }

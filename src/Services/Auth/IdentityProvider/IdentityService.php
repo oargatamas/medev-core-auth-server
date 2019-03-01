@@ -18,11 +18,23 @@ use MedevAuth\Services\Auth\IdentityProvider\Actions\PasswordForgot\RenderForgot
 use MedevAuth\Services\Auth\IdentityProvider\Actions\Register\RegisterServlet;
 use MedevAuth\Services\Auth\IdentityProvider\Actions\Register\RenderRegisterView;
 use MedevSlim\Core\Action\Middleware\RequestValidator;
+use MedevSlim\Core\Service\APIService;
 use MedevSlim\Core\Service\View\TwigAPIService;
 use Slim\App;
 
 class IdentityService extends TwigAPIService
 {
+    const ID_TOKEN_COOKIE_KEY = "X-MEDEV-ID-TOKEN";
+
+    const ROUTE_LOGIN = "login";
+    const ROUTE_LOGOUT = "logout";
+    const ROUTE_REGISTER = "register";
+    const ROUTE_FORGOT_PASSWORD = "forgot";
+
+    const ERROR_INVALID_CREDENTIALS = 0;
+    const ERROR_NO_REDIRECT_URI = 1;
+    const ERROR_INVALID_STATE = 2;
+
 
     /**
      * @return mixed
@@ -39,35 +51,44 @@ class IdentityService extends TwigAPIService
     protected function registerRoutes(App $app)
     {
         $app->get("/", new RenderLoginView($this))
-            ->setName($this->getServiceName());
+            ->setArgument(APIService::SERVICE_ID,$this->getServiceName())
+            ->setName("idp");
 
         $app->get("/login",new RenderLoginView($this))
-            ->setName($this->getServiceName());
+            ->setArgument(APIService::SERVICE_ID,$this->getServiceName())
+            ->setName(self::ROUTE_LOGIN);
 
         $app->post("/login",new LoginServlet($this))
             ->add(new RequestValidator(LoginServlet::getParams()))
-            ->setName($this->getServiceName());
+            ->setArgument(APIService::SERVICE_ID,$this->getServiceName())
+            ->setName(self::ROUTE_LOGIN.".post");
 
         $app->get("/logout", new RenderLogoutView($this))
-            ->setName($this->getServiceName());
+            ->setArgument(APIService::SERVICE_ID,$this->getServiceName())
+            ->setName(self::ROUTE_LOGOUT);
 
         $app->post("/logout", new LogoutServlet($this))
             ->add(new RequestValidator(LogoutServlet::getParams()))
-            ->setName($this->getServiceName());
+            ->setArgument(APIService::SERVICE_ID,$this->getServiceName())
+            ->setName(self::ROUTE_LOGOUT.".post");
 
         $app->get("/register", new RenderRegisterView($this))
-            ->setName($this->getServiceName());
+            ->setArgument(APIService::SERVICE_ID,$this->getServiceName())
+            ->setName(self::ROUTE_REGISTER);
 
         $app->post("/register", new RegisterServlet($this))
             ->add(new RequestValidator(RegisterServlet::getParams()))
-            ->setName($this->getServiceName());
+            ->setArgument(APIService::SERVICE_ID,$this->getServiceName())
+            ->setName(self::ROUTE_REGISTER.".post");
 
         $app->get("/forgot", new RenderForgotPasswordView($this))
-            ->setName($this->getServiceName());
+            ->setArgument(APIService::SERVICE_ID,$this->getServiceName())
+            ->setName(self::ROUTE_FORGOT_PASSWORD);
 
         $app->post("/forgot", new ForgotPasswordServlet($this))
             ->add(new RequestValidator(ForgotPasswordServlet::getParams()))
-            ->setName($this->getServiceName());
+            ->setArgument(APIService::SERVICE_ID,$this->getServiceName())
+            ->setName(self::ROUTE_FORGOT_PASSWORD.".post");
     }
 
 
