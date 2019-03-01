@@ -36,6 +36,7 @@ class GenerateAuthCode extends APIRepositoryAction
         $authCode->setCreatedAt($now->getTimestamp());
         $authCode->setExpiresAt($now->modify("+5 minutes")->getTimestamp());
         $authCode->setRedirectUri($client->getRedirectUri());
+        $authCode->setIsRevoked(false);
 
         return $authCode;
     }

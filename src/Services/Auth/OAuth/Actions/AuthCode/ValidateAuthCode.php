@@ -10,6 +10,7 @@ namespace MedevAuth\Services\Auth\OAuth\Actions\AuthCode;
 
 
 use MedevAuth\Services\Auth\OAuth\Entity\AuthCode;
+use MedevAuth\Services\Auth\OAuth\Exceptions\OAuthException;
 use MedevAuth\Services\Auth\OAuth\Repository\Exception\RepositoryException;
 use MedevSlim\Core\Action\Repository\APIRepositoryAction;
 
@@ -26,15 +27,13 @@ class ValidateAuthCode extends APIRepositoryAction
         /** @var AuthCode $authCode */
         $authCode = $args["authcode"]; //Todo move to constant
 
-        $result = $this->database->has("OAuth_AuthCodes",
+        $result = $this->database->has("OAuth_AuthCodes",[],
             [
-                "Id" => $authCode->getIdentifier(),
-                "IsRevoked" => false,
-                "ExpiresAt[>]" => date('Y\-m\-d\ h:i:s')
+                "Id" => $authCode->getIdentifier()
             ]);
-        //Todo add info to log
+        
         if(!$result){
-            throw new RepositoryException("Authcode ".$authCode->getIdentifier()." not valid.");
+            throw new OAuthException("Authcode ".$authCode->getIdentifier()." not valid.");
         }
     }
 }

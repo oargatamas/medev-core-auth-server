@@ -9,7 +9,7 @@
 namespace MedevAuth\Services\Auth\OAuth\Actions\AuthCode;
 
 
-use MedevAuth\Services\Auth\OAuth\Repository\Exception\RepositoryException;
+use MedevAuth\Services\Auth\OAuth\Exceptions\OAuthException;
 use MedevSlim\Core\Action\Repository\APIRepositoryAction;
 
 class RevokeAuthCode extends APIRepositoryAction
@@ -18,7 +18,7 @@ class RevokeAuthCode extends APIRepositoryAction
     /**
      * @param $args
      * @return void
-     * @throws RepositoryException
+     * @throws OAuthException
      */
     public function handleRequest($args = [])
     {
@@ -34,8 +34,8 @@ class RevokeAuthCode extends APIRepositoryAction
 
         //Todo test is briefly
         $result = $this->database->error();
-        if(!is_null($result)){
-            throw new RepositoryException(implode(" - ",$result));
+        if(is_null($result)){
+            throw new OAuthException("Auth code can not be revoked: ".implode(" - ",$result));
         }
     }
 }
