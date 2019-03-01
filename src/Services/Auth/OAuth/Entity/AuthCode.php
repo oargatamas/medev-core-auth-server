@@ -9,6 +9,7 @@
 namespace MedevAuth\Services\Auth\OAuth\Entity;
 
 
+use DateTime;
 use Defuse\Crypto\Crypto;
 use Defuse\Crypto\Key;
 
@@ -32,11 +33,11 @@ class AuthCode extends DatabaseEntity
      */
     private $redirectUri;
     /**
-     * @var int
+     * @var DateTime
      */
     private $createdAt;
     /**
-     * @var int
+     * @var DateTime
      */
     private $expiresAt;
     /**
@@ -59,7 +60,7 @@ class AuthCode extends DatabaseEntity
     }
 
     /**
-     * @return int
+     * @return DateTime
      */
     public function getCreatedAt()
     {
@@ -67,15 +68,15 @@ class AuthCode extends DatabaseEntity
     }
 
     /**
-     * @param int $createdAt
+     * @param DateTime $createdAt
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt(DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
     }
 
     /**
-     * @return int
+     * @return DateTime
      */
     public function getExpiresAt()
     {
@@ -83,9 +84,9 @@ class AuthCode extends DatabaseEntity
     }
 
     /**
-     * @param int $expiresAt
+     * @param DateTime $expiresAt
      */
-    public function setExpiresAt($expiresAt)
+    public function setExpiresAt(DateTime $expiresAt)
     {
         $this->expiresAt = $expiresAt;
     }
