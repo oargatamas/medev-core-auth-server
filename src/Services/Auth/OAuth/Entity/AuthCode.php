@@ -12,6 +12,10 @@ namespace MedevAuth\Services\Auth\OAuth\Entity;
 use Defuse\Crypto\Crypto;
 use Defuse\Crypto\Key;
 
+/**
+ * Class AuthCode
+ * @package MedevAuth\Services\Auth\OAuth\Entity
+ */
 class AuthCode extends DatabaseEntity
 {
 
@@ -35,6 +39,10 @@ class AuthCode extends DatabaseEntity
      * @var int
      */
     private $expiresAt;
+    /**
+     * @var boolean
+     */
+    private $isRevoked;
 
     /**
      * @return Client
@@ -131,5 +139,21 @@ class AuthCode extends DatabaseEntity
             "redirect_uri" => $this->redirectUri
         ]);
         return Crypto::encrypt($json,$encryptionKey);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRevoked()
+    {
+        return $this->isRevoked;
+    }
+
+    /**
+     * @param bool $isRevoked
+     */
+    public function setIsRevoked(bool $isRevoked)
+    {
+        $this->isRevoked = $isRevoked;
     }
 }
