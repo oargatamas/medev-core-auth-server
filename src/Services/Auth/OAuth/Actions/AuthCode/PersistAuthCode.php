@@ -39,7 +39,7 @@ class PersistAuthCode extends APIRepositoryAction
         ]);
 
         $result = $this->database->error();
-        if(is_null($result)){
+        if(!is_null($result[2])){
             throw new OAuthException("Auth code can not be saved: ".implode(" - ",$result));
         }
     }

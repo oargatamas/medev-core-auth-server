@@ -17,12 +17,12 @@ class RevokeAccessToken extends APIRepositoryAction
 
     /**
      * @param $args
-     * @return integer
+     * @return boolean
      */
     public function handleRequest($args = [])
     {
         // We do not need to revoke access tokens due to their short living
         // If yes, then the DB Update should be performed here...
-        return 0;
+        return true;
     }
 }

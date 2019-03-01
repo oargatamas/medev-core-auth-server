@@ -21,6 +21,7 @@ class GenerateAccessToken extends GenerateToken
      */
     public function handleRequest($args = [])
     {
+        //Todo add persist task call
         return parent::handleRequest($args);
     }
 }

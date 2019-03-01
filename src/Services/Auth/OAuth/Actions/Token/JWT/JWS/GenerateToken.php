@@ -9,6 +9,7 @@
 namespace MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS;
 
 
+use DateTime;
 use Lcobucci\JWT\Signer\Key;
 use MedevAuth\Services\Auth\OAuth\Entity\Client;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\JWT\Signed\OAuthJWS;
@@ -39,6 +40,8 @@ abstract class GenerateToken extends APIRepositoryAction
         $token->setUser($user);
         $token->setClient($client);
         $token->setScopes($scopes);
+        $token->setCreatedAt(new DateTime());
+        $token->setIsRevoked(false);
         $token->setExpiration($tokenConfig["expiration"]["access_token"]);
         $token->setPrivateKey($tokenSigningKey);
 

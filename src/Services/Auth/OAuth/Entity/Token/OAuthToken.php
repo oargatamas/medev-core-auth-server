@@ -73,6 +73,18 @@ class OAuthToken extends DatabaseEntity
         return $this->expiration;
     }
 
+
+    /**
+     * @return DateTime
+     * @throws \Exception
+     */
+    public function getExpiresAt(){
+        $expiresAt = new DateTime();
+        $expiresAt->setTimestamp($this->createdAt->getTimestamp());
+        $expiresAt->modify($this->expiration. " seconds");
+        return $expiresAt;
+    }
+
     /**
      * @param int $expiration
      */

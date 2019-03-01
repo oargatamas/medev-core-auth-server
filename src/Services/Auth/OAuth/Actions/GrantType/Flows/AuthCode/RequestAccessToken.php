@@ -14,6 +14,7 @@ use MedevAuth\Services\Auth\OAuth\Actions\AuthCode\ValidateAuthCode;
 use MedevAuth\Services\Auth\OAuth\Actions\GrantType\AccessGrant\GrantAccess;
 use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\AccessToken\GenerateAccessToken;
 use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\RefreshToken\GenerateRefreshToken;
+use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\RefreshToken\PersistsRefreshToken;
 use MedevAuth\Services\Auth\OAuth\Entity\AuthCode;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\OAuthToken;
 use MedevSlim\Core\Service\Exceptions\UnauthorizedException;
@@ -61,6 +62,7 @@ class RequestAccessToken extends GrantAccess
         ];
         $action = new GenerateAccessToken($this->service);
         $accessToken = $action->handleRequest($tokenInfo);
+
         return  $accessToken;
     }
 
@@ -77,6 +79,11 @@ class RequestAccessToken extends GrantAccess
         ];
         $action = new GenerateRefreshToken($this->service);
         $refreshToken = $action->handleRequest($tokenInfo);
+
+        $this->info("Persisting refresh token.");
+        $saveToken = new PersistsRefreshToken($this->service);
+        $saveToken->handleRequest(["refresh_token" => $refreshToken]);
+
         return  $refreshToken;
     }
 

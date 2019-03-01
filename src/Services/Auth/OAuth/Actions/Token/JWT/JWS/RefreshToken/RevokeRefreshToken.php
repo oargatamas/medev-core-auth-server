@@ -18,11 +18,12 @@ class RevokeRefreshToken extends APIRepositoryAction
 
     /**
      * @param $args
-     * @return integer
+     * @return boolean
      * @throws UnauthorizedException
      */
     public function handleRequest($args = [])
     {
+        //Todo add log entries
         $tokenIdentifier = $args["token_id"]; //Todo move to constant
 
         /** @var PDOStatement $result */
@@ -36,10 +37,10 @@ class RevokeRefreshToken extends APIRepositoryAction
 
         $errors = $this->database->error();
         if(!is_null($errors)){
-            $this->error("Refresh token can not be saved to database. Interrupting access grant.");
+            $this->error("Refresh token can not be updated to database. Interrupting access grant.");
             throw new UnauthorizedException(implode(" - ",$errors));
         }
 
-        return $result->rowCount();
+        return $result->rowCount() > 0;
     }
 }
