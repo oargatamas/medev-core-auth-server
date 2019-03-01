@@ -24,6 +24,10 @@ class LogoutServlet extends APIServlet
      */
     public function handleRequest(Request $request, Response $response, $args)
     {
+        session_destroy();
+
         return $response;
     }
+
+
 }
