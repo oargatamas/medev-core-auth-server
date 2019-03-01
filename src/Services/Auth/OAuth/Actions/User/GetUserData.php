@@ -26,7 +26,7 @@ class GetUserData extends APIRepositoryAction
         $userId = $args["user_id"]; //Todo move to constant
 
         $storedData = $this->database->get("OAuth_Users",
-            ["Id","FirstName","LastName","UserName","Email","Password","Salt","CreatedAt","UpdatedAT","Verified","Disabled"],
+            ["Id","FirstName","LastName","UserName","Email","Password","CreatedAt","UpdatedAT","Verified","Disabled"],
             [
                 "AND" => [
                     "Id" => $userId,
