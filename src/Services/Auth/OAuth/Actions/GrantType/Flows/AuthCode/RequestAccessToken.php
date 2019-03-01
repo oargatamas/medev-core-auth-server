@@ -8,8 +8,10 @@
 
 namespace MedevAuth\Services\Auth\OAuth\Actions\GrantType\Flows\AuthCode;
 
+use MedevAuth\Services\Auth\OAuth\Actions\AuthCode\GetAuthCodeData;
 use MedevAuth\Services\Auth\OAuth\Actions\AuthCode\RevokeAuthCode;
-use MedevAuth\Services\Auth\OAuth\Actions\GrantType\GrantAccess\GrantAccess;
+use MedevAuth\Services\Auth\OAuth\Actions\AuthCode\ValidateAuthCode;
+use MedevAuth\Services\Auth\OAuth\Actions\GrantType\AccessGrant\GrantAccess;
 use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\AccessToken\GenerateAccessToken;
 use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\RefreshToken\GenerateRefreshToken;
 use MedevAuth\Services\Auth\OAuth\Entity\AuthCode;
@@ -34,7 +36,15 @@ class RequestAccessToken extends GrantAccess
      */
     public function validateAccessRequest(Request $request, $args = [])
     {
-        // TODO: Implement validateAccessRequest() method.
+        parent::validateAccessRequest($request,$args);
+
+        $getAuthCodeData = new GetAuthCodeData($this->service);
+        $this->authCode = $getAuthCodeData->handleRequest(["auth_code_id" => $request->getParam("code")]);
+
+        $this->user = $this->authCode->getUser();
+
+        $validateAuthCode = new ValidateAuthCode($this->service);
+        $validateAuthCode->handleRequest(["authcode" => $this->authCode]);
     }
 
     /**

@@ -10,6 +10,7 @@ namespace MedevAuth\Services\Auth\OAuth\Actions\GrantType\Flows\AuthCode;
 
 
 use MedevAuth\Services\Auth\OAuth\Actions\AuthCode\GenerateAuthCode;
+use MedevAuth\Services\Auth\OAuth\Actions\AuthCode\PersistAuthCode;
 use MedevAuth\Services\Auth\OAuth\Actions\Client\ValidateClient;
 use MedevAuth\Services\Auth\OAuth\Actions\GrantType\Authorization\Authorization;
 use MedevAuth\Services\Auth\OAuth\Entity\AuthCode;
@@ -21,7 +22,7 @@ class AuthorizeRequest extends Authorization
 
     public function isLoginRequired(Request $request, $args)
     {
-        if (isset($_SESSION["user"])) {
+        if (isset($_SESSION["user"])) { //Todo move to constant
             $this->user = $_SESSION["user"];
             return false;
         }
@@ -40,7 +41,8 @@ class AuthorizeRequest extends Authorization
         $validateClient = new ValidateClient($this->service);
         $validateClient->handleRequest([
             "client" => $this->client,
-            "validate_secret" => true,
+            "validate_secret" => false,
+            "grant_type" => "authorization_code"
         ]);
     }
 
@@ -49,18 +51,18 @@ class AuthorizeRequest extends Authorization
         $getAuthCode = new GenerateAuthCode($this->service);
         /** @var AuthCode $authCode */
         $authCode = $getAuthCode->handleRequest(["client" => $this->client]);
+        $authCode->setUser($_SESSION["user"]);
+
+        $storeAuthCode = new PersistAuthCode($this->service);
+        $storeAuthCode->handleRequest(["authcode" => $authCode]);
+
+        $redirectUri = $authCode->getRedirectUri();
 
         $data = [
             "code" => $authCode->getIdentifier(),
             "state" => $this->csrfToken
         ];
 
-        return $response->withJson($data, 200);
+        return $response->withRedirect($redirectUri."?".http_build_query($data,"","&",PHP_QUERY_RFC3986));
     }
-
-    static function getParams()
-    {
-        return array_merge(parent::getParams(), ["client_secret"]);
-    }
-
 }
