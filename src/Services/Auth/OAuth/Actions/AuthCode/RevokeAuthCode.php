@@ -9,6 +9,7 @@
 namespace MedevAuth\Services\Auth\OAuth\Actions\AuthCode;
 
 
+use MedevAuth\Services\Auth\OAuth\Entity\Persistables\AuthCode;
 use MedevAuth\Services\Auth\OAuth\Exceptions\OAuthException;
 use MedevSlim\Core\Action\Repository\APIRepositoryAction;
 
@@ -22,19 +23,19 @@ class RevokeAuthCode extends APIRepositoryAction
      */
     public function handleRequest($args = [])
     {
-        $codeIdentifier = $args["authcode_id"]; //Todo move to constant
+        $authCodeId = $args["authcode_id"]; //Todo move to constant
 
-        $this->database->update("OAuth_AuthCodes",
+        $this->database->update(AuthCode::getTableName(),
             [
-                "IsRevoked" => true
+                "a.IsRevoked" => true
             ],
             [
-                "Id" => $codeIdentifier
+                "a.Id" => $authCodeId
             ]);
 
-        //Todo test is briefly
+
         $result = $this->database->error();
-        if(is_null($result)){
+        if(!is_null($result[2])){
             throw new OAuthException("Auth code can not be revoked: ".implode(" - ",$result));
         }
     }

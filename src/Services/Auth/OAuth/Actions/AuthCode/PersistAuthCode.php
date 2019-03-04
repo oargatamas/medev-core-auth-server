@@ -9,7 +9,8 @@
 namespace MedevAuth\Services\Auth\OAuth\Actions\AuthCode;
 
 
-use MedevAuth\Services\Auth\OAuth\Entity\AuthCode;
+use MedevAuth\Services\Auth\OAuth\Entity;
+use MedevAuth\Services\Auth\OAuth\Entity\Persistables\AuthCode;
 use MedevAuth\Services\Auth\OAuth\Exceptions\OAuthException;
 use MedevSlim\Core\Action\Repository\APIRepositoryAction;
 use MedevSlim\Core\Database\Medoo\MedooDatabase;
@@ -24,18 +25,18 @@ class PersistAuthCode extends APIRepositoryAction
      */
     public function handleRequest($args = [])
     {
-        /** @var AuthCode $authCode */
+        /** @var Entity\AuthCode $authCode */
         $authCode = $args["authcode"];
         //Todo move to constant
 
-        $this->database->insert("OAuth_AuthCodes",[
-            "Id" => $authCode->getIdentifier(),
-            "UserId" => $authCode->getUser()->getIdentifier(),
-            "ClientId" => $authCode->getClient()->getIdentifier(),
-            "RedirectURI" => $authCode->getRedirectUri(),
-            "IsRevoked" => $authCode->isRevoked(),
-            "CreatedAt" => $authCode->getCreatedAt()->format(MedooDatabase::DEFAULT_DATE_FORMAT),
-            "ExpiresAt" => $authCode->getExpiresAt()->format(MedooDatabase::DEFAULT_DATE_FORMAT)
+        $this->database->insert(AuthCode::getTableName(),[
+            "a.Id" => $authCode->getIdentifier(),
+            "a.UserId" => $authCode->getUser()->getIdentifier(),
+            "a.ClientId" => $authCode->getClient()->getIdentifier(),
+            "a.RedirectURI" => $authCode->getRedirectUri(),
+            "a.IsRevoked" => $authCode->isRevoked(),
+            "a.CreatedAt" => $authCode->getCreatedAt()->format(MedooDatabase::DEFAULT_DATE_FORMAT),
+            "a.ExpiresAt" => $authCode->getExpiresAt()->format(MedooDatabase::DEFAULT_DATE_FORMAT)
         ]);
 
         $result = $this->database->error();
