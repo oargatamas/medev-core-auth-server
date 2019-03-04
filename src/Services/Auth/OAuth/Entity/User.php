@@ -30,4 +30,35 @@ class User extends ScopedEntity
     public function setUsername($username){
         $this->username = $username;
     }
+
+    /**
+     * @param $storedData
+     * @return User
+     */
+    public static function fromAssocArray($storedData)
+    {
+        $user = new User();
+
+        $user->setIdentifier($storedData["u.Id"]);
+        $user->setUsername($storedData["u.UserName"]);
+        $user->setScopes(explode(",",$storedData["UserScopes"]));
+
+        return $user;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getTableName()
+    {
+        return "OAuth_Users(u)";
+    }
+
+    /**
+     * @return string[]
+     */
+    public static function getColumnNames()
+    {
+        return ["u.Id","u.FirstName","u.LastName","u.UserName","u.Email","u.Password","u.Verified","u.Disabled","u.CreatedAt","u.UpdatedAt"];
+    }
 }

@@ -9,7 +9,9 @@
 namespace MedevAuth\Services\Auth\OAuth\Entity;
 
 
-abstract class DatabaseEntity
+use MedevAuth\Services\Auth\OAuth\Entity\Persistables\MedooPersistable;
+
+abstract class DatabaseEntity implements MedooPersistable
 {
     /**
      * @var string

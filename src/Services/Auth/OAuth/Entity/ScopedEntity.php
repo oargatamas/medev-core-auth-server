@@ -40,6 +40,6 @@ abstract class ScopedEntity extends DatabaseEntity
      * @param string $scope
      */
     public function addScope($scope){
-        $this->scopes[] = $scope;
+        array_push($this->scopes,$scope);
     }
 }

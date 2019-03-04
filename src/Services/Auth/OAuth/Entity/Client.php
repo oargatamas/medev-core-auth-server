@@ -91,4 +91,38 @@ class Client extends ScopedEntity
     public function hasGrantType($grantType){
         return in_array($grantType,$this->grantTypes);
     }
+
+    /**
+     * @param $storedData
+     * @return Client
+     */
+    public static function fromAssocArray($storedData)
+    {
+        $client = new Client();
+
+        $client->setIdentifier($storedData["c.Id"]);
+        $client->setName($storedData["c.Name"]);
+        $client->setSecret($storedData["c.Secret"]);
+        $client->setRedirectUri($storedData["c.Secret"]);
+        $client->setScopes(explode(",",$storedData["ClientScopes"]));
+        $client->setGrantTypes(explode(",",$storedData["ClientGrantTypes"]));
+
+        return $client;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getTableName()
+    {
+        return "OAuth_Clients(c)";
+    }
+
+    /**
+     * @return string[]
+     */
+    public static function getColumnNames()
+    {
+        return ["c.Id","c.Name","c.Secret","c.RedirectURI","c.Status","c.CreatedAt","c.UpdatedAt"];
+    }
 }

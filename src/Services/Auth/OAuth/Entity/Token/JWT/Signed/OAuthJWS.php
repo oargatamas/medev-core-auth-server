@@ -14,7 +14,7 @@ use Lcobucci\JWT\Signer\Key;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\JWT\OAuthJWT;
 
-class OAuthJWS extends OAuthJWT
+abstract class OAuthJWS extends OAuthJWT
 {
     /**
      * @var Key

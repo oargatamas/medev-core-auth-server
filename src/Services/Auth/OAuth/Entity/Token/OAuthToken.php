@@ -11,10 +11,10 @@ namespace MedevAuth\Services\Auth\OAuth\Entity\Token;
 
 use DateTime;
 use MedevAuth\Services\Auth\OAuth\Entity\Client;
-use MedevAuth\Services\Auth\OAuth\Entity\DatabaseEntity;
+use MedevAuth\Services\Auth\OAuth\Entity\ScopedEntity;
 use MedevAuth\Services\Auth\OAuth\Entity\User;
 
-class OAuthToken extends DatabaseEntity
+abstract class OAuthToken extends ScopedEntity
 {
     const USER = "issuer_user";
     const CLIENT = "issuer_client";
@@ -26,15 +26,9 @@ class OAuthToken extends DatabaseEntity
     protected $createdAt;
 
     /**
-     * @var int
+     * @var DateTime
      */
-    protected $expiration;
-
-    /**
-     * @var string[]
-     */
-    protected $scopes;
-
+    protected $expiresAt;
     /**
      * @var Client
      */
@@ -53,7 +47,7 @@ class OAuthToken extends DatabaseEntity
     /**
      * @return \DateTime
      */
-    public function getCreatedAt(): DateTime
+    public function getCreatedAt()
     {
         return $this->createdAt;
     }
@@ -61,58 +55,46 @@ class OAuthToken extends DatabaseEntity
     /**
      * @param \DateTime $createdAt
      */
-    public function setCreatedAt(DateTime $createdAt): void
+    public function setCreatedAt(DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
     }
-
-    /**
-     * @return int
-     */
-    public function getExpiration(){
-        return $this->expiration;
-    }
-
 
     /**
      * @return DateTime
      * @throws \Exception
      */
     public function getExpiresAt(){
-        $expiresAt = new DateTime();
-        $expiresAt->setTimestamp($this->createdAt->getTimestamp());
-        $expiresAt->modify($this->expiration. " seconds");
-        return $expiresAt;
+        return $this->expiresAt;
     }
 
     /**
-     * @param int $expiration
+     * @return int
      */
-    public function setExpiration($expiration){
-        $this->expiration = $expiration;
-    }
-
-
-    /**
-     * @return string[]
-     */
-    public function getScopes(){
-        return $this->scopes;
+    public function getExpiration(){
+        $diff = $this->expiresAt->diff($this->createdAt);
+        return $diff->s;
     }
 
     /**
-     * @param string[] $scopes
+     * @param int $seconds
+     * @throws \Exception
      */
-    public function setScopes($scopes){
-        $this->scopes = $scopes;
+    public function setExpiration($seconds){
+        $expiration = new DateTime();
+        $expiration->setTimestamp($this->createdAt->getTimestamp());
+        $expiration->modify("+".$seconds." second");
+        $this->expiresAt = $expiration;
     }
 
     /**
-     * @param string $scope
+     * @param DateTime $expiresAt
+     * @return void
      */
-    public function addScope($scope){
-        array_push($this->scopes,$scope);
+    public function setExpiresAt(Datetime $expiresAt){
+        $this->expiresAt = $expiresAt;
     }
+
 
     /**
      * @return Client
