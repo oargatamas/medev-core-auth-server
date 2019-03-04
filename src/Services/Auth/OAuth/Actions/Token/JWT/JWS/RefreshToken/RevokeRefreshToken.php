@@ -9,6 +9,7 @@
 namespace MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\RefreshToken;
 
 
+use MedevAuth\Services\Auth\OAuth\Entity\Persistables\RefreshToken;
 use MedevSlim\Core\Action\Repository\APIRepositoryAction;
 use MedevSlim\Core\Service\Exceptions\UnauthorizedException;
 use PDOStatement;
@@ -27,12 +28,12 @@ class RevokeRefreshToken extends APIRepositoryAction
         $tokenIdentifier = $args["token_id"]; //Todo move to constant
 
         /** @var PDOStatement $result */
-        $result = $this->database->update("OAuth_RefreshTokens",
+        $result = $this->database->update(RefreshToken::getTableName(),
             [
-                "IsRevoked" => true
+                "rt.IsRevoked" => true
             ],
             [
-                "Id" => $tokenIdentifier
+                "rt.Id" => $tokenIdentifier
             ]);
 
         $errors = $this->database->error();

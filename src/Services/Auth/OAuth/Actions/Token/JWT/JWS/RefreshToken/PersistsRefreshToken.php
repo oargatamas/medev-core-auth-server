@@ -9,6 +9,7 @@
 namespace MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\RefreshToken;
 
 
+use MedevAuth\Services\Auth\OAuth\Entity\Persistables\RefreshToken;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\JWT\Signed\OAuthJWS;
 use MedevAuth\Services\Auth\OAuth\Exceptions\OAuthException;
 use MedevSlim\Core\Action\Repository\APIRepositoryAction;
@@ -27,14 +28,14 @@ class PersistsRefreshToken extends APIRepositoryAction
         /** @var OAuthJWS $refreshToken */
         $refreshToken = $args["refresh_token"]; //Todo move to constant
 
-        $this->database->insert("OAuth_RefreshTokens",
+        $this->database->insert(RefreshToken::getTableName(),
             [
-                "Id" => $refreshToken->getIdentifier(),
-                "UserId" => $refreshToken->getUser()->getIdentifier(),
-                "ClientId" => $refreshToken->getClient()->getIdentifier(),
-                "IsRevoked" => $refreshToken->isRevoked(),
-                "CreatedAt" => $refreshToken->getCreatedAt()->format(MedooDatabase::DEFAULT_DATE_FORMAT),
-                "ExpiresAt" => $refreshToken->getExpiresAt()->format(MedooDatabase::DEFAULT_DATE_FORMAT),
+                "rt.Id" => $refreshToken->getIdentifier(),
+                "rt.UserId" => $refreshToken->getUser()->getIdentifier(),
+                "rt.ClientId" => $refreshToken->getClient()->getIdentifier(),
+                "rt.IsRevoked" => $refreshToken->isRevoked(),
+                "rt.CreatedAt" => $refreshToken->getCreatedAt()->format(MedooDatabase::DEFAULT_DATE_FORMAT),
+                "rt.ExpiresAt" => $refreshToken->getExpiresAt()->format(MedooDatabase::DEFAULT_DATE_FORMAT),
             ]
         );
 
