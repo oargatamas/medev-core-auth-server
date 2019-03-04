@@ -27,10 +27,10 @@ class RevokeAuthCode extends APIRepositoryAction
 
         $this->database->update(AuthCode::getTableName(),
             [
-                "a.IsRevoked" => true
+                "IsRevoked" => true
             ],
             [
-                "a.Id" => $authCodeId
+                "Id" => $authCodeId
             ]);
 
 
