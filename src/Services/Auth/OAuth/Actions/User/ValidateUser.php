@@ -9,6 +9,7 @@
 namespace MedevAuth\Services\Auth\OAuth\Actions\User;
 
 
+use MedevAuth\Services\Auth\OAuth\Entity\Persistables\User;
 use MedevSlim\Core\Action\Repository\APIRepositoryAction;
 use MedevSlim\Core\Service\Exceptions\UnauthorizedException;
 
@@ -26,16 +27,16 @@ class ValidateUser extends APIRepositoryAction
         $username = $args["username"]; //Todo move to constant
         $password = $args["password"]; //Todo move to constant
 
-        $storedData = $this->database->get("OAuth_Users",
-            ["Id","Password"],
+        $storedData = $this->database->get(User::getTableName(),
+            User::getColumnNames(),
             [
                 "AND" => [
                     "OR" =>[
-                        "UserName" => $username,
-                        "Email" => $username
+                        "u.UserName" => $username,
+                        "u.Email" => $username
                     ],
-                    "Verified" => 1,
-                    "Disabled" => 0
+                    "u.Verified" => 1,
+                    "u.Disabled" => 0
                 ]
             ]
         );
@@ -44,12 +45,12 @@ class ValidateUser extends APIRepositoryAction
             throw new UnauthorizedException("User ".$username." not registered or disabled.");
         }
 
-        if(!password_verify($password,$storedData["Password"])){
+        if(!password_verify($password,$storedData["u.Password"])){
             throw new UnauthorizedException("Password for ".$username." is invalid");
         }
 
         $this->info("User credentials are valid.");
 
-        return $storedData["Id"];
+        return $storedData["u.Id"];
     }
 }
