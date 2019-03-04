@@ -37,7 +37,7 @@ class Client implements MedooPersistable
      */
     public static function getTableName()
     {
-        return "OAuth_Clients(c)";
+        return "OAuth_Clients";
     }
 
     /**

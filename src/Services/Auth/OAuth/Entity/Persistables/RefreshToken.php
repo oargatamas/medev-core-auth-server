@@ -39,7 +39,7 @@ class RefreshToken implements MedooPersistable
      */
     public static function getTableName()
     {
-        return "OAuth_RefreshTokens(rt)";
+        return "OAuth_RefreshTokens";
     }
 
     /**

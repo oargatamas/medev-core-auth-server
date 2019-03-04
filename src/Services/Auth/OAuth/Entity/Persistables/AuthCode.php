@@ -40,7 +40,7 @@ class AuthCode implements MedooPersistable
      */
     public static function getTableName()
     {
-        return "OAuth_AuthCode(a)";
+        return "OAuth_AuthCodes";
     }
 
     /**

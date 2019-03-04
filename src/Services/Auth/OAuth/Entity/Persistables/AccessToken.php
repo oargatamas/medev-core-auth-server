@@ -40,7 +40,7 @@ class AccessToken implements MedooPersistable
      */
     public static function getTableName()
     {
-        return "OAuth_AccessTokens(at)";
+        return "OAuth_AccessTokens";
     }
 
     /**

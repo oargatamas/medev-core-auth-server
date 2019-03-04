@@ -32,7 +32,7 @@ class User implements MedooPersistable
      */
     public static function getTableName()
     {
-        return "OAuth_Users(u)";
+        return "OAuth_Users";
     }
 
     /**
