@@ -25,6 +25,9 @@ class GenerateRefreshToken extends GenerateToken
      */
     public function handleRequest($args = [])
     {
+        $tokenConfig = $this->config["authorization"]["token"];
+
+        $args[OAuthToken::EXPIRATION] = $tokenConfig["expiration"]["refresh_token"];
         $args[OAuthToken::SCOPES] = (new GetRefreshTokenScopes($this->service))->handleRequest();
         return parent::handleRequest($args);
     }

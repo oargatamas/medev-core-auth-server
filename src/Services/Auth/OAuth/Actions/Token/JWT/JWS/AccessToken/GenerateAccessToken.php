@@ -11,6 +11,7 @@ namespace MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\AccessToken;
 
 use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\GenerateToken;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\JWT\Signed\OAuthJWS;
+use MedevAuth\Services\Auth\OAuth\Entity\Token\OAuthToken;
 
 class GenerateAccessToken extends GenerateToken
 {
@@ -21,7 +22,10 @@ class GenerateAccessToken extends GenerateToken
      */
     public function handleRequest($args = [])
     {
-        //Todo add persist task call
+        $tokenConfig = $this->config["authorization"]["token"];
+
+        $args[OAuthToken::EXPIRATION] = $tokenConfig["expiration"]["access_token"];
+        $args[OAuthToken::SCOPES] = []; //Todo get common items from User and ClientScopes
         return parent::handleRequest($args);
     }
 }

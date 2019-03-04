@@ -33,6 +33,8 @@ abstract class GenerateToken extends APIRepositoryAction
         $scopes = $args[OAuthToken::SCOPES]; //Todo move to constant
         /** @var Key $tokenPrivateKey */
         $tokenSigningKey = CryptUtils::getKeyFromConfig($tokenConfig["private_key"]);
+        /** @var OAuthJWS $token */
+        $expiration = $args[OAuthToken::EXPIRATION];
 
         $token = new OAuthJWS();
 
@@ -41,8 +43,8 @@ abstract class GenerateToken extends APIRepositoryAction
         $token->setClient($client);
         $token->setScopes($scopes);
         $token->setCreatedAt(new DateTime());
+        $token->setExpiration($expiration);
         $token->setIsRevoked(false);
-        $token->setExpiration($tokenConfig["expiration"]["access_token"]);
         $token->setPrivateKey($tokenSigningKey);
 
         return $token;
