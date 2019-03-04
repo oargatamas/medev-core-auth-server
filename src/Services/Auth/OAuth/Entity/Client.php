@@ -13,7 +13,7 @@ namespace MedevAuth\Services\Auth\OAuth\Entity;
  * Class Client
  * @package MedevAuth\Services\Auth\OAuth\Entity
  */
-class Client extends DatabaseEntity
+class Client extends ScopedEntity
 {
 
     /**
@@ -28,7 +28,6 @@ class Client extends DatabaseEntity
      * @var string
      */
     private $redirectUri;
-
     /**
      * @var string[]
      */
@@ -79,7 +78,7 @@ class Client extends DatabaseEntity
     /**
      * @param string[] $grantTypes
      */
-    public function setGrantTypes(array $grantTypes)
+    public function setGrantTypes($grantTypes)
     {
         $this->grantTypes = $grantTypes;
     }

@@ -9,7 +9,7 @@
 namespace MedevAuth\Services\Auth\OAuth\Entity;
 
 
-class User extends DatabaseEntity
+class User extends ScopedEntity
 {
 
     /**
