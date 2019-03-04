@@ -12,6 +12,7 @@ namespace MedevAuth\Services\Auth\OAuth\Actions\AuthCode;
 use DateTime;
 use MedevAuth\Services\Auth\OAuth\Entity\AuthCode;
 use MedevAuth\Services\Auth\OAuth\Entity\Client;
+use MedevAuth\Services\Auth\OAuth\Entity\User;
 use MedevSlim\Core\Action\Repository\APIRepositoryAction;
 use MedevSlim\Utils\RandomString;
 
@@ -27,10 +28,13 @@ class GenerateAuthCode extends APIRepositoryAction
     {
         /** @var Client $client */
         $client = $args["client"]; //Todo move to constant
+        /** @var User $user */
+        $user = $args["user"]; //Todo move to constant
 
         $authCode = new AuthCode();
 
         $authCode->setClient($client);
+        $authCode->setUser($user);
         $authCode->setIdentifier(RandomString::generate(20));
         $authCode->setCreatedAt(new DateTime());
         $authCode->setExpiresAt(new DateTime("+5 minutes"));
