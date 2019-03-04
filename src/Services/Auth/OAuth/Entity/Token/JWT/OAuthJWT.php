@@ -13,7 +13,7 @@ use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Token;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\OAuthToken;
 
-abstract class OAuthJWT extends OAuthToken
+class OAuthJWT extends OAuthToken
 {
 
     /**

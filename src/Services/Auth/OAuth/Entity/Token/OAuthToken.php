@@ -14,11 +14,13 @@ use MedevAuth\Services\Auth\OAuth\Entity\Client;
 use MedevAuth\Services\Auth\OAuth\Entity\ScopedEntity;
 use MedevAuth\Services\Auth\OAuth\Entity\User;
 
-abstract class OAuthToken extends ScopedEntity
+class OAuthToken extends ScopedEntity
 {
     const USER = "issuer_user";
     const CLIENT = "issuer_client";
     const SCOPES = "scopes";
+    const TOKEN = "token_base";
+    const EXPIRATION = "expiration";
 
     /**
      * @var DateTime

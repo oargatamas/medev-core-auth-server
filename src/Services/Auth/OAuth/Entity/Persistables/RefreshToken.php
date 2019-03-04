@@ -6,24 +6,23 @@
  * Time: 11:20
  */
 
-namespace MedevAuth\Services\Auth\OAuth\Entity\Token\JWT\Signed;
+namespace MedevAuth\Services\Auth\OAuth\Entity\Persistables;
 
 
 use DateTime;
-use MedevAuth\Services\Auth\OAuth\Entity\Client;
-use MedevAuth\Services\Auth\OAuth\Entity\User;
+use MedevAuth\Services\Auth\OAuth\Entity\Token\JWT\Signed\OAuthJWS;
 
-class RefreshToken extends OAuthJWS
+class RefreshToken implements MedooPersistable
 {
 
     /**
      * @param $storedData
-     * @return RefreshToken
+     * @return OAuthJWS
      * @throws \Exception
      */
     public static function fromAssocArray($storedData)
     {
-        $token = new RefreshToken();
+        $token = new OAuthJWS();
 
         $token->setIdentifier($storedData["rt.Id"]);
         $token->setCreatedAt(new DateTime($storedData["rt.CreatedAt"]));
