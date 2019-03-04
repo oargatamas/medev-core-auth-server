@@ -30,12 +30,12 @@ class PersistsRefreshToken extends APIRepositoryAction
 
         $this->database->insert(RefreshToken::getTableName(),
             [
-                "rt.Id" => $refreshToken->getIdentifier(),
-                "rt.UserId" => $refreshToken->getUser()->getIdentifier(),
-                "rt.ClientId" => $refreshToken->getClient()->getIdentifier(),
-                "rt.IsRevoked" => $refreshToken->isRevoked(),
-                "rt.CreatedAt" => $refreshToken->getCreatedAt()->format(MedooDatabase::DEFAULT_DATE_FORMAT),
-                "rt.ExpiresAt" => $refreshToken->getExpiresAt()->format(MedooDatabase::DEFAULT_DATE_FORMAT),
+                "Id" => $refreshToken->getIdentifier(),
+                "UserId" => $refreshToken->getUser()->getIdentifier(),
+                "ClientId" => $refreshToken->getClient()->getIdentifier(),
+                "IsRevoked" => $refreshToken->isRevoked(),
+                "CreatedAt" => $refreshToken->getCreatedAt()->format(MedooDatabase::DEFAULT_DATE_FORMAT),
+                "ExpiresAt" => $refreshToken->getExpiresAt()->format(MedooDatabase::DEFAULT_DATE_FORMAT),
             ]
         );
 
