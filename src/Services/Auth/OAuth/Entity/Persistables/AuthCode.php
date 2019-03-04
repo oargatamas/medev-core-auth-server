@@ -24,11 +24,11 @@ class AuthCode implements MedooPersistable
     {
         $authCode = new Entity\AuthCode();
 
-        $authCode->setIdentifier($storedData["a.Id"]);
-        $authCode->setRedirectUri($storedData["a.RedirectURI"]);
-        $authCode->setIsRevoked($storedData["a.IsRevoked"]);
-        $authCode->setCreatedAt(new DateTime($storedData["a.CreatedAt"]));
-        $authCode->setExpiresAt(new DateTime($storedData["a.ExpiresAt"]));
+        $authCode->setIdentifier($storedData["Id"]);
+        $authCode->setRedirectUri($storedData["RedirectURI"]);
+        $authCode->setIsRevoked($storedData["IsRevoked"]);
+        $authCode->setCreatedAt(new DateTime($storedData["CreatedAt"]));
+        $authCode->setExpiresAt(new DateTime($storedData["ExpiresAt"]));
         $authCode->setUser(User::fromAssocArray($storedData));
         $authCode->setClient(Client::fromAssocArray($storedData));
 

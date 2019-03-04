@@ -20,8 +20,8 @@ class User implements MedooPersistable
     {
         $user = new Entity\User();
 
-        $user->setIdentifier($storedData["u.Id"]);
-        $user->setUsername($storedData["u.UserName"]);
+        $user->setIdentifier($storedData["Id"]);
+        $user->setUsername($storedData["UserName"]);
         $user->setScopes(explode(",",$storedData["UserScopes"]));
 
         return $user;

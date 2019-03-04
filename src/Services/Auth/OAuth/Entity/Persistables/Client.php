@@ -22,10 +22,10 @@ class Client implements MedooPersistable
     {
         $client = new Entity\Client();
 
-        $client->setIdentifier($storedData["c.Id"]);
-        $client->setName($storedData["c.Name"]);
-        $client->setSecret($storedData["c.Secret"]);
-        $client->setRedirectUri($storedData["c.Secret"]);
+        $client->setIdentifier($storedData["Id"]);
+        $client->setName($storedData["Name"]);
+        $client->setSecret($storedData["Secret"]);
+        $client->setRedirectUri($storedData["Secret"]);
         $client->setScopes(explode(",",$storedData["ClientScopes"]));
         $client->setGrantTypes(explode(",",$storedData["ClientGrantTypes"]));
 

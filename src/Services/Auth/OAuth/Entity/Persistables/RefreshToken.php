@@ -24,10 +24,10 @@ class RefreshToken implements MedooPersistable
     {
         $token = new OAuthJWS();
 
-        $token->setIdentifier($storedData["rt.Id"]);
-        $token->setCreatedAt(new DateTime($storedData["rt.CreatedAt"]));
-        $token->setExpiresAt(new DateTime($storedData["rt.ExpiresAt"]));
-        $token->setIsRevoked($storedData["rt.IsRevoked"]);
+        $token->setIdentifier($storedData["Id"]);
+        $token->setCreatedAt(new DateTime($storedData["CreatedAt"]));
+        $token->setExpiresAt(new DateTime($storedData["ExpiresAt"]));
+        $token->setIsRevoked($storedData["IsRevoked"]);
         $token->setClient(Client::fromAssocArray($storedData));
         $token->setUser(User::fromAssocArray($storedData));
 
