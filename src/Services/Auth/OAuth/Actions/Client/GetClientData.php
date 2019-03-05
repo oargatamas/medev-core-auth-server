@@ -9,48 +9,47 @@
 namespace MedevAuth\Services\Auth\OAuth\Actions\Client;
 
 
-use MedevAuth\Services\Auth\OAuth\Entity\Client;
+use MedevAuth\Services\Auth\OAuth\Entity;
+use MedevAuth\Services\Auth\OAuth\Entity\Persistables\Client;
 use MedevSlim\Core\Action\Repository\APIRepositoryAction;
 use MedevSlim\Core\Service\Exceptions\UnauthorizedException;
+use Medoo\Medoo;
 
 class GetClientData extends APIRepositoryAction
 {
 
     /**
      * @param $args
-     * @return Client
+     * @return Entity\Client
      * @throws UnauthorizedException
      */
     public function handleRequest($args = [])
     {
         $clientId = $args["client_id"]; //Todo move to constant
 
-        $storedData = $this->database->get("OAuth_Clients",
-            ["Id","Name","Secret","RedirectURI","Status"],
-            ["Id" => $clientId]
+        $storedData = $this->database->get("OAuth_Clients(c)",
+            [
+                "[>]OAuth_ClientScopes(cs)" => ["c.Id" => "ClientId"],
+                "[>]OAuth_ClientGrantTypes(cg)" => [ "c.Id" => "ClientId" ],
+                "[>]OAuth_GrantTypes(g)" => [ "cg.GrantId" => "Id" ],
+            ],
+            array_merge(
+                Client::getColumnNames(),
+                ["ClientScopes" => Medoo::raw("GROUP_CONCAT(<cs.ScopeId>)")],
+                ["ClientGrantTypes" => Medoo::raw("GROUP_CONCAT(<g.GrantName>)")]
+            ),
+            [
+                "c.Id" => $clientId,
+                "GROUP" => "c.Id"
+            ]
         );
-
-        $grantTypeData = $this->database->select("OAuth_ClientGrantTypes", //From Table
-            ["[>]OAuth_GrantTypes" => ["GrantId" => "Id"]],     //Table Join section
-            ["GrantName"],                                      //Select column list
-            ["ClientId" => $clientId]                           //Where condition
-        );
-
-        $grantTypes = array_map(function($value){ return $value["GrantName"];},$grantTypeData);
 
 
         if(empty($storedData) || is_null($storedData)){
             throw new UnauthorizedException("Client ".$clientId." not existing in the database.");
         }
 
-        $clientEntity = new Client();
-        $clientEntity->setIdentifier($storedData["Id"]);
-        $clientEntity->setName($storedData["Name"]);
-        $clientEntity->setRedirectUri($storedData["RedirectURI"]);
-        $clientEntity->setSecret($storedData["Secret"]);
-        $clientEntity->setGrantTypes($grantTypes);
-
-        return $clientEntity;
+        return Client::fromAssocArray($storedData);
     }
 
 
