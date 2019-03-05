@@ -10,6 +10,7 @@ namespace MedevAuth\Services\Auth\OAuth\Actions\GrantType\Flows\Implicit;
 
 
 use MedevAuth\Services\Auth\OAuth\Actions\Client\ValidateClient;
+use MedevAuth\Services\Auth\OAuth\Actions\GrantType\AccessGrant\GrantAccess;
 use MedevAuth\Services\Auth\OAuth\Actions\GrantType\Authorization\Authorization;
 use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\AccessToken\GenerateAccessToken;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\OAuthToken;
@@ -45,6 +46,7 @@ class AuthorizeRequest extends Authorization
         $validateClient->handleRequest([
             "client" => $this->client,
             "validate_secret" => false,
+            "grant_type" => "implicit"
         ]);
     }
 
@@ -58,7 +60,18 @@ class AuthorizeRequest extends Authorization
         ];
         $action = new GenerateAccessToken($this->service);
         $accessToken = $action->handleRequest($tokenInfo);
-        return  $accessToken;
+
+        $accessToken->setExpiration(600);
+
+        $data = [
+            GrantAccess::ACCESS_TOKEN => $accessToken->finalizeToken(),
+            GrantAccess::ACCESS_TOKEN_TYPE => "bearer",
+            GrantAccess::EXPIRES_IN => $accessToken->getExpiration(),
+        ];
+
+        $redirectUri = $this->client->getRedirectUri();
+
+        return  $response->withRedirect($redirectUri."?".http_build_query($data,"","&",PHP_QUERY_RFC3986));
     }
 
 
