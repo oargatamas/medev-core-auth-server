@@ -26,7 +26,7 @@ class GetUserData extends APIRepositoryAction
     {
         $userId = $args["user_id"]; //Todo move to constant
 
-        $storedData = $this->database->get(User::getTableName(),
+        $storedData = $this->database->get(User::getTableName()."(u)",
             User::getColumnNames(),
             [
                 "AND" => [

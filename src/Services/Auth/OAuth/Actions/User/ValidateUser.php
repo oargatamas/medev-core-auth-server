@@ -27,7 +27,7 @@ class ValidateUser extends APIRepositoryAction
         $username = $args["username"]; //Todo move to constant
         $password = $args["password"]; //Todo move to constant
 
-        $storedData = $this->database->get(User::getTableName(),
+        $storedData = $this->database->get(User::getTableName()."(u)",
             User::getColumnNames(),
             [
                 "AND" => [
@@ -45,12 +45,12 @@ class ValidateUser extends APIRepositoryAction
             throw new UnauthorizedException("User ".$username." not registered or disabled.");
         }
 
-        if(!password_verify($password,$storedData["u.Password"])){
+        if(!password_verify($password,$storedData["Password"])){
             throw new UnauthorizedException("Password for ".$username." is invalid");
         }
 
         $this->info("User credentials are valid.");
 
-        return $storedData["u.Id"];
+        return $storedData["Id"];
     }
 }
