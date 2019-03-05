@@ -74,8 +74,9 @@ class OAuthToken extends ScopedEntity
      * @return int
      */
     public function getExpiration(){
-        $diff = $this->expiresAt->diff($this->createdAt);
-        return $diff->s;
+        $expiry = $this->expiresAt->getTimestamp();
+        $create = $this->createdAt->getTimestamp();
+        return $expiry - $create;
     }
 
     /**

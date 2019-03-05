@@ -42,7 +42,7 @@ class OAuthJWS extends OAuthJWT
             ->setAudience($this->client->getIdentifier())
             ->setIssuedAt($this->createdAt->getTimestamp())
             ->setNotBefore($this->createdAt->getTimestamp())
-            ->setExpiration($this->expiration)
+            ->setExpiration($this->getExpiration())
             ->set("scopes", $this->scopes)
             ->sign( new Sha256(), $this->privateKey)
             ->getToken();
