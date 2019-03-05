@@ -25,7 +25,7 @@ class Client implements MedooPersistable
         $client->setIdentifier($storedData["Id"]);
         $client->setName($storedData["Name"]);
         $client->setSecret($storedData["Secret"]);
-        $client->setRedirectUri($storedData["Secret"]);
+        $client->setRedirectUri($storedData["RedirectURI"]);
         $client->setScopes(explode(",",$storedData["ClientScopes"]));
         $client->setGrantTypes(explode(",",$storedData["ClientGrantTypes"]));
 
