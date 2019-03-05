@@ -32,12 +32,7 @@ class ParseRefreshToken extends ParseToken
         $storedData = $this->database->get(
             RefreshToken::getTableName()."(rt)",
             RefreshToken::getColumnNames(),
-            [
-                "AND" => [
-                    "rt.Id" => $token->getIdentifier(),
-                    "rt.IsRevoked" => false
-                ]
-            ]
+            ["rt.Id" => $token->getIdentifier()]
         );
 
         if(is_null($storedData)){
