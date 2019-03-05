@@ -37,7 +37,7 @@ class RevokeRefreshToken extends APIRepositoryAction
             ]);
 
         $errors = $this->database->error();
-        if(isset($errors[2])){
+        if(isset($errors[2]) || $result->rowCount() <= 0){
             $this->error("Refresh token can not be updated to database. Interrupting access grant.");
             throw new UnauthorizedException(implode(" - ",$errors));
         }

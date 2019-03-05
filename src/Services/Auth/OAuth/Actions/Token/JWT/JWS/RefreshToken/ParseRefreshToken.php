@@ -12,6 +12,7 @@ namespace MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\RefreshToken;
 use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\ParseToken;
 use MedevAuth\Services\Auth\OAuth\Entity\Persistables\RefreshToken;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\JWT\Signed\OAuthJWS;
+use MedevSlim\Core\Service\Exceptions\UnauthorizedException;
 
 class ParseRefreshToken extends ParseToken
 {
@@ -24,11 +25,13 @@ class ParseRefreshToken extends ParseToken
     /**
      * @param OAuthJWS $token
      * @return OAuthJWS
+     * @throws UnauthorizedException
      */
     protected function withServerState(OAuthJWS $token)
     {
-        $isBlackListed = $this->database->has(
-            RefreshToken::getTableName(),
+        $storedData = $this->database->get(
+            RefreshToken::getTableName()."(rt)",
+            RefreshToken::getColumnNames(),
             [
                 "AND" => [
                     "rt.Id" => $token->getIdentifier(),
@@ -37,7 +40,11 @@ class ParseRefreshToken extends ParseToken
             ]
         );
 
-        $token->setIsRevoked($isBlackListed);
+        if(is_null($storedData)){
+            throw new UnauthorizedException("Refreshtoken not existing with the following id: ".$token->getIdentifier());
+        }
+
+        $token->setIsRevoked($storedData["IsRevoked"]);
         return $token;
     }
 }
