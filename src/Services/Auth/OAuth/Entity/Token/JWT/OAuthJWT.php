@@ -47,7 +47,9 @@ class OAuthJWT extends OAuthToken
             ->setAudience($this->client->getIdentifier())
             ->setIssuedAt($this->createdAt->getTimestamp())
             ->setNotBefore($this->createdAt->getTimestamp())
-            ->setExpiration($this->expiration)
+            ->setExpiration($this->getExpiration())
+            ->set("usr",$this->user->getIdentifier())
+            ->set("cli", $this->client->getIdentifier())
             ->set("scopes", $this->scopes) //Todo Move key to static field
             ->getToken();
 
