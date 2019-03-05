@@ -30,13 +30,13 @@ class PersistAuthCode extends APIRepositoryAction
         //Todo move to constant
 
         $this->database->insert(AuthCode::getTableName(),[
-            "a.Id" => $authCode->getIdentifier(),
-            "a.UserId" => $authCode->getUser()->getIdentifier(),
-            "a.ClientId" => $authCode->getClient()->getIdentifier(),
-            "a.RedirectURI" => $authCode->getRedirectUri(),
-            "a.IsRevoked" => $authCode->isRevoked(),
-            "a.CreatedAt" => $authCode->getCreatedAt()->format(MedooDatabase::DEFAULT_DATE_FORMAT),
-            "a.ExpiresAt" => $authCode->getExpiresAt()->format(MedooDatabase::DEFAULT_DATE_FORMAT)
+            "Id" => $authCode->getIdentifier(),
+            "UserId" => $authCode->getUser()->getIdentifier(),
+            "ClientId" => $authCode->getClient()->getIdentifier(),
+            "RedirectURI" => $authCode->getRedirectUri(),
+            "IsRevoked" => $authCode->isRevoked(),
+            "CreatedAt" => $authCode->getCreatedAt()->format(MedooDatabase::DEFAULT_DATE_FORMAT),
+            "ExpiresAt" => $authCode->getExpiresAt()->format(MedooDatabase::DEFAULT_DATE_FORMAT)
         ]);
 
         $result = $this->database->error();
