@@ -15,6 +15,7 @@ use MedevAuth\Services\Auth\OAuth\Entity\Persistables\AuthCode;
 use MedevAuth\Services\Auth\OAuth\Entity\Persistables\Client;
 use MedevAuth\Services\Auth\OAuth\Entity\Persistables\User;
 use MedevSlim\Core\Action\Repository\APIRepositoryAction;
+use Medoo\Medoo;
 
 class GetAuthCodeData extends APIRepositoryAction
 {
@@ -29,25 +30,27 @@ class GetAuthCodeData extends APIRepositoryAction
         $authCodeId = $args["auth_code_id"];
 
 
-        $storedData = $this->database->get(AuthCode::getTableName(),
+        $storedData = $this->database->get(AuthCode::getTableName()."(a)",
             [
-                "[>]".Client::getTableName() => [ "a.ClientId" => "c.Id"],
-                "[>]".User::getTableName() => [ "a.UserId" => "u.Id"],
-                "[>]OAuth_UserScopes(us)" => [ "a.UserId" => "us.UserId" ],
+                "[>]".Client::getTableName()."(c)" => [ "a.ClientId" => "Id"],
+                "[>]".User::getTableName()."(u)" => [ "a.UserId" => "Id"],
+                "[>]OAuth_ClientGrantTypes(cg)" => [ "a.ClientId" => "ClientId" ],
+                "[>]OAuth_UserScopes(us)" => [ "a.UserId" => "UserId" ],
                 "[>]OAuth_ClientScopes(cs)" => [
-                    "AND" => [
-                        "a.UserId" => "cs.UserId",
-                        "a.ClientId" => "cs.ClientId"
+                        "a.UserId" => "UserId",
+                        "a.ClientId" => "ClientId"
                     ]
-                ]
             ],
-            [
+            array_merge(
                 AuthCode::getColumnNames(),
                 Client::getColumnNames(),
                 User::getColumnNames(),
-                "GROUP_CONCAT(cs.ScopeId) as ClientScopes",
-                "GROUP_CONCAT(us.ScopeId) as UserScopes"
-            ],
+                [
+                    "ClientGrantTypes" => Medoo::raw("GROUP_CONCAT(<cg.GrantId>)"),
+                    "ClientScopes" => Medoo::raw("GROUP_CONCAT(<cs.ScopeId>)"),
+                    "UserScopes" => Medoo::raw("GROUP_CONCAT(<us.ScopeId>)")
+                ]
+            ),
             ["a.Id" => $authCodeId]
         );
 
