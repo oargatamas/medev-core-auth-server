@@ -9,7 +9,8 @@
 namespace MedevAuth\Services\Auth\OAuth\Actions\GrantType\Flows\ClientCredentials;
 
 
-use MedevAuth\Services\Auth\OAuth\Actions\GrantType\GrantAccess\GrantAccess;
+use MedevAuth\Services\Auth\OAuth\Actions\GrantType\AccessGrant\GrantAccess;
+use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\AccessToken\GenerateAccessToken;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\OAuthToken;
 use MedevSlim\Core\Service\Exceptions\UnauthorizedException;
 use Slim\Http\Request;
@@ -25,7 +26,7 @@ class RequestAccessToken extends GrantAccess
      */
     public function validateAccessRequest(Request $request, $args = [])
     {
-        // TODO: Implement validateAccessRequest() method.
+        parent::validateAccessRequest($request, $args);
     }
 
     /**
@@ -34,6 +35,14 @@ class RequestAccessToken extends GrantAccess
      */
     public function generateAccessToken()
     {
-        // TODO: Implement generateAccessToken() method.
+        $tokenInfo = [
+            OAuthToken::USER => $this->user,
+            OAuthToken::CLIENT => $this->client,
+            OAuthToken::SCOPES => $this->scopes
+        ];
+        $action = new GenerateAccessToken($this->service);
+        $accessToken = $action->handleRequest($tokenInfo);
+
+        return $accessToken;
     }
 }

@@ -9,6 +9,7 @@
 namespace MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS;
 
 
+use DateTime;
 use Lcobucci\JWT\Parser;
 use MedevAuth\Services\Auth\OAuth\Actions\Client\GetClientData;
 use MedevAuth\Services\Auth\OAuth\Actions\User\GetUserData;
@@ -32,15 +33,16 @@ abstract class ParseToken extends APIRepositoryAction
     {
         $jwt = (new Parser())->parse($args["token"]);
 
-        $client = (new GetClientData($this->service))->handleRequest(["client_id" => $jwt->getClaim("cli")]);
-        $user = (new GetUserData($this->service))->handleRequest(["user_id" => $jwt->getClaim("usr")]);;
-        $privateKey = CryptUtils::getKeyFromConfig($this->config["auth"]["token"]["private_key"]);
+        $client = (new GetClientData($this->service))->handleRequest(["client_id" => $jwt->getClaim("cli","")]);
+        $user = (new GetUserData($this->service))->handleRequest(["user_id" => $jwt->getClaim("usr","")]);;
+        $privateKey = CryptUtils::getKeyFromConfig($this->config["authorization"]["token"]["private_key"]);
 
         $token = new OAuthJWS();
         $token->setJwt($jwt);
 
         $token->setIdentifier($jwt->getHeader("jti"));
-        $token->setExpiration($jwt->getClaim("exp"));
+        $token->setCreatedAt((new DateTime())->setTimestamp($jwt->getClaim("iat")));
+        $token->setExpiresAt((new DateTime())->setTimestamp($jwt->getClaim("exp")));
         $token->setScopes($jwt->getClaim("scopes"));
         $token->setClient($client);
         $token->setUser($user);

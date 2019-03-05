@@ -36,6 +36,8 @@ class OAuthJWT extends OAuthToken
     }
 
 
+
+
     /**
      * @return string
      */
@@ -47,7 +49,7 @@ class OAuthJWT extends OAuthToken
             ->setAudience($this->client->getIdentifier())
             ->setIssuedAt($this->createdAt->getTimestamp())
             ->setNotBefore($this->createdAt->getTimestamp())
-            ->setExpiration($this->getExpiration())
+            ->setExpiration($this->expiresAt->getTimestamp())
             ->set("usr",$this->user->getIdentifier())
             ->set("cli", $this->client->getIdentifier())
             ->set("scopes", $this->scopes) //Todo Move key to static field

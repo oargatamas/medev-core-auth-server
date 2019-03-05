@@ -28,7 +28,7 @@ class ValidateToken extends APIRepositoryAction
         /** @var OAuthJWS $token */
         $token = $args["token"]; //Todo move to constant
 
-        $tokenVerificationKey = CryptUtils::getKeyFromConfig($this->config["auth"]["token"]["public_key"]);
+        $tokenVerificationKey = CryptUtils::getKeyFromConfig($this->config["authorization"]["token"]["public_key"]);
 
         if (!$token->verifySignature($tokenVerificationKey)) {
             throw new UnauthorizedException("Invalid token signature.");

@@ -30,14 +30,14 @@ class RevokeRefreshToken extends APIRepositoryAction
         /** @var PDOStatement $result */
         $result = $this->database->update(RefreshToken::getTableName(),
             [
-                "rt.IsRevoked" => true
+                "IsRevoked" => true
             ],
             [
-                "rt.Id" => $tokenIdentifier
+                "Id" => $tokenIdentifier
             ]);
 
         $errors = $this->database->error();
-        if(!is_null($errors)){
+        if(isset($errors[2])){
             $this->error("Refresh token can not be updated to database. Interrupting access grant.");
             throw new UnauthorizedException(implode(" - ",$errors));
         }

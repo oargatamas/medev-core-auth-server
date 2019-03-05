@@ -9,7 +9,7 @@
 namespace MedevAuth\Services\Auth\OAuth\Actions\GrantType\Flows\RefreshToken;
 
 
-use MedevAuth\Services\Auth\OAuth\Actions\GrantType\GrantAccess\GrantAccess;
+use MedevAuth\Services\Auth\OAuth\Actions\GrantType\AccessGrant\GrantAccess;
 use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\AccessToken\GenerateAccessToken;
 use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\RefreshToken\ParseRefreshToken;
 use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\RefreshToken\RevokeRefreshToken;
@@ -42,10 +42,12 @@ class RequestAccessToken extends GrantAccess
         $parseAction = new ParseRefreshToken($this->service);
         $parsedRefreshToken = $parseAction->handleRequest(["token" => $request->getParam("refresh_token")]);
 
-        $this->refreshToken = $parsedRefreshToken;
-
         $validation = new ValidateToken($this->service);
         $validation->handleRequest(["token" => $parsedRefreshToken]);
+
+        $this->refreshToken = $parsedRefreshToken;
+        $this->client = $parsedRefreshToken->getClient();
+        $this->user = $parsedRefreshToken->getUser();
     }
 
     /**

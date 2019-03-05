@@ -35,7 +35,7 @@ class RevokeAuthCode extends APIRepositoryAction
 
 
         $result = $this->database->error();
-        if(!is_null($result[2])){
+        if(isset($result[2])){
             throw new OAuthException("Auth code can not be revoked: ".implode(" - ",$result));
         }
     }
