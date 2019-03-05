@@ -81,7 +81,7 @@ abstract class Authorization extends APIServlet
 
         if($this->isPermissionRequired($request,$args)){
             $this->info("Permmissions required for client ".$this->client->getIdentifier());
-            return $response->withRedirect("/authorization/permission",301);
+            return $response->withRedirect("/authorization/permission");
         }
 
 
