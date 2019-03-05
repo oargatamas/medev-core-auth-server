@@ -50,8 +50,10 @@ class AuthorizeRequest extends Authorization
     {
         $getAuthCode = new GenerateAuthCode($this->service);
         /** @var AuthCode $authCode */
-        $authCode = $getAuthCode->handleRequest(["client" => $this->client]);
-        $authCode->setUser($_SESSION["user"]);
+        $authCode = $getAuthCode->handleRequest([
+            "client" => $this->client,
+            "user" => $this->user
+        ]);
 
         $storeAuthCode = new PersistAuthCode($this->service);
         $storeAuthCode->handleRequest(["authcode" => $authCode]);
