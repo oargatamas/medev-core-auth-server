@@ -9,6 +9,7 @@
 namespace MedevAuth\Services\Auth\OAuth\Entity\Persistables;
 
 use MedevAuth\Services\Auth\OAuth\Entity;
+use Medoo\Medoo;
 
 class User implements MedooPersistable
 {
@@ -20,7 +21,7 @@ class User implements MedooPersistable
     {
         $user = new Entity\User();
 
-        $user->setIdentifier($storedData["Id"]);
+        $user->setIdentifier($storedData["UserId"]);
         $user->setUsername($storedData["UserName"]);
         $user->setScopes(explode(",",$storedData["UserScopes"]));
 
@@ -40,6 +41,17 @@ class User implements MedooPersistable
      */
     public static function getColumnNames()
     {
-        return ["u.Id","u.FirstName","u.LastName","u.UserName","u.Email","u.Password","u.Verified","u.Disabled","u.CreatedAt","u.UpdatedAt"];
+        return [
+            "UserId" => Medoo::raw("<u.Id>"),
+			"UserFirstName" => Medoo::raw("<u.FirstName>"),
+			"UserLastName" => Medoo::raw("<u.LastName>"),
+			"UserName" => Medoo::raw("<u.UserName>"),
+			"UserEmail" => Medoo::raw("<u.Email>"),
+			"UserPassword" => Medoo::raw("<u.Password>"),
+			"UserVerified" => Medoo::raw("<u.Verified>"),
+			"UserDisabled" => Medoo::raw("<u.Disabled>"),
+			"UserCreated" => Medoo::raw("<u.CreatedAt>"),
+			"UserUpdated" => Medoo::raw("<u.UpdatedAt>")
+		];
     }
 }

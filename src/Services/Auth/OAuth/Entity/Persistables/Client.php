@@ -10,6 +10,7 @@ namespace MedevAuth\Services\Auth\OAuth\Entity\Persistables;
 
 
 use MedevAuth\Services\Auth\OAuth\Entity;
+use Medoo\Medoo;
 
 class Client implements MedooPersistable
 {
@@ -22,12 +23,12 @@ class Client implements MedooPersistable
     {
         $client = new Entity\Client();
 
-        $client->setIdentifier($storedData["Id"]);
-        $client->setName($storedData["Name"]);
-        $client->setSecret($storedData["Secret"]);
-        $client->setRedirectUri($storedData["RedirectURI"]);
-        $client->setScopes(explode(",",$storedData["ClientScopes"]));
-        $client->setGrantTypes(explode(",",$storedData["ClientGrantTypes"]));
+        $client->setIdentifier($storedData["ClientId"]);
+        $client->setName($storedData["ClientName"]);
+        $client->setSecret($storedData["ClientSecret"]);
+        $client->setRedirectUri($storedData["ClientRedirect"]);
+        $client->setScopes(explode(",", $storedData["ClientScopes"]));
+        $client->setGrantTypes(explode(",", $storedData["ClientGrantTypes"]));
 
         return $client;
     }
@@ -45,6 +46,14 @@ class Client implements MedooPersistable
      */
     public static function getColumnNames()
     {
-        return ["c.Id","c.Name","c.Secret","c.RedirectURI","c.Status","c.CreatedAt","c.UpdatedAt"];
+        return [
+            "ClientId" => Medoo::raw("<c.Id>"),
+            "ClientName" => Medoo::raw("<c.Name>"),
+            "ClientSecret" => Medoo::raw("<c.Secret>"),
+            "ClientRedirect" => Medoo::raw("<c.RedirectURI>"),
+            "ClientStatus" => Medoo::raw("<c.Status>"),
+            "ClientCreated" => Medoo::raw("<c.CreatedAt>"),
+            "ClientUpdated" => Medoo::raw("<c.UpdatedAt>")
+        ];
     }
 }

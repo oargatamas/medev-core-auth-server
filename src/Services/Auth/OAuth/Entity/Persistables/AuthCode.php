@@ -9,9 +9,9 @@
 namespace MedevAuth\Services\Auth\OAuth\Entity\Persistables;
 
 
-
 use DateTime;
 use MedevAuth\Services\Auth\OAuth\Entity;
+use Medoo\Medoo;
 
 class AuthCode implements MedooPersistable
 {
@@ -24,11 +24,11 @@ class AuthCode implements MedooPersistable
     {
         $authCode = new Entity\AuthCode();
 
-        $authCode->setIdentifier($storedData["Id"]);
-        $authCode->setRedirectUri($storedData["RedirectURI"]);
-        $authCode->setIsRevoked($storedData["IsRevoked"]);
-        $authCode->setCreatedAt(new DateTime($storedData["CreatedAt"]));
-        $authCode->setExpiresAt(new DateTime($storedData["ExpiresAt"]));
+        $authCode->setIdentifier($storedData["AuthCodeId"]);
+        $authCode->setRedirectUri($storedData["AuthCodeRedirectURI"]);
+        $authCode->setIsRevoked($storedData["AuthCodeRevoked"]);
+        $authCode->setCreatedAt(new DateTime($storedData["AuthCodeCreatedAt"]));
+        $authCode->setExpiresAt(new DateTime($storedData["AuthCodeExpiresAt"]));
         $authCode->setUser(User::fromAssocArray($storedData));
         $authCode->setClient(Client::fromAssocArray($storedData));
 
@@ -48,6 +48,12 @@ class AuthCode implements MedooPersistable
      */
     public static function getColumnNames()
     {
-        return ["a.Id","a.RedirectURI","a.IsRevoked","a.CreatedAt","a.ExpiresAt"];
+        return [
+            "AuthCodeId" => Medoo::raw("<a.Id>"),
+            "AuthCodeRedirectURI" => Medoo::raw("<a.RedirectURI>"),
+            "AuthCodeRevoked" => Medoo::raw("<a.IsRevoked>"),
+            "AuthCodeCreatedAt" => Medoo::raw("<a.CreatedAt>"),
+            "AuthCodeExpiresAt" => Medoo::raw("<a.ExpiresAt>")
+        ];
     }
 }

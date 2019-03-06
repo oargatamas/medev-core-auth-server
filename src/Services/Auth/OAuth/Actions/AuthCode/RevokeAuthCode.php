@@ -25,7 +25,7 @@ class RevokeAuthCode extends APIRepositoryAction
     {
         $authCodeId = $args["authcode_id"]; //Todo move to constant
 
-        $this->database->update(AuthCode::getTableName(),
+        $result = $this->database->update(AuthCode::getTableName(),
             [
                 "IsRevoked" => true
             ],
@@ -33,10 +33,9 @@ class RevokeAuthCode extends APIRepositoryAction
                 "Id" => $authCodeId
             ]);
 
-
-        $result = $this->database->error();
-        if(isset($result[2])){
-            throw new OAuthException("Auth code can not be revoked: ".implode(" - ",$result));
+        $error = $this->database->error();
+        if(isset($error[2]) || $result->rowCount() <= 0){
+            throw new OAuthException("Auth code can not be revoked: ".implode(" - ",$error));
         }
     }
 }
