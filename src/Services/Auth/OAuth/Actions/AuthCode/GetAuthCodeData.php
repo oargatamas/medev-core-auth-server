@@ -35,6 +35,7 @@ class GetAuthCodeData extends APIRepositoryAction
                 "[>]".Client::getTableName()."(c)" => [ "a.ClientId" => "Id"],
                 "[>]".User::getTableName()."(u)" => [ "a.UserId" => "Id"],
                 "[>]OAuth_ClientGrantTypes(cg)" => [ "a.ClientId" => "ClientId" ],
+                "[>]OAuth_GrantTypes(g)" => ["cg.GrantId" => "Id"],
                 "[>]OAuth_UserScopes(us)" => [ "a.UserId" => "UserId" ],
                 "[>]OAuth_ClientScopes(cs)" => [
                         "a.UserId" => "UserId",
@@ -45,15 +46,17 @@ class GetAuthCodeData extends APIRepositoryAction
                 AuthCode::getColumnNames(),
                 Client::getColumnNames(),
                 User::getColumnNames(),
-                [
-                    "ClientGrantTypes" => Medoo::raw("GROUP_CONCAT(<cg.GrantId>)"),
-                    "ClientScopes" => Medoo::raw("GROUP_CONCAT(<cs.ScopeId>)"),
-                    "UserScopes" => Medoo::raw("GROUP_CONCAT(<us.ScopeId>)")
-                ]
+                ["ClientGrantTypes" => Medoo::raw("GROUP_CONCAT(DISTINCT(<g.GrantName>))")],
+                ["ClientScopes" => Medoo::raw("GROUP_CONCAT(DISTINCT(<cs.ScopeId>))")],
+                ["UserScopes" => Medoo::raw("GROUP_CONCAT(DISTINCT(<us.ScopeId>))")]
             ),
-            ["a.Id" => $authCodeId]
+            [
+                "a.Id" => $authCodeId,
+                "GROUP" => "a.Id"
+            ]
         );
 
+        $result = $this->database->error();
 
         $authCode = AuthCode::fromAssocArray($storedData);
 

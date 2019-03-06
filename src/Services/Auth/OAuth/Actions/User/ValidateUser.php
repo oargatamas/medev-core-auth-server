@@ -45,12 +45,12 @@ class ValidateUser extends APIRepositoryAction
             throw new UnauthorizedException("User ".$username." not registered or disabled.");
         }
 
-        if(!password_verify($password,$storedData["Password"])){
+        if(!password_verify($password,$storedData["UserPassword"])){
             throw new UnauthorizedException("Password for ".$username." is invalid");
         }
 
         $this->info("User credentials are valid.");
 
-        return $storedData["Id"];
+        return $storedData["UserId"];
     }
 }
