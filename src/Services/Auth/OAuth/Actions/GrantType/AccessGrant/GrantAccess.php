@@ -126,7 +126,8 @@ abstract class GrantAccess extends APIServlet
     {
         return [
             "grant_type",
-            "client_id"
+            "client_id",
+            "state"
         ];
     }
 
