@@ -1,3 +1,16 @@
+DROP TABLE IF EXISTS OAuth_Users;
+DROP TABLE IF EXISTS OAuth_Scopes;
+DROP TABLE IF EXISTS OAuth_Clients;
+DROP TABLE IF EXISTS OAuth_AuthCodes;
+DROP TABLE IF EXISTS OAuth_AccessTokens;
+DROP TABLE IF EXISTS OAuth_RefreshTokens;
+DROP TABLE IF EXISTS OAuth_Clients_Users;
+DROP TABLE IF EXISTS OAuth_UserScopes;
+DROP TABLE IF EXISTS OAuth_ClientScopes;
+DROP TABLE IF EXISTS OAuth_GrantTypes;
+DROP TABLE IF EXISTS OAuth_ClientGrantTypes;
+
+
 CREATE TABLE IF NOT EXISTS OAuth_Users (
 	Id INT AUTO_INCREMENT,
 	FirstName VARCHAR(255) NOT NULL,
@@ -5,11 +18,10 @@ CREATE TABLE IF NOT EXISTS OAuth_Users (
 	UserName VARCHAR(255) NOT NULL,
 	Email VARCHAR(255) NOT NULL,
 	Password VARCHAR(255) NOT NULL,
-	Salt VARCHAR(255),
 	Verified TINYINT(1) DEFAULT 0,
 	Disabled TINYINT(1) DEFAULT 0,
-	CreatedAt DATE,
-	UpdatedAT DATE,
+	CreatedAt DATETIME,
+	UpdatedAT DATETIME,
 	PRIMARY KEY(Id),
 	UNIQUE (Email)
 ) ENGINE=INNODB;
@@ -18,8 +30,8 @@ CREATE TABLE IF NOT EXISTS OAuth_Scopes (
 	Id VARCHAR(200),
 	Application VARCHAR(50) NOT NULL,
 	Description TEXT,
-	CreatedAt DATE,
-	UpdatedAt DATE,
+	CreatedAt DATETIME,
+	UpdatedAt DATETIME,
 	PRIMARY KEY (Id)
 ) ENGINE=INNODB;
 
@@ -29,8 +41,8 @@ CREATE TABLE IF NOT EXISTS OAuth_Clients (
 	Secret VARCHAR(255), 
 	RedirectURI VARCHAR(255),
 	Status INT NOT NULL DEFAULT 0,
-	CreatedAt DATE,
-	UpdatedAt DATE,
+	CreatedAt DATETIME,
+	UpdatedAt DATETIME,
 	PRIMARY KEY (Id)
 ) ENGINE=INNODB;
 
@@ -40,8 +52,8 @@ CREATE TABLE IF NOT EXISTS OAuth_AuthCodes (
 	ClientId VARCHAR(100),
 	RedirectURI VARCHAR(255),
 	IsRevoked TINYINT(1) DEFAULT 1,
-	CreatedAt DATE NOT NULL,
-	Expiration DATE NOT NULL,
+	CreatedAt DATETIME NOT NULL,
+	ExpiresAt DATETIME NOT NULL,
 	PRIMARY KEY (Id, ClientId)
 ) ENGINE=INNODB;
 
@@ -49,18 +61,18 @@ CREATE TABLE IF NOT EXISTS OAuth_AccessTokens (
 	Id VARCHAR(255),
 	UserId INT NOT NULL,
 	ClientId INT NOT NULL,
-	Expiration DATE NOT NULL,
-	CreatedAt DATE NOT NULL,
+	ExpiresAt DATETIME NOT NULL,
+	CreatedAt DATETIME NOT NULL,
 	PRIMARY KEY (Id)
 ) ENGINE=INNODB;
 
 CREATE TABLE IF NOT EXISTS OAuth_RefreshTokens (
 	Id VARCHAR(255),
 	UserId INT NOT NULL,
-	ClientId INT NOT NULL,
+	ClientId VARCHAR(100) NOT NULL,
 	IsRevoked TINYINT(1) DEFAULT 1,
-	CreatedAt DATE NOT NULL,
-	Expiration DATE NOT NULL,
+	CreatedAt DATETIME NOT NULL,
+	ExpiresAt DATETIME NOT NULL,
 	PRIMARY KEY (Id)
 ) ENGINE=INNODB;
 
@@ -72,14 +84,14 @@ CREATE TABLE IF NOT EXISTS OAuth_Clients_Users (
 
 CREATE TABLE IF NOT EXISTS OAuth_UserScopes(
 	UserId INT NOT NULL,
-	ScopeId INT NOT NULL,
+	ScopeId VARCHAR(200) NOT NULL,
 	PRIMARY KEY (UserId, ScopeId)
 ) ENGINE=INNODB;
 
 CREATE TABLE IF NOT EXISTS OAuth_ClientScopes(
-	ClientId INT NOT NULL,
+	ClientId VARCHAR(100) NOT NULL,
 	UserId INT NOT NULL,
-	ScopeId INT NOT NULL,
+	ScopeId VARCHAR(200) NOT NULL,
 	PRIMARY KEY (ClientId, UserId, ScopeId)
 ) ENGINE=INNODB;
 
@@ -91,7 +103,7 @@ CREATE TABLE IF NOT EXISTS OAuth_GrantTypes(
 ) ENGINE=INNODB;
 
 CREATE TABLE IF NOT EXISTS OAuth_ClientGrantTypes(
-  ClientId INT NOT NULL,
+  ClientId VARCHAR(100) NOT NULL,
   GrantId INT NOT NULL,
   PRIMARY KEY (ClientId, GrantId)
 ) ENGINE=INNODB;
@@ -102,4 +114,5 @@ INSERT INTO OAuth_GrantTypes VALUES (2,'password');
 INSERT INTO OAuth_GrantTypes VALUES (3,'client_credentials');
 INSERT INTO OAuth_GrantTypes VALUES (4,'refresh_token');
 
-
+INSERT INTO OAuth_Users VALUES ('1','Tamás','Oarga','Tangomajom','toarga@medev.hu','$2y$12$PtR0KlIvg22oI.y.ukJ0A.s5JsalVCNkKE.wGz5R/9nz5cs3mxBJm','1','0','2019-02-26','2019-02-26');
+INSERT INTO OAuth_Clients VALUES ('hu.medev.test.webclient','TestWebApplication','$2y$12$1TUfojssKlhWYaRKLG0wq.8mxt/ErN.9HUZza0MniFRYCK9tsY6He','http://api.medev.local','1','2019-02-26','2019-02-26');

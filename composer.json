@@ -10,7 +10,8 @@
   },
   "autoload": {
     "psr-4": {
-      "MedevAuth\\": "src/"
+      "MedevAuth\\": "src/",
+      "MedevAuthExample\\" : "example/src"
     }
   },
   "repositories": [
