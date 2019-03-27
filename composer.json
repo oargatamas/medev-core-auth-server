@@ -3,10 +3,9 @@
   "description": "Securing Medev Slim applications via OAuth2 with JWT based solution.",
   "require": {
     "medev-core/slim": "@dev",
-    "lcobucci/jwt": "^3.2",
-    "defuse/php-encryption": "^2.1",
     "ext-pdo": "*",
-    "ext-json": "*"
+    "ext-json": "*",
+    "gree/jose": "^2.2"
   },
   "autoload": {
     "psr-4": {
