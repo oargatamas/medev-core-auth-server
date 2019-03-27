@@ -100,6 +100,17 @@ class OAuthToken extends ScopedEntity
 
 
     /**
+     * @return bool
+     * @throws \Exception
+     */
+    public function isExpired(){
+        $now = new DateTime();
+
+        return $now->getTimestamp() > $this->expiresAt->getTimestamp();
+    }
+
+
+    /**
      * @return Client
      */
     public function getClient(){
@@ -130,7 +141,7 @@ class OAuthToken extends ScopedEntity
     /**
      * @return bool
      */
-    public function isRevoked(): bool
+    public function isRevoked()
     {
         return $this->isRevoked;
     }
@@ -138,7 +149,7 @@ class OAuthToken extends ScopedEntity
     /**
      * @param bool $isRevoked
      */
-    public function setIsRevoked(bool $isRevoked): void
+    public function setIsRevoked($isRevoked)
     {
         $this->isRevoked = $isRevoked;
     }
