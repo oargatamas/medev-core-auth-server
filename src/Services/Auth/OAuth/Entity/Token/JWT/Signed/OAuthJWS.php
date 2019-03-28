@@ -30,11 +30,17 @@ class OAuthJWS extends OAuthJWT
 
     /**
      * @param string $publicKey
-     * @throws \JOSE_Exception_VerificationFailed
+     * @return bool
      */
-    public function verifySignature($publicKey){
+    public function verifySignature($publicKey)
+    {
         $token = new JOSE_JWS($this->mapPropsToClaims());
-        $token->verify($publicKey,"RS256");
+        try {
+            $token->verify($publicKey, "RS256");
+            return true;
+        } catch (\JOSE_Exception_VerificationFailed $e) {
+            return false;
+        }
     }
 
     /**
