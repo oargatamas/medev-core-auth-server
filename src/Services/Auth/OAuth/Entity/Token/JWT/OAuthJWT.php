@@ -39,7 +39,7 @@ class OAuthJWT extends OAuthToken
     {
         $token = new JOSE_JWT($this->mapPropsToClaims());
 
-        return $token->__toString();
+        return $token->toString();
     }
 
 
