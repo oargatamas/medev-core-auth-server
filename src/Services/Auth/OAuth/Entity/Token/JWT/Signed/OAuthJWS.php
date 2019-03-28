@@ -9,47 +9,43 @@
 namespace MedevAuth\Services\Auth\OAuth\Entity\Token\JWT\Signed;
 
 
-use Lcobucci\JWT\Builder;
-use Lcobucci\JWT\Signer\Key;
-use Lcobucci\JWT\Signer\Rsa\Sha256;
+use JOSE_JWS;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\JWT\OAuthJWT;
 
 class OAuthJWS extends OAuthJWT
 {
     /**
-     * @var Key
+     * @var string
      */
     private $privateKey;
 
 
     /**
-     * @param Key $privateKey
+     * @param string $privateKey
      */
     public function setPrivateKey($privateKey)
     {
         $this->privateKey = $privateKey;
     }
 
-    public function verifySignature(Key $publicKey){
-        return $this->jwt->verify(new Sha256(),$publicKey->getContent());
+    /**
+     * @param string $publicKey
+     * @throws \JOSE_Exception_VerificationFailed
+     */
+    public function verifySignature($publicKey){
+        $token = new JOSE_JWS($this->mapPropsToClaims());
+        $token->verify($publicKey,"RS256");
     }
 
+    /**
+     * @return string
+     * @throws \JOSE_Exception
+     */
     public function finalizeToken()
     {
-        $token = (new Builder())
-            ->setId($this->identifier, true)
-            ->setSubject($this->user->getIdentifier())
-            ->setAudience($this->client->getIdentifier())
-            ->setIssuedAt($this->createdAt->getTimestamp())
-            ->setNotBefore($this->createdAt->getTimestamp())
-            ->setExpiration($this->expiresAt->getTimestamp())
-            ->set("usr",$this->user->getIdentifier())
-            ->set("cli", $this->client->getIdentifier())
-            ->set("scopes", $this->scopes)
-            ->sign( new Sha256(), $this->privateKey)
-            ->getToken();
+        $token = (new JOSE_JWS($this->mapPropsToClaims()));
 
-        return $token->__toString();
+        return $token->sign($this->privateKey, "RS256")->toString();
     }
 
 

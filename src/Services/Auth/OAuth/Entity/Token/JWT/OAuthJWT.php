@@ -9,51 +9,35 @@
 namespace MedevAuth\Services\Auth\OAuth\Entity\Token\JWT;
 
 
-use Lcobucci\JWT\Builder;
-use Lcobucci\JWT\Token;
+use JOSE_JWT;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\OAuthToken;
 
 class OAuthJWT extends OAuthToken
 {
 
     /**
-     * @var \Lcobucci\JWT\Token
+     * @return array
      */
-    protected $jwt;
-
-
-    /**
-     * @param \Lcobucci\JWT\Token $jwt
-     */
-    public function setJwt(Token $jwt)
-    {
-        $this->jwt = $jwt;
-        $this->isRevoked = false;
+    protected function mapPropsToClaims(){
+        return [
+            "jti" => $this->identifier,
+            "sub" => $this->user->getIdentifier(),
+            "aud" => $this->client->getIdentifier(),
+            "iat" => $this->createdAt->getTimestamp(),
+            "nbf" => $this->createdAt->getTimestamp(),
+            "exp" => $this->expiresAt->getTimestamp(),
+            "usr" => $this->user->getIdentifier(),
+            "cli" => $this->client->getIdentifier(),
+            "scopes" => $this->scopes
+        ];
     }
-
-    public function isExpired(){
-        return $this->jwt->isExpired();
-    }
-
-
-
 
     /**
      * @return string
      */
     public function finalizeToken()
     {
-        $token = (new Builder())
-            ->setId($this->identifier, true)
-            ->setSubject($this->user->getIdentifier())
-            ->setAudience($this->client->getIdentifier())
-            ->setIssuedAt($this->createdAt->getTimestamp())
-            ->setNotBefore($this->createdAt->getTimestamp())
-            ->setExpiration($this->expiresAt->getTimestamp())
-            ->set("usr",$this->user->getIdentifier())
-            ->set("cli", $this->client->getIdentifier())
-            ->set("scopes", $this->scopes) //Todo Move key to static field
-            ->getToken();
+        $token = new JOSE_JWT($this->mapPropsToClaims());
 
         return $token->__toString();
     }
