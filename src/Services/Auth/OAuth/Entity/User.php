@@ -17,9 +17,17 @@ class User extends ScopedEntity
      */
     private $username;
     /**
+     * @var string
+     */
+    private $email;
+    /**
      * @var bool
      */
     private $disabled;
+    /**
+     * @var bool
+     */
+    private $verified;
 
     /**
      * @return bool
@@ -28,7 +36,6 @@ class User extends ScopedEntity
     {
         return $this->disabled;
     }
-
     /**
      * @param bool $disabled
      */
@@ -36,7 +43,6 @@ class User extends ScopedEntity
     {
         $this->disabled = $disabled;
     }
-
     /**
      * @return bool
      */
@@ -44,7 +50,6 @@ class User extends ScopedEntity
     {
         return $this->verified;
     }
-
     /**
      * @param bool $verified
      */
@@ -53,21 +58,30 @@ class User extends ScopedEntity
         $this->verified = $verified;
     }
     /**
-     * @var bool
-     */
-    private $verified;
-
-    /**
      * @return string
      */
     public function getUsername(){
         return $this->username;
     }
-
     /**
      * @param string $username
      */
     public function setUsername($username){
         $this->username = $username;
     }
+    /**
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+    /**
+     * @param string $email
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+    }
+
 }
