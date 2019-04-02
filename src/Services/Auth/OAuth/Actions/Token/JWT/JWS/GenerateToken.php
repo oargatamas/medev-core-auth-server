@@ -21,22 +21,27 @@ use MedevSlim\Utils\UUID\UUID;
 
 abstract class GenerateToken extends APIRepositoryAction
 {
+    /**
+     * @param array $args
+     * @return OAuthJWS
+     * @throws \Exception
+     */
     public function handleRequest($args = [])
     {
         $tokenConfig = $this->config["authorization"]["token"];
 
         /** @var User $user */
-        $user = $args[OAuthToken::USER]; //Todo move to constant
+        $user = $args[OAuthToken::USER];
         /** @var Client $client */
-        $client = $args[OAuthToken::CLIENT]; //Todo move to constant
+        $client = $args[OAuthToken::CLIENT];
         /** @var string[] $scopes */
-        $scopes = $args[OAuthToken::SCOPES]; //Todo move to constant
-        /** @var Key $tokenPrivateKey */
-        $tokenSigningKey = CryptUtils::getKeyFromConfig($tokenConfig["private_key"]);
+        $scopes = $args[OAuthToken::SCOPES];
+        /** @var string $tokenSigningKey */
+        $tokenSigningKey = $tokenConfig["private_key"];
         /** @var OAuthJWS $token */
-        $expiration = $args[OAuthToken::EXPIRATION];
-
         $token = new OAuthJWS();
+
+        $expiration = $args[OAuthToken::EXPIRATION];
 
         $token->setIdentifier(UUID::v4());
         $token->setUser($user);
