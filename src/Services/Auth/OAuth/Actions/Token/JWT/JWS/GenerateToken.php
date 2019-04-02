@@ -10,12 +10,10 @@ namespace MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS;
 
 
 use DateTime;
-use Lcobucci\JWT\Signer\Key;
 use MedevAuth\Services\Auth\OAuth\Entity\Client;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\JWT\Signed\OAuthJWS;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\OAuthToken;
 use MedevAuth\Services\Auth\OAuth\Entity\User;
-use MedevAuth\Utils\CryptUtils;
 use MedevSlim\Core\Action\Repository\APIRepositoryAction;
 use MedevSlim\Utils\UUID\UUID;
 

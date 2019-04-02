@@ -11,11 +11,11 @@ namespace MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS;
 
 use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\AccessToken\RevokeAccessToken;
 use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\RefreshToken\RevokeRefreshToken;
-use MedevSlim\Core\Action\Servlet\APIServletAction;
+use MedevSlim\Core\Action\Servlet\APIServlet;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-class RevokeTokenServlet extends APIServletAction
+class RevokeTokenServlet extends APIServlet
 {
 
     /**
