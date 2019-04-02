@@ -16,6 +16,7 @@ use MedevAuth\Services\Auth\OAuth\Actions\Client\GetClientData;
 use MedevAuth\Services\Auth\OAuth\Actions\User\GetUserData;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\JWT\Signed\OAuthJWS;
 use MedevSlim\Core\Action\Repository\APIRepositoryAction;
+use MedevSlim\Core\Service\Exceptions\UnauthorizedException;
 
 /**
  * Class ParseToken
@@ -27,6 +28,8 @@ abstract class ParseToken extends APIRepositoryAction
     /**
      * @param $args
      * @return OAuthJWS
+     * @throws UnauthorizedException
+     * @throws \JOSE_Exception
      * @throws \Exception
      */
     public function handleRequest($args = [])

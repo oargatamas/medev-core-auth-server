@@ -21,7 +21,7 @@ class ValidateToken extends APIRepositoryAction
      * @param $args
      * @return OAuthJWS
      * @throws UnauthorizedException
-     * @throws OAuthException
+     * @throws \Exception
      */
     public function handleRequest($args = [])
     {

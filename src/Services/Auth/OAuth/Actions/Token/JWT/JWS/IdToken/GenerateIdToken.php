@@ -25,7 +25,7 @@ class GenerateIdToken extends GenerateToken
     {
         $tokenConfig = $this->config["authorization"]["token"];
 
-        $args[OAuthToken::EXPIRATION] = $tokenConfig["expiration"]["access_token"];
+        $args[OAuthToken::EXPIRATION] = $tokenConfig["expiration"]["id_token"];
         $args[OAuthToken::SCOPES] = (new GetIdTokenScopes($this->service))->handleRequest();
         return parent::handleRequest($args);
     }
