@@ -10,16 +10,16 @@ namespace MedevAuth\Services\Auth\OAuth\Actions\User;
 
 
 use MedevAuth\Services\Auth\OAuth\Entity\Persistables\User;
-use MedevSlim\Core\Action\Repository\APIRepositoryAction;
 use MedevSlim\Core\Service\Exceptions\UnauthorizedException;
 
-class ValidateUser extends APIRepositoryAction
+class ValidateUser extends GetUserData
 {
 
     /**
      * @param $args
-     * @return int
+     * @return \MedevAuth\Services\Auth\OAuth\Entity\User
      * @throws UnauthorizedException
+     * @throws \Exception
      */
     public function handleRequest($args = [])
     {
@@ -27,22 +27,16 @@ class ValidateUser extends APIRepositoryAction
         $username = $args["username"]; //Todo move to constant
         $password = $args["password"]; //Todo move to constant
 
-        $storedData = $this->database->get(User::getTableName()."(u)",
-            User::getColumnNames(),
-            [
-                "AND" => [
-                    "OR" =>[
-                        "u.UserName" => $username,
-                        "u.Email" => $username
-                    ],
-                    "u.Verified" => 1,
-                    "u.Disabled" => 0
-                ]
-            ]
-        );
 
-        if(!$storedData || empty($storedData) || is_null($storedData)){
-            throw new UnauthorizedException("User ".$username." not registered or disabled.");
+        $storedData = $this->getStoredUserData(["user_id" => $username]);
+        $user = User::fromAssocArray($storedData);
+
+        if(!$user->isDisabled()){
+            throw new UnauthorizedException("User ".$username." not disabled.");
+        }
+
+        if(!$user->isVerified()){
+            throw new UnauthorizedException("User ".$username." not verified.");
         }
 
         if(!password_verify($password,$storedData["UserPassword"])){
@@ -51,6 +45,6 @@ class ValidateUser extends APIRepositoryAction
 
         $this->info("User credentials are valid.");
 
-        return $storedData["UserId"];
+        return $user;
     }
 }
