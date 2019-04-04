@@ -15,6 +15,7 @@ use JOSE_JWT;
 use MedevAuth\Services\Auth\OAuth\Actions\Client\GetClientData;
 use MedevAuth\Services\Auth\OAuth\Actions\User\GetUserData;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\JWT\Signed\OAuthJWS;
+use MedevAuth\Utils\CryptUtils;
 use MedevSlim\Core\Action\Repository\APIRepositoryAction;
 use MedevSlim\Core\Service\Exceptions\UnauthorizedException;
 
@@ -36,7 +37,7 @@ abstract class ParseToken extends APIRepositoryAction
     {
         $jwt = JOSE_JWT::decode($args["token"]);
 
-        $privateKey = file_get_contents($this->config["authorization"]["token"]["private_key"]);
+        $privateKey = CryptUtils::getRSAKeyFromConfig($this->config["authorization"]["token"]["private_key"]);
 
         if($jwt instanceof JOSE_JWE){
             $jwt = $jwt->decrypt($privateKey);

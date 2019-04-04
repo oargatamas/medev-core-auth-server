@@ -14,8 +14,10 @@ use MedevAuth\Services\Auth\OAuth\Entity\Client;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\JWT\Signed\OAuthJWS;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\OAuthToken;
 use MedevAuth\Services\Auth\OAuth\Entity\User;
+use MedevAuth\Utils\CryptUtils;
 use MedevSlim\Core\Action\Repository\APIRepositoryAction;
 use MedevSlim\Utils\UUID\UUID;
+use phpseclib\Crypt\RSA;
 
 abstract class GenerateToken extends APIRepositoryAction
 {
@@ -34,8 +36,8 @@ abstract class GenerateToken extends APIRepositoryAction
         $client = $args[OAuthToken::CLIENT];
         /** @var string[] $scopes */
         $scopes = $args[OAuthToken::SCOPES];
-        /** @var string $tokenSigningKey */
-        $tokenSigningKey = $tokenConfig["private_key"];
+        /** @var RSA $tokenSigningKey */
+        $tokenSigningKey = CryptUtils::getRSAKeyFromConfig($tokenConfig["private_key"]);
         /** @var OAuthJWS $token */
         $token = new OAuthJWS();
 

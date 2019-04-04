@@ -11,16 +11,17 @@ namespace MedevAuth\Services\Auth\OAuth\Entity\Token\JWT\Encrypted;
 
 use JOSE_JWT;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\JWT\OAuthJWT;
+use phpseclib\Crypt\RSA;
 
 class OAuthJWE extends OAuthJWT
 {
     /**
-     * @var string
+     * @var RSA
      */
     private $publicKey;
 
     /**
-     * @param string $publicKey
+     * @param RSA $publicKey
      */
     public function setPublicKey($publicKey)
     {

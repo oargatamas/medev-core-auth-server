@@ -10,18 +10,20 @@ namespace MedevAuth\Services\Auth\OAuth\Entity\Token\JWT\Signed;
 
 
 use JOSE_JWS;
+use JOSE_JWT;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\JWT\OAuthJWT;
+use phpseclib\Crypt\RSA;
 
 class OAuthJWS extends OAuthJWT
 {
     /**
-     * @var string
+     * @var RSA
      */
     private $privateKey;
 
 
     /**
-     * @param string $privateKey
+     * @param RSA $privateKey
      */
     public function setPrivateKey($privateKey)
     {
@@ -29,7 +31,7 @@ class OAuthJWS extends OAuthJWT
     }
 
     /**
-     * @param string $publicKey
+     * @param RSA $publicKey
      * @return bool
      */
     public function verifySignature($publicKey)
@@ -45,11 +47,10 @@ class OAuthJWS extends OAuthJWT
 
     /**
      * @return string
-     * @throws \JOSE_Exception
      */
     public function finalizeToken()
     {
-        $token = (new JOSE_JWS($this->mapPropsToClaims()));
+        $token = new JOSE_JWT($this->mapPropsToClaims());
 
         return $token->sign($this->privateKey, "RS256")->toString();
     }
