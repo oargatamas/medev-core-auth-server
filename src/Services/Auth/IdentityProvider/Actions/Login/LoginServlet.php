@@ -38,11 +38,7 @@ class LoginServlet extends APIServlet
 
         try{
             $validateAction = new ValidateUser($this->service);
-            $userId = $validateAction->handleRequest($userInfo);
-
-            $user = new User();
-            $user->setUsername($request->getParam("username"));
-            $user->setIdentifier($userId);
+            $user = $validateAction->handleRequest($userInfo);
 
             $_SESSION["user"] = $user;
 
