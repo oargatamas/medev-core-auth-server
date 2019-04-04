@@ -31,8 +31,8 @@ class ValidateUser extends GetUserData
         $storedData = $this->getStoredUserData(["user_id" => $username]);
         $user = User::fromAssocArray($storedData);
 
-        if(!$user->isDisabled()){
-            throw new UnauthorizedException("User ".$username." not disabled.");
+        if($user->isDisabled()){
+            throw new UnauthorizedException("User ".$username." disabled.");
         }
 
         if(!$user->isVerified()){
