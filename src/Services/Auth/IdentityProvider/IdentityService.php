@@ -24,7 +24,7 @@ use Slim\App;
 
 class IdentityService extends TwigAPIService
 {
-    const ID_TOKEN_COOKIE_KEY = "X-MEDEV-ID-TOKEN";
+    const ID_TOKEN_REQUEST_KEY = "X-MEDEV-ID-TOKEN";
 
     const ROUTE_LOGIN = "login";
     const ROUTE_LOGOUT = "logout";
