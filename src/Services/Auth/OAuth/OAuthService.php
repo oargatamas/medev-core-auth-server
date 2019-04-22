@@ -14,6 +14,7 @@ use MedevAuth\Services\Auth\OAuth\Actions\GrantType\AccessGrant\GrantAccessHandl
 use MedevAuth\Services\Auth\OAuth\Actions\GrantType\AccessGrant\GrantFlowIdentifier;
 use MedevAuth\Services\Auth\OAuth\Actions\GrantType\Authorization\AuthorizationFlowIdentifier;
 use MedevAuth\Services\Auth\OAuth\Actions\GrantType\Authorization\AuthorizationHandler;
+use MedevSlim\Core\Application\MedevApp;
 use MedevSlim\Core\Service\APIService;
 use Slim\App;
 
@@ -22,6 +23,17 @@ class OAuthService extends APIService
 {
     const ROUTE_AUTHORIZE = "authorize";
     const ROUTE_TOKEN = "token";
+
+    public function __construct(MedevApp $app)
+    {
+        parent::__construct($app);
+        $config = $app->getConfiguration();
+        $lifetime = $config["session"]["lifetime"];
+        ini_set('session.gc_maxlifetime', $lifetime);
+        session_set_cookie_params($lifetime);
+        session_start();
+    }
+
 
     /**
      * @return mixed
@@ -37,7 +49,6 @@ class OAuthService extends APIService
      */
     protected function registerRoutes(App $app)
     {
-
         //Todo consider to move it to another application
         $idp = new IdentityService($this->application);
         $idp->registerService("/idp");

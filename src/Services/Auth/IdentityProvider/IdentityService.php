@@ -18,6 +18,7 @@ use MedevAuth\Services\Auth\IdentityProvider\Actions\PasswordForgot\RenderForgot
 use MedevAuth\Services\Auth\IdentityProvider\Actions\Register\RegisterServlet;
 use MedevAuth\Services\Auth\IdentityProvider\Actions\Register\RenderRegisterView;
 use MedevSlim\Core\Action\Middleware\RequestValidator;
+use MedevSlim\Core\Application\MedevApp;
 use MedevSlim\Core\Service\APIService;
 use MedevSlim\Core\Service\View\TwigAPIService;
 use Slim\App;
@@ -34,6 +35,16 @@ class IdentityService extends TwigAPIService
     const ERROR_INVALID_CREDENTIALS = 0;
     const ERROR_NO_REDIRECT_URI = 1;
     const ERROR_INVALID_STATE = 2;
+
+    public function __construct(MedevApp $app)
+    {
+        parent::__construct($app);
+        $config = $app->getConfiguration();
+        $lifetime = $config["session"]["lifetime"];
+        ini_set('session.gc_maxlifetime', $lifetime);
+        session_set_cookie_params($lifetime);
+        session_start();
+    }
 
 
     /**
