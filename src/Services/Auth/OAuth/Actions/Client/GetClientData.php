@@ -35,7 +35,7 @@ class GetClientData extends APIRepositoryAction
             ],
             array_merge(
                 Client::getColumnNames(),
-                ["ClientScopes" => Medoo::raw("GROUP_CONCAT(<cs.ScopeId>)")],
+                ["ClientScopes" => Medoo::raw("GROUP_CONCAT(Distinct(<cs.ScopeId>))")],
                 ["ClientGrantTypes" => Medoo::raw("GROUP_CONCAT(<g.GrantName>)")]
             ),
             [

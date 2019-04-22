@@ -28,7 +28,7 @@ class OAuthJWT extends OAuthToken
             "exp" => $this->expiresAt->getTimestamp(),
             "usr" => $this->user->getIdentifier(),
             "cli" => $this->client->getIdentifier(),
-            "scopes" => $this->scopes
+            "scopes" => array_values($this->scopes)
         ];
     }
 

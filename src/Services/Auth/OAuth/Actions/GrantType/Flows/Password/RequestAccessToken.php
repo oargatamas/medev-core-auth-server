@@ -15,6 +15,7 @@ use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\RefreshToken\GenerateRef
 use MedevAuth\Services\Auth\OAuth\Actions\User\ValidateUser;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\OAuthToken;
 use MedevAuth\Services\Auth\OAuth\Entity\User;
+use MedevSlim\Core\Service\Exceptions\UnauthorizedException;
 use Slim\Http\Request;
 
 /**
@@ -39,6 +40,7 @@ class RequestAccessToken extends GrantAccess
             "password" => $password
         ];
         $userId = $userValidation->handleRequest($userCredentials);
+
 
         $this->user = new User();
         $this->user->setIdentifier($userId);
