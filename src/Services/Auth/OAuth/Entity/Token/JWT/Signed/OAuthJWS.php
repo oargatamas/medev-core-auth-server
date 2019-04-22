@@ -19,7 +19,7 @@ class OAuthJWS extends OAuthJWT
     /**
      * @var RSA
      */
-    private $privateKey;
+    protected $privateKey;
 
 
     /**
