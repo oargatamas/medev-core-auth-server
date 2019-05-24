@@ -23,16 +23,7 @@ class RefreshToken implements MedooPersistable
      */
     public static function fromAssocArray($storedData)
     {
-        $token = new OAuthJWS();
-
-        $token->setIdentifier($storedData["RefreshTokenId"]);
-        $token->setCreatedAt(new DateTime($storedData["RefreshTokenCreated"]));
-        $token->setExpiresAt(new DateTime($storedData["RefreshTokenExpires"]));
-        $token->setIsRevoked($storedData["RefreshTokenIsRevoked"]);
-        $token->setClient(Client::fromAssocArray($storedData));
-        $token->setUser(User::fromAssocArray($storedData));
-
-        return $token;
+        return null;
     }
 
     /**

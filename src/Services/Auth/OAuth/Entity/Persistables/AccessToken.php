@@ -23,16 +23,7 @@ class AccessToken implements MedooPersistable
      */
     public static function fromAssocArray($storedData)
     {
-        $token = new OAuthJWS();
-
-        $token->setIdentifier($storedData["Id"]);
-        $token->setCreatedAt(new DateTime($storedData["CreatedAt"]));
-        $token->setExpiresAt(new DateTime($storedData["ExpiresAt"]));
-        $token->setIsRevoked($storedData["IsRevoked"]);
-        $token->setClient(Client::fromAssocArray($storedData));
-        $token->setUser(User::fromAssocArray($storedData));
-
-        return $token;
+        return null;
     }
 
     /**

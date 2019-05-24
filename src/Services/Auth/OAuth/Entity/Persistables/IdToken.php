@@ -24,16 +24,7 @@ class IdToken implements MedooPersistable
      */
     public static function fromAssocArray($storedData)
     {
-        $token = new OAuthJWS();
-
-        $token->setIdentifier($storedData["IdTokenId"]);
-        $token->setCreatedAt(new DateTime($storedData["IdTokenCreated"]));
-        $token->setExpiresAt(new DateTime($storedData["IdTokenExpires"]));
-        $token->setIsRevoked($storedData["IdTokenIsRevoked"]);
-        $token->setClient(Client::fromAssocArray($storedData));
-        $token->setUser(User::fromAssocArray($storedData));
-
-        return $token;
+        return null;
     }
 
     /**
