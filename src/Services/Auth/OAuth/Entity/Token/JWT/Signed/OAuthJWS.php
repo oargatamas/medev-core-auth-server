@@ -19,26 +19,27 @@ class OAuthJWS extends OAuthJWT
     /**
      * @var RSA
      */
-    protected $privateKey;
-
-
+    protected $signingKey;
     /**
-     * @param RSA $privateKey
+     * @var RSA
      */
-    public function setPrivateKey($privateKey)
+    protected $verificationKey;
+
+
+    public function __construct(JOSE_JWT $jwt, RSA $signingKey, RSA $verificationKey)
     {
-        $this->privateKey = $privateKey;
+        $this->signingKey = $signingKey;
+        $this->verificationKey = $verificationKey;
+        parent::__construct($jwt);
     }
 
     /**
-     * @param RSA $publicKey
      * @return bool
      */
-    public function verifySignature($publicKey)
+    public function verifySignature()
     {
-        $token = new JOSE_JWS($this->mapPropsToClaims());
         try {
-            $token->verify($publicKey, "RS256");
+            $this->jwt->verify($this->verificationKey, "RS256");
             return true;
         } catch (\JOSE_Exception_VerificationFailed $e) {
             return false;
@@ -50,9 +51,7 @@ class OAuthJWS extends OAuthJWT
      */
     public function finalizeToken()
     {
-        $token = new JOSE_JWT($this->mapPropsToClaims());
-
-        return $token->sign($this->privateKey, "RS256")->toString();
+        return $this->jwt->sign($this->signingKey, "RS256")->toString();
     }
 
 

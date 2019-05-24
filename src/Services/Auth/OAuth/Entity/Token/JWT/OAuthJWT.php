@@ -10,26 +10,69 @@ namespace MedevAuth\Services\Auth\OAuth\Entity\Token\JWT;
 
 
 use JOSE_JWT;
+use MedevAuth\Services\Auth\OAuth\Entity\Client;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\OAuthToken;
+use MedevAuth\Services\Auth\OAuth\Entity\User;
 
 class OAuthJWT extends OAuthToken
 {
 
     /**
-     * @return array
+     * @var JOSE_JWT
      */
-    protected function mapPropsToClaims(){
-        return [
-            "jti" => $this->identifier,
-            "sub" => $this->user->getIdentifier(),
-            "aud" => $this->client->getIdentifier(),
-            "iat" => $this->createdAt->getTimestamp(),
-            "nbf" => $this->createdAt->getTimestamp(),
-            "exp" => $this->expiresAt->getTimestamp(),
-            "usr" => $this->user->getIdentifier(),
-            "cli" => $this->client->getIdentifier(),
-            "scopes" => array_values($this->scopes)
-        ];
+    protected $jwt;
+
+
+    /**
+     * OAuthJWT constructor.
+     * @param JOSE_JWT $jwt
+     */
+    public function __construct(JOSE_JWT $jwt)
+    {
+        $this->jwt = $jwt;
+    }
+
+    public function setIdentifier($identifier)
+    {
+        $this->jwt->claims["jti"] = $identifier;
+        parent::setIdentifier($identifier);
+    }
+
+    public function setScopes($scopes)
+    {
+        $this->jwt->claims["scopes"] = array_values($scopes);
+        parent::setScopes($scopes);
+    }
+
+    public function addScope($scope)
+    {
+        $this->jwt->claims["scopes"][] = $scope;
+        parent::addScope($scope);
+    }
+
+
+    public function setCreatedAt(\DateTime $createdAt)
+    {
+        $this->jwt->claims["iat"] = $createdAt->getTimestamp();
+        parent::setCreatedAt($createdAt);
+    }
+
+    public function setExpiresAt(\DateTime $expiresAt)
+    {
+        $this->jwt->claims["exp"] = $expiresAt->getTimestamp();
+        parent::setExpiresAt($expiresAt);
+    }
+
+    public function setClient(Client $client)
+    {
+        $this->jwt->claims["cli"] = $client->getIdentifier();
+        parent::setClient($client);
+    }
+
+    public function setUser(User $user)
+    {
+        $this->jwt->claims["usr"] = $user->getIdentifier();
+        parent::setUser($user);
     }
 
     /**
@@ -37,9 +80,7 @@ class OAuthJWT extends OAuthToken
      */
     public function finalizeToken()
     {
-        $token = new JOSE_JWT($this->mapPropsToClaims());
-
-        return $token->toString();
+        return $this->jwt->toString();
     }
 
 

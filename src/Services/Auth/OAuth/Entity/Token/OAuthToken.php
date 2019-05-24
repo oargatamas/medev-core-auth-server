@@ -87,7 +87,7 @@ class OAuthToken extends ScopedEntity
         $expiration = new DateTime();
         $expiration->setTimestamp($this->createdAt->getTimestamp());
         $expiration->modify("+".$seconds." second");
-        $this->expiresAt = $expiration;
+        $this->setExpiresAt($expiration);
     }
 
     /**
