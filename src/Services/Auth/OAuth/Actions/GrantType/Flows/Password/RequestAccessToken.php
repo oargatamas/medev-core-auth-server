@@ -12,10 +12,9 @@ namespace MedevAuth\Services\Auth\OAuth\Actions\GrantType\Flows\Password;
 use MedevAuth\Services\Auth\OAuth\Actions\GrantType\AccessGrant\GrantAccess;
 use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\AccessToken\GenerateAccessToken;
 use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\RefreshToken\GenerateRefreshToken;
+use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\RefreshToken\PersistsRefreshToken;
 use MedevAuth\Services\Auth\OAuth\Actions\User\ValidateUser;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\OAuthToken;
-use MedevAuth\Services\Auth\OAuth\Entity\User;
-use MedevSlim\Core\Service\Exceptions\UnauthorizedException;
 use Slim\Http\Request;
 
 /**
@@ -39,12 +38,7 @@ class RequestAccessToken extends GrantAccess
             "username" => $username,
             "password" => $password
         ];
-        $userId = $userValidation->handleRequest($userCredentials);
-
-
-        $this->user = new User();
-        $this->user->setIdentifier($userId);
-        $this->user->setUsername($username);
+        $this->user = $userValidation->handleRequest($userCredentials);
     }
 
 
@@ -59,6 +53,7 @@ class RequestAccessToken extends GrantAccess
             OAuthToken::CLIENT => $this->client,
             OAuthToken::SCOPES => $this->scopes
         ];
+        $this->info("Generating access token.");
         $action = new GenerateAccessToken($this->service);
         $accessToken = $action->handleRequest($tokenInfo);
 
@@ -75,8 +70,13 @@ class RequestAccessToken extends GrantAccess
             OAuthToken::USER => $this->user,
             OAuthToken::CLIENT => $this->client
         ];
+        $this->info("Generating refresh token.");
         $action = new GenerateRefreshToken($this->service);
         $refreshToken = $action->handleRequest($tokenInfo);
+
+        $this->info("Persisting refresh token.");
+        $saveToken = new PersistsRefreshToken($this->service);
+        $saveToken->handleRequest(["refresh_token" => $refreshToken]);
 
         return $refreshToken;
     }

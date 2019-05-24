@@ -39,7 +39,7 @@ class ParseRefreshToken extends ParseToken
             throw new UnauthorizedException("Refreshtoken not existing with the following id: ".$token->getIdentifier());
         }
 
-        $token->setIsRevoked($storedData["IsRevoked"]);
+        $token->setIsRevoked($storedData["RefreshTokenIsRevoked"]);
         return $token;
     }
 }

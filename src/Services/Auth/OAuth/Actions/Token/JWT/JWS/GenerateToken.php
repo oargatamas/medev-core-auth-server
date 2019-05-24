@@ -10,6 +10,7 @@ namespace MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS;
 
 
 use DateTime;
+use JOSE_JWT;
 use MedevAuth\Services\Auth\OAuth\Entity\Client;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\JWT\Signed\OAuthJWS;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\OAuthToken;
@@ -37,9 +38,11 @@ abstract class GenerateToken extends APIRepositoryAction
         /** @var string[] $scopes */
         $scopes = $args[OAuthToken::SCOPES];
         /** @var RSA $tokenSigningKey */
-        $tokenSigningKey = CryptUtils::getRSAKeyFromConfig($tokenConfig["private_key"]);
+        $signKey = CryptUtils::getRSAKeyFromConfig($tokenConfig["private_key"]);
+        /** @var RSA $tokenSigningKey */
+        $verificationKey = CryptUtils::getRSAKeyFromConfig($tokenConfig["public_key"]);
         /** @var OAuthJWS $token */
-        $token = new OAuthJWS();
+        $token = new OAuthJWS(new JOSE_JWT(),$signKey,$verificationKey);
 
         $expiration = $args[OAuthToken::EXPIRATION];
 
@@ -50,7 +53,6 @@ abstract class GenerateToken extends APIRepositoryAction
         $token->setCreatedAt(new DateTime());
         $token->setExpiration($expiration);
         $token->setIsRevoked(false);
-        $token->setPrivateKey($tokenSigningKey);
 
         return $token;
     }
