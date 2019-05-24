@@ -38,16 +38,18 @@ abstract class ParseToken extends APIRepositoryAction
         $jwt = JOSE_JWT::decode($args["token"]);
 
         $privateKey = CryptUtils::getRSAKeyFromConfig($this->config["authorization"]["token"]["private_key"]);
+        $publicKey = CryptUtils::getRSAKeyFromConfig($this->config["authorization"]["token"]["public_key"]);
 
         if($jwt instanceof JOSE_JWE){
             $jwt = $jwt->decrypt($privateKey);
         }
 
+
         $client = (new GetClientData($this->service))->handleRequest(["client_id" => $jwt->claims["cli"]]);
         $user = (new GetUserData($this->service))->handleRequest(["user_id" => $jwt->claims["usr"]]);;
 
 
-        $token = new OAuthJWS();
+        $token = new OAuthJWS($jwt,$privateKey,$publicKey);
 
         $token->setIdentifier($jwt->claims["jti"]);
         $token->setCreatedAt((new DateTime())->setTimestamp($jwt->claims["iat"]));
@@ -55,7 +57,6 @@ abstract class ParseToken extends APIRepositoryAction
         $token->setScopes($jwt->claims["scopes"]);
         $token->setClient($client);
         $token->setUser($user);
-        $token->setPrivateKey($privateKey);
 
         return $this->withServerState($token);
     }

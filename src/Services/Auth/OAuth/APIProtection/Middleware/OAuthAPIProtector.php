@@ -10,6 +10,7 @@ namespace MedevAuth\Services\Auth\OAuth\APIProtection\Middleware;
 
 
 use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\AccessToken\ParseAccessToken;
+use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\ValidateToken;
 use MedevSlim\Core\Logging\ComponentLogger;
 use MedevSlim\Core\Service\APIService;
 use MedevSlim\Core\Service\Exceptions\UnauthorizedException;
@@ -47,33 +48,30 @@ class OAuthAPIProtector implements ComponentLogger
     public function __invoke(Request $request, Response $response, callable $next)
     {
         $this->info("Validating client access");
-        if(!$request->hasHeader("Authorization")){
+        if (!$request->hasHeader("Authorization")) {
             throw new UnauthorizedException("Authorization header not set");
         }
 
         $this->info("Authorization data provided. Extracting access token from request");
-        $accessTokenString = str_replace("Bearer ","",$request->getHeader("Authorization")[0]);
-        $this->info("Access token: ". $accessTokenString);
-
-        try{
-            $parsedToken = (new ParseAccessToken($this->service))->handleRequest(["token" => $accessTokenString]);
+        $accessTokenString = str_replace("Bearer ", "", $request->getHeader("Authorization")[0]);
+        $this->info("Access token: " . $accessTokenString);
 
 
-            $this->info("Enriching inbound request with access meta data.");
-            $authorizedRequest = $request->withAttributes(
-                [
-                    "scopes" => $parsedToken->getScopes(),
-                    "user_id" => $parsedToken->getUser()->getIdentifier(),
-                    "client_id" => $parsedToken->getClient()->getIdentifier()
-                ]
-            );
+        $parsedToken = (new ParseAccessToken($this->service))->handleRequest(["token" => $accessTokenString]);
 
-            $this->info("Authorization successful. Sending request to next stage");
-            return $next($authorizedRequest,$response);
-        } catch (\Exception $e){
-            $this->error("Authorization failed. ".$e->getMessage().$e->getTraceAsString());
-            throw new UnauthorizedException($e->getMessage());
-        }
+        (new ValidateToken($this->service))->handleRequest(["token" => $parsedToken]);
+
+        $this->info("Enriching inbound request with access meta data.");
+        $authorizedRequest = $request->withAttributes(
+            [
+                "scopes" => $parsedToken->getScopes(),
+                "user_id" => $parsedToken->getUser()->getIdentifier(),
+                "client_id" => $parsedToken->getClient()->getIdentifier()
+            ]
+        );
+
+        $this->info("Authorization successful. Sending request to next stage");
+        return $next($authorizedRequest, $response);
     }
 
     /**
@@ -82,7 +80,7 @@ class OAuthAPIProtector implements ComponentLogger
      */
     public function debug($message, $args = [])
     {
-        $this->service->debug($message,$args);
+        $this->service->debug($message, $args);
     }
 
     /**
@@ -91,7 +89,7 @@ class OAuthAPIProtector implements ComponentLogger
      */
     public function info($message, $args = [])
     {
-        $this->service->info($message,$args);
+        $this->service->info($message, $args);
     }
 
     /**
@@ -100,7 +98,7 @@ class OAuthAPIProtector implements ComponentLogger
      */
     public function warn($message, $args = [])
     {
-        $this->service->warn($message,$args);
+        $this->service->warn($message, $args);
     }
 
     /**
@@ -109,6 +107,6 @@ class OAuthAPIProtector implements ComponentLogger
      */
     public function error($message, $args = [])
     {
-        $this->service->error($message,$args);
+        $this->service->error($message, $args);
     }
 }
