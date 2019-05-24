@@ -24,7 +24,7 @@ class CryptUtils
     public static function getRSAKeyFromConfig($config){
         $key = new RSA();
 
-        if($config["passphrase"]){
+        if(array_key_exists("passphrase",$config)){
             $key->setPassword($config["passphrase"]);
         }
 
