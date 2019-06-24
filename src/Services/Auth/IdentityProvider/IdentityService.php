@@ -39,11 +39,6 @@ class IdentityService extends TwigAPIService
     public function __construct(MedevApp $app)
     {
         parent::__construct($app);
-       /* $config = $app->getConfiguration();
-        $lifetime = $config["session"]["lifetime"];
-        ini_set('session.gc_maxlifetime', $lifetime);
-        session_set_cookie_params($lifetime);
-        session_start();*/
     }
 
 

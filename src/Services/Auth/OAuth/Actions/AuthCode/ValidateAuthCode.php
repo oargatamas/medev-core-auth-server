@@ -11,7 +11,6 @@ namespace MedevAuth\Services\Auth\OAuth\Actions\AuthCode;
 
 use DateTime;
 use MedevAuth\Services\Auth\OAuth\Entity\AuthCode;
-use MedevAuth\Services\Auth\OAuth\Repository\Exception\RepositoryException;
 use MedevSlim\Core\Action\Repository\APIRepositoryAction;
 use MedevSlim\Core\Service\Exceptions\UnauthorizedException;
 
@@ -33,7 +32,7 @@ class ValidateAuthCode extends APIRepositoryAction
         }
 
         if($authCode->getExpiresAt() < new DateTime()){
-            throw new UnauthorizedException("Auth code".$authCode->getIdentifier()." expired.");
+            throw new UnauthorizedException("Auth code ".$authCode->getIdentifier()." expired.");
         }
     }
 }
