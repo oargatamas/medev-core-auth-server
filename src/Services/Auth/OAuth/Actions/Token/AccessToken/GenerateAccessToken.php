@@ -6,10 +6,10 @@
  * Time: 16:00
  */
 
-namespace MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\AccessToken;
+namespace MedevAuth\Services\Auth\OAuth\Actions\Token\AccessToken;
 
 
-use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\GenerateToken;
+use MedevAuth\Services\Auth\OAuth\Actions\Token\GenerateToken;
 use MedevAuth\Services\Auth\OAuth\Entity\Client;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\JWT\Signed\OAuthJWS;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\OAuthToken;

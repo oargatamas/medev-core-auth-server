@@ -6,11 +6,11 @@
  * Time: 11:03
  */
 
-namespace MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS;
+namespace MedevAuth\Services\Auth\OAuth\Actions\Token;
 
 
-use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\AccessToken\RevokeAccessToken;
-use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\RefreshToken\RevokeRefreshToken;
+use MedevAuth\Services\Auth\OAuth\Actions\Token\AccessToken\RevokeAccessToken;
+use MedevAuth\Services\Auth\OAuth\Actions\Token\RefreshToken\RevokeRefreshToken;
 use MedevSlim\Core\Action\Servlet\APIServlet;
 use Slim\Http\Request;
 use Slim\Http\Response;

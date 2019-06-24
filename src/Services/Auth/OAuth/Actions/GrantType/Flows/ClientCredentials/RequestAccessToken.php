@@ -10,7 +10,7 @@ namespace MedevAuth\Services\Auth\OAuth\Actions\GrantType\Flows\ClientCredential
 
 
 use MedevAuth\Services\Auth\OAuth\Actions\GrantType\AccessGrant\GrantAccess;
-use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\AccessToken\GenerateAccessToken;
+use MedevAuth\Services\Auth\OAuth\Actions\Token\AccessToken\GenerateAccessToken;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\OAuthToken;
 use MedevSlim\Core\Service\Exceptions\UnauthorizedException;
 use Slim\Http\Request;

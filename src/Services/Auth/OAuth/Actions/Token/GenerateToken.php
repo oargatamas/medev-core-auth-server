@@ -6,7 +6,7 @@
  * Time: 11:54
  */
 
-namespace MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS;
+namespace MedevAuth\Services\Auth\OAuth\Actions\Token;
 
 
 use DateTime;

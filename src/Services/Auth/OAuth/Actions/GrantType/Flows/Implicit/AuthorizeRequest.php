@@ -12,7 +12,7 @@ namespace MedevAuth\Services\Auth\OAuth\Actions\GrantType\Flows\Implicit;
 use MedevAuth\Services\Auth\OAuth\Actions\Client\ValidateClient;
 use MedevAuth\Services\Auth\OAuth\Actions\GrantType\AccessGrant\GrantAccess;
 use MedevAuth\Services\Auth\OAuth\Actions\GrantType\Authorization\Authorization;
-use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\AccessToken\GenerateAccessToken;
+use MedevAuth\Services\Auth\OAuth\Actions\Token\AccessToken\GenerateAccessToken;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\OAuthToken;
 use Slim\Http\Request;
 use Slim\Http\Response;

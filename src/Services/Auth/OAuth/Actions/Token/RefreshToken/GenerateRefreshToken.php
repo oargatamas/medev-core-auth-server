@@ -6,12 +6,12 @@
  * Time: 16:20
  */
 
-namespace MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\RefreshToken;
+namespace MedevAuth\Services\Auth\OAuth\Actions\Token\RefreshToken;
 
 
 
 use MedevAuth\Services\Auth\OAuth\Actions\Scope\GetRefreshTokenScopes;
-use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\GenerateToken;
+use MedevAuth\Services\Auth\OAuth\Actions\Token\GenerateToken;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\JWT\Signed\OAuthJWS;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\OAuthToken;
 

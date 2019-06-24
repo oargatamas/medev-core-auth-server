@@ -6,11 +6,11 @@
  * Time: 9:13
  */
 
-namespace MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\IdToken;
+namespace MedevAuth\Services\Auth\OAuth\Actions\Token\IdToken;
 
 
 use MedevAuth\Services\Auth\OAuth\Actions\Scope\GetIdTokenScopes;
-use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\GenerateToken;
+use MedevAuth\Services\Auth\OAuth\Actions\Token\GenerateToken;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\JWT\Signed\OAuthJWS;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\OAuthToken;
 

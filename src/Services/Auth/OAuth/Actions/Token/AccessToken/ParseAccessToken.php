@@ -6,10 +6,10 @@
  * Time: 10:46
  */
 
-namespace MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\AccessToken;
+namespace MedevAuth\Services\Auth\OAuth\Actions\Token\AccessToken;
 
 
-use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\ParseToken;
+use MedevAuth\Services\Auth\OAuth\Actions\Token\ParseToken;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\JWT\Signed\OAuthJWS;
 
 class ParseAccessToken extends ParseToken

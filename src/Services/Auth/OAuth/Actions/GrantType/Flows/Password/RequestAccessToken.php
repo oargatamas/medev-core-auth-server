@@ -10,9 +10,9 @@ namespace MedevAuth\Services\Auth\OAuth\Actions\GrantType\Flows\Password;
 
 
 use MedevAuth\Services\Auth\OAuth\Actions\GrantType\AccessGrant\GrantAccess;
-use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\AccessToken\GenerateAccessToken;
-use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\RefreshToken\GenerateRefreshToken;
-use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\RefreshToken\PersistsRefreshToken;
+use MedevAuth\Services\Auth\OAuth\Actions\Token\AccessToken\GenerateAccessToken;
+use MedevAuth\Services\Auth\OAuth\Actions\Token\RefreshToken\GenerateRefreshToken;
+use MedevAuth\Services\Auth\OAuth\Actions\Token\RefreshToken\PersistsRefreshToken;
 use MedevAuth\Services\Auth\OAuth\Actions\User\ValidateUser;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\OAuthToken;
 use Slim\Http\Request;

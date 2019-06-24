@@ -2,33 +2,33 @@
 /**
  * Created by PhpStorm.
  * User: OargaTamas
- * Date: 2019. 03. 01.
- * Time: 16:41
+ * Date: 2019. 04. 02.
+ * Time: 9:51
  */
 
-namespace MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\RefreshToken;
+namespace MedevAuth\Services\Auth\OAuth\Actions\Token\IdToken;
 
 
-use MedevAuth\Services\Auth\OAuth\Entity\Persistables\RefreshToken;
+use MedevAuth\Services\Auth\OAuth\Entity\Persistables\IdToken;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\JWT\Signed\OAuthJWS;
 use MedevAuth\Services\Auth\OAuth\Exceptions\OAuthException;
 use MedevSlim\Core\Action\Repository\APIRepositoryAction;
 use MedevSlim\Core\Database\Medoo\MedooDatabase;
 
-class PersistsRefreshToken extends APIRepositoryAction
+
+class PersistIdToken extends APIRepositoryAction
 {
 
     /**
      * @param $args
-     * @return void
      * @throws \Exception
      */
     public function handleRequest($args = [])
     {
         /** @var OAuthJWS $refreshToken */
-        $refreshToken = $args["refresh_token"]; //Todo move to constant
+        $refreshToken = $args["id_token"]; //Todo move to constant
 
-        $this->database->insert(RefreshToken::getTableName(),
+        $this->database->insert(IdToken::getTableName(),
             [
                 "Id" => $refreshToken->getIdentifier(),
                 "UserId" => $refreshToken->getUser()->getIdentifier(),
@@ -41,7 +41,7 @@ class PersistsRefreshToken extends APIRepositoryAction
 
         $result = $this->database->error();
         if(!is_null($result[2])){
-            throw new OAuthException("Refresh token ".$refreshToken->getIdentifier()." can not be saved: ".implode(" - ",$result));
+            throw new OAuthException("Id token ".$refreshToken->getIdentifier()." can not be saved: ".implode(" - ",$result));
         }
     }
 }

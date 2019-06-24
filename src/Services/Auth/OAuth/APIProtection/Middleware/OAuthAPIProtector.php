@@ -9,8 +9,8 @@
 namespace MedevAuth\Services\Auth\OAuth\APIProtection\Middleware;
 
 
-use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\AccessToken\ParseAccessToken;
-use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\ValidateToken;
+use MedevAuth\Services\Auth\OAuth\Actions\Token\AccessToken\ParseAccessToken;
+use MedevAuth\Services\Auth\OAuth\Actions\Token\ValidateToken;
 use MedevSlim\Core\Logging\ComponentLogger;
 use MedevSlim\Core\Service\APIService;
 use MedevSlim\Core\Service\Exceptions\UnauthorizedException;

@@ -6,10 +6,9 @@
  * Time: 15:51
  */
 
-namespace MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS;
+namespace MedevAuth\Services\Auth\OAuth\Actions\Token;
 
 use MedevAuth\Services\Auth\OAuth\Entity\Token\JWT\Signed\OAuthJWS;
-use MedevAuth\Utils\CryptUtils;
 use MedevSlim\Core\Action\Repository\APIRepositoryAction;
 use MedevSlim\Core\Service\Exceptions\UnauthorizedException;
 

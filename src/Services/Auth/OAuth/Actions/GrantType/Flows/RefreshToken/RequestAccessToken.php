@@ -10,10 +10,10 @@ namespace MedevAuth\Services\Auth\OAuth\Actions\GrantType\Flows\RefreshToken;
 
 
 use MedevAuth\Services\Auth\OAuth\Actions\GrantType\AccessGrant\GrantAccess;
-use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\AccessToken\GenerateAccessToken;
-use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\RefreshToken\ParseRefreshToken;
-use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\RefreshToken\RevokeRefreshToken;
-use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\ValidateToken;
+use MedevAuth\Services\Auth\OAuth\Actions\Token\AccessToken\GenerateAccessToken;
+use MedevAuth\Services\Auth\OAuth\Actions\Token\RefreshToken\ParseRefreshToken;
+use MedevAuth\Services\Auth\OAuth\Actions\Token\RefreshToken\RevokeRefreshToken;
+use MedevAuth\Services\Auth\OAuth\Actions\Token\ValidateToken;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\OAuthToken;
 use MedevSlim\Core\Service\Exceptions\UnauthorizedException;
 use Slim\Http\Request;

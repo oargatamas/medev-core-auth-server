@@ -6,7 +6,7 @@
  * Time: 16:48
  */
 
-namespace MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\AccessToken;
+namespace MedevAuth\Services\Auth\OAuth\Actions\Token\AccessToken;
 
 
 use MedevSlim\Core\Action\Repository\APIRepositoryAction;

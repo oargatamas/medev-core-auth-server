@@ -6,7 +6,7 @@
  * Time: 16:03
  */
 
-namespace MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS;
+namespace MedevAuth\Services\Auth\OAuth\Actions\Token;
 
 
 use DateTime;
@@ -21,7 +21,7 @@ use MedevSlim\Core\Service\Exceptions\UnauthorizedException;
 
 /**
  * Class ParseToken
- * @package MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS
+ * @package MedevAuth\Services\Auth\OAuth\Actions\Token\
  */
 abstract class ParseToken extends APIRepositoryAction
 {

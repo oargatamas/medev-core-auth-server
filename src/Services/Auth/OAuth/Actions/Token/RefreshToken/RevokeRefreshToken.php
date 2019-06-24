@@ -2,19 +2,19 @@
 /**
  * Created by PhpStorm.
  * User: OargaTamas
- * Date: 2019. 04. 02.
- * Time: 9:15
+ * Date: 2019. 02. 13.
+ * Time: 16:19
  */
 
-namespace MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\IdToken;
+namespace MedevAuth\Services\Auth\OAuth\Actions\Token\RefreshToken;
 
 
-use MedevAuth\Services\Auth\OAuth\Entity\Persistables\IdToken;
+use MedevAuth\Services\Auth\OAuth\Entity\Persistables\RefreshToken;
 use MedevSlim\Core\Action\Repository\APIRepositoryAction;
 use MedevSlim\Core\Service\Exceptions\UnauthorizedException;
 use PDOStatement;
 
-class RevokeIdToken extends APIRepositoryAction
+class RevokeRefreshToken extends APIRepositoryAction
 {
 
     /**
@@ -24,10 +24,11 @@ class RevokeIdToken extends APIRepositoryAction
      */
     public function handleRequest($args = [])
     {
+        //Todo add log entries
         $tokenIdentifier = $args["token_id"]; //Todo move to constant
 
         /** @var PDOStatement $result */
-        $result = $this->database->update(IdToken::getTableName(),
+        $result = $this->database->update(RefreshToken::getTableName(),
             [
                 "IsRevoked" => true
             ],
@@ -37,7 +38,7 @@ class RevokeIdToken extends APIRepositoryAction
 
         $errors = $this->database->error();
         if(isset($errors[2]) || $result->rowCount() <= 0){
-            $this->error("id token can not be updated to database. Interrupting access grant.");
+            $this->error("Refresh token can not be updated to database. Interrupting access grant.");
             throw new UnauthorizedException(implode(" - ",$errors));
         }
 

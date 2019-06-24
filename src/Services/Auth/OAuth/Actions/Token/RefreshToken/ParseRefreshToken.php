@@ -6,10 +6,10 @@
  * Time: 10:44
  */
 
-namespace MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\RefreshToken;
+namespace MedevAuth\Services\Auth\OAuth\Actions\Token\RefreshToken;
 
 
-use MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS\ParseToken;
+use MedevAuth\Services\Auth\OAuth\Actions\Token\ParseToken;
 use MedevAuth\Services\Auth\OAuth\Entity\Persistables\RefreshToken;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\JWT\Signed\OAuthJWS;
 use MedevSlim\Core\Service\Exceptions\UnauthorizedException;
