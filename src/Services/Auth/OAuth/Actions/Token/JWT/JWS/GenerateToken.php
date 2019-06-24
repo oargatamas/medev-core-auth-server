@@ -12,7 +12,7 @@ namespace MedevAuth\Services\Auth\OAuth\Actions\Token\JWT\JWS;
 use DateTime;
 use JOSE_JWT;
 use MedevAuth\Services\Auth\OAuth\Entity\Client;
-use MedevAuth\Services\Auth\OAuth\Entity\Token\JWT\Signed\OAuthJWS;
+use MedevAuth\Services\Auth\OAuth\Entity\Token\JWT\Signed\Encrypted\OAuthJWSE;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\OAuthToken;
 use MedevAuth\Services\Auth\OAuth\Entity\User;
 use MedevAuth\Utils\CryptUtils;
@@ -24,7 +24,7 @@ abstract class GenerateToken extends APIRepositoryAction
 {
     /**
      * @param array $args
-     * @return OAuthJWS
+     * @return OAuthJWSE
      * @throws \Exception
      */
     public function handleRequest($args = [])
@@ -41,8 +41,8 @@ abstract class GenerateToken extends APIRepositoryAction
         $signKey = CryptUtils::getRSAKeyFromConfig($tokenConfig["private_key"]);
         /** @var RSA $tokenSigningKey */
         $verificationKey = CryptUtils::getRSAKeyFromConfig($tokenConfig["public_key"]);
-        /** @var OAuthJWS $token */
-        $token = new OAuthJWS(new JOSE_JWT(),$signKey,$verificationKey);
+        /** @var OAuthJWSE $token */
+        $token = new OAuthJWSE(new JOSE_JWT(),$signKey,$verificationKey);
 
         $expiration = $args[OAuthToken::EXPIRATION];
 

@@ -27,7 +27,7 @@ class RevokeTokenServlet extends APIServlet
      */
     public function handleRequest(Request $request, Response $response, $args)
     {
-
+        //Todo token type determination ugly. Fix it!!!
         //Todo add log entries
         $tokenId = $args["token_id"]; //Todo move to constant
 

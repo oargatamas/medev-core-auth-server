@@ -9,7 +9,8 @@
 namespace MedevAuth\Services\Auth\OAuth\Entity\Token\JWT\Signed;
 
 
-use JOSE_JWS;
+
+use JOSE_Exception_VerificationFailed;
 use JOSE_JWT;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\JWT\OAuthJWT;
 use phpseclib\Crypt\RSA;
@@ -26,10 +27,10 @@ class OAuthJWS extends OAuthJWT
     protected $verificationKey;
 
 
-    public function __construct(JOSE_JWT $jwt, RSA $signingKey, RSA $verificationKey)
+    public function __construct(JOSE_JWT $jwt, RSA $privateKey, RSA $publicKey)
     {
-        $this->signingKey = $signingKey;
-        $this->verificationKey = $verificationKey;
+        $this->signingKey = $privateKey;
+        $this->verificationKey = $publicKey;
         parent::__construct($jwt);
     }
 
@@ -41,7 +42,7 @@ class OAuthJWS extends OAuthJWT
         try {
             $this->jwt->verify($this->verificationKey, "RS256");
             return true;
-        } catch (\JOSE_Exception_VerificationFailed $e) {
+        } catch (JOSE_Exception_VerificationFailed $e) {
             return false;
         }
     }

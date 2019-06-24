@@ -18,23 +18,25 @@ class OAuthJWSE extends OAuthJWS
     /**
      * @var RSA
      */
-    protected $publicKey;
-
+    protected $encryptionKey;
     /**
-     * @param RSA $publicKey
+     * @var RSA
      */
-    public function setPublicKey($publicKey)
+    protected $decryptionKey;
+
+    public function __construct(JOSE_JWT $jwt, RSA $privateKey, RSA $publicKey)
     {
-        $this->publicKey = $publicKey;
+        $this->encryptionKey = $publicKey;
+        $this->decryptionKey = $privateKey;
+        parent::__construct($jwt, $privateKey, $publicKey);
     }
+
 
     public function finalizeToken()
     {
-        $token = new JOSE_JWT($this->mapPropsToClaims());
-
-        return $token
-            ->sign($this->privateKey,"RS256")
-            ->encrypt($this->publicKey,"RS256")
+        return $this->jwt
+            ->sign($this->signingKey,"RS256")
+            ->encrypt($this->encryptionKey,"RS256")
             ->toString();
     }
 }
