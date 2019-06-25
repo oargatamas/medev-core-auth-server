@@ -36,7 +36,7 @@ class OAuthJWSE extends OAuthJWS
     {
         return $this->jwt
             ->sign($this->signingKey,"RS256")
-            ->encrypt($this->encryptionKey,"RS256")
+            ->encrypt($this->encryptionKey)
             ->toString();
     }
 }

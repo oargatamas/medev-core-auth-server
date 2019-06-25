@@ -38,11 +38,11 @@ abstract class GenerateToken extends APIRepositoryAction
         /** @var string[] $scopes */
         $scopes = $args[OAuthToken::SCOPES];
         /** @var RSA $tokenSigningKey */
-        $signKey = CryptUtils::getRSAKeyFromConfig($tokenConfig["private_key"]);
-        /** @var RSA $tokenSigningKey */
-        $verificationKey = CryptUtils::getRSAKeyFromConfig($tokenConfig["public_key"]);
+        $privateKey = CryptUtils::getRSAKeyFromConfig($tokenConfig["private_key"]);
+        /** @var RSA $verificationKey */
+        $publicKey = CryptUtils::getRSAKeyFromConfig($tokenConfig["public_key"]);
         /** @var OAuthJWSE $token */
-        $token = new OAuthJWSE(new JOSE_JWT(),$signKey,$verificationKey);
+        $token = new OAuthJWSE(new JOSE_JWT(),$privateKey,$publicKey);
 
         $expiration = $args[OAuthToken::EXPIRATION];
 

@@ -41,7 +41,8 @@ abstract class ParseToken extends APIRepositoryAction
         $publicKey = CryptUtils::getRSAKeyFromConfig($this->config["authorization"]["token"]["public_key"]);
 
         if($jwt instanceof JOSE_JWE){
-            $jwt = $jwt->decrypt($privateKey);
+            $decryptedJwt = $jwt->decrypt($privateKey)->plain_text;
+            $jwt = JOSE_JWT::decode($decryptedJwt);
         }
 
 
