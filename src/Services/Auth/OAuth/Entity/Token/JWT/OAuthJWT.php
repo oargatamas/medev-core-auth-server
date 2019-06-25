@@ -30,7 +30,10 @@ class OAuthJWT extends OAuthToken
     public function __construct(JOSE_JWT $jwt)
     {
         $this->jwt = $jwt;
+        parent::__construct();
     }
+
+
 
     public function setIdentifier($identifier)
     {
@@ -74,6 +77,19 @@ class OAuthJWT extends OAuthToken
         $this->jwt->claims["usr"] = $user->getIdentifier();
         parent::setUser($user);
     }
+
+    public function addCustomData($key, $data)
+    {
+        $this->jwt->claims[$key] = $data;
+        parent::addCustomData($key, $data);
+    }
+
+    public function removeCustomData($key)
+    {
+        $this->jwt->claims[$key] = null;
+        parent::removeCustomData($key);
+    }
+
 
     /**
      * @return string

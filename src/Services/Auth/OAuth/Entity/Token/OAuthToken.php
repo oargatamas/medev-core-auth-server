@@ -47,6 +47,17 @@ class OAuthToken extends ScopedEntity
     protected $isRevoked;
 
     /**
+     * @var array
+     */
+    protected $customData;
+
+
+    public function __construct()
+    {
+        $this->customData = [];
+    }
+
+    /**
      * @return \DateTime
      */
     public function getCreatedAt()
@@ -152,6 +163,14 @@ class OAuthToken extends ScopedEntity
     public function setIsRevoked($isRevoked)
     {
         $this->isRevoked = $isRevoked;
+    }
+
+    public function addCustomData($key, $data){
+        $this->customData[$key] = $data;
+    }
+
+    public function removeCustomData($key){
+        $this->customData[$key] = null;
     }
 
     /**
