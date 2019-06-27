@@ -9,6 +9,7 @@ use MedevSlim\Core\View\TwigView;
 include(__DIR__ . "/../../vendor/autoload.php");
 
 $application = \MedevSlim\Core\Application\MedevApp::fromJsonFile(__DIR__."/../config/config.json");
+$config = $application->getConfiguration();
 
 $container = $application->getContainer();
 TwigView::inject($container);
@@ -20,23 +21,12 @@ $authServer->registerService("");
 $protectedService = new ProtectedResourceService($application);
 $protectedService->registerService("/api");
 
+
+$session = $config["authorization"]["session"];
+session_set_cookie_params($session["lifetime"],$session["path"],$session["domain"],true,true);
+
 session_start();
 $application->run();
-
-
-/*
-session_start();
-
-echo session_id()."<br/>";
-
-if(isset($_SESSION["AuthParams"])){
-    $_SESSION["AuthParams"] += 1;
-}else{
-    $_SESSION["AuthParams"] = 0;
-}
-
-echo $_SESSION["AuthParams"];
-*/
 
 
 

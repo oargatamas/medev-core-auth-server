@@ -11,7 +11,9 @@
   "authorization": {
     "server" : "http://auth.medev.local",
     "session" : {
-      "lifetime" : 3600
+      "lifetime" : 360,
+      "path" : "/",
+      "domain" : "auth.medev.local"
     },
     "token" : {
       "public_key" : {
