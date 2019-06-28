@@ -6,7 +6,7 @@
  * Time: 9:23
  */
 
-namespace MedevAuth\Services\Auth\IdentityProvider\Actions\PasswordForgot;
+namespace MedevAuth\Services\Auth\IdentityProvider\Actions\PasswordRecovery;
 
 
 use MedevSlim\Core\Action\Repository\APIRepositoryAction;

@@ -6,7 +6,7 @@
  * Time: 9:22
  */
 
-namespace MedevAuth\Services\Auth\IdentityProvider\Actions\PasswordForgot;
+namespace MedevAuth\Services\Auth\IdentityProvider\Actions\PasswordRecovery;
 
 
 use MedevAuth\Services\Auth\OAuth\Entity;

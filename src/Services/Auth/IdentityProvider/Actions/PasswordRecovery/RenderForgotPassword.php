@@ -6,7 +6,7 @@
  * Time: 10:15
  */
 
-namespace MedevAuth\Services\Auth\IdentityProvider\Actions\PasswordForgot;
+namespace MedevAuth\Services\Auth\IdentityProvider\Actions\PasswordRecovery;
 
 
 use MedevSlim\Core\Action\Servlet\Twig\APITwigServlet;
