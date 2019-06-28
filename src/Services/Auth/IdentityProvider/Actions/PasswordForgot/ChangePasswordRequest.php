@@ -40,7 +40,6 @@ class ChangePasswordRequest extends APIServlet
 
         $changePw = new ChangePassword($this->service);
         $changeParams = $request->getParams(ChangePasswordRequest::getParams());
-        $changeParams["user"] = $user;
         $changePw->handleRequest([$changeParams]);
 
 
