@@ -56,7 +56,6 @@ class ChangePasswordRequest extends APIServlet
     static function getParams()
     {
         return [
-            "oldPassword",
             "newPassword",
             "newPasswordAgain"
         ];
