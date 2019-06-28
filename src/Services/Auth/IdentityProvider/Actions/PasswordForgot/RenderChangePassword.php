@@ -13,7 +13,7 @@ use MedevSlim\Core\Action\Servlet\Twig\APITwigServlet;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-class RenderForgotPassword extends APITwigServlet
+class RenderChangePassword extends APITwigServlet
 {
 
     /**
@@ -24,6 +24,6 @@ class RenderForgotPassword extends APITwigServlet
      */
     public function handleRequest(Request $request, Response $response, $args)
     {
-        return $this->render($response,"ForgotPassword.twig",[]);
+        return $this->render($response,"ChangePassword.twig",[]);
     }
 }
