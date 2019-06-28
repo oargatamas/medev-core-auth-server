@@ -27,14 +27,13 @@ class GenerateAccessToken extends GenerateToken
     {
         $tokenConfig = $this->config["authorization"]["token"];
 
-
         /** @var Client $client */
         $client = $args[OAuthToken::CLIENT];
         /** @var User $user */
         $user = $args[OAuthToken::USER];
+        $args[OAuthToken::EXPIRATION] = $args[OAuthToken::EXPIRATION] ?? $tokenConfig["expiration"]["access_token"];
+        $args[OAuthToken::SCOPES] = $args[OAuthToken::SCOPES] ?? array_intersect($user->getScopes(), $client->getScopes());
 
-        $args[OAuthToken::EXPIRATION] = $tokenConfig["expiration"]["access_token"];
-        $args[OAuthToken::SCOPES] = array_intersect($user->getScopes(),$client->getScopes());
         return parent::handleRequest($args);
     }
 }
