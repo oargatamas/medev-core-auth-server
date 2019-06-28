@@ -13,18 +13,18 @@ use MedevAuth\Services\Auth\OAuth\Actions\Client\GetClientData;
 use MedevAuth\Services\Auth\OAuth\Actions\Token\AccessToken\GenerateAccessToken;
 use MedevAuth\Services\Auth\OAuth\Actions\User\GetUserData;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\OAuthToken;
-use MedevSlim\Core\Action\Servlet\APIServlet;
+use MedevSlim\Core\Action\Servlet\Twig\APITwigServlet;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-class ForgotPasswordRequest extends APIServlet
+class ForgotPasswordRequest extends APITwigServlet
 {
 
     /**
      * @param Request $request
      * @param Response $response
      * @param $args
-     * @return Response
+     * @return \Psr\Http\Message\ResponseInterface|Response
      * @throws \Exception
      */
     public function handleRequest(Request $request, Response $response, $args)
@@ -44,7 +44,7 @@ class ForgotPasswordRequest extends APIServlet
         (new SendForgotPasswordMail($this->service))->handleRequest([$accessToken]);
 
 
-        return $response;
+        return $this->render($response,"PasswordNotificationSent.twig",[]);
     }
 
     static function getParams()
