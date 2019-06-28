@@ -41,6 +41,7 @@ class ForgotPasswordRequest extends APIServlet
 
         $accessToken = (new GenerateAccessToken($this->service))->handleRequest($tokenParams);
 
+        (new SendForgotPasswordMail($this->service))->handleRequest([$accessToken]);
 
 
         return $response;
