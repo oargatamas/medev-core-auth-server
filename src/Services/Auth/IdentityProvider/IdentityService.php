@@ -9,9 +9,9 @@
 namespace MedevAuth\Services\Auth\IdentityProvider;
 
 
-use MedevAuth\Services\Auth\IdentityProvider\Actions\Login\LoginServlet;
+use MedevAuth\Services\Auth\IdentityProvider\Actions\Login\Login;
 use MedevAuth\Services\Auth\IdentityProvider\Actions\Login\RenderLoginView;
-use MedevAuth\Services\Auth\IdentityProvider\Actions\Logout\LogoutServlet;
+use MedevAuth\Services\Auth\IdentityProvider\Actions\Logout\Logout;
 use MedevAuth\Services\Auth\IdentityProvider\Actions\Logout\RenderLogoutView;
 use MedevAuth\Services\Auth\IdentityProvider\Actions\PasswordForgot\ForgotPasswordServlet;
 use MedevAuth\Services\Auth\IdentityProvider\Actions\PasswordForgot\RenderForgotPasswordView;
@@ -64,8 +64,8 @@ class IdentityService extends TwigAPIService
             ->setArgument(APIService::SERVICE_ID,$this->getServiceName())
             ->setName(self::ROUTE_LOGIN);
 
-        $app->post("/login",new LoginServlet($this))
-            ->add(new RequestValidator(LoginServlet::getParams()))
+        $app->post("/login",new Login($this))
+            ->add(new RequestValidator(Login::getParams()))
             ->setArgument(APIService::SERVICE_ID,$this->getServiceName())
             ->setName(self::ROUTE_LOGIN.".post");
 
@@ -73,8 +73,8 @@ class IdentityService extends TwigAPIService
             ->setArgument(APIService::SERVICE_ID,$this->getServiceName())
             ->setName(self::ROUTE_LOGOUT);
 
-        $app->post("/logout", new LogoutServlet($this))
-            ->add(new RequestValidator(LogoutServlet::getParams()))
+        $app->post("/logout", new Logout($this))
+            ->add(new RequestValidator(Logout::getParams()))
             ->setArgument(APIService::SERVICE_ID,$this->getServiceName())
             ->setName(self::ROUTE_LOGOUT.".post");
 
