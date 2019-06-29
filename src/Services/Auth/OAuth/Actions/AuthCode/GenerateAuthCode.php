@@ -31,7 +31,7 @@ class GenerateAuthCode extends APIRepositoryAction
         /** @var User $user */
         $user = $args[AuthCode::USER];
         $redirectUri = $args[AuthCode::REDIRECT_URI] ?? $client->getRedirectUri();
-        $expiration = $args[AuthCode::EXPIRATION] ?? 3600; //Default to 10 minutes
+        $expiration = $args[AuthCode::EXPIRATION] ?? 300; //Default to 5 minutes
 
         $authCode = new AuthCode();
 
