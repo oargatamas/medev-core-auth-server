@@ -80,18 +80,22 @@ class IdentityService extends TwigAPIService
             ->setName(self::ROUTE_LOGOUT.".post");
 
         $app->get("/pw/forgot", new RenderForgotPassword($this))
+            ->add(new RequestValidator(RenderForgotPassword::getParams()))
             ->setArgument(APIService::SERVICE_ID,$this->getServiceName())
             ->setName(self::ROUTE_FORGOT_PASSWORD);
 
         $app->post("/pw/forgot", new ForgotPasswordRequest($this))
+            ->add(new RequestValidator(ForgotPasswordRequest::getParams()))
             ->setArgument(APIService::SERVICE_ID,$this->getServiceName())
             ->setName(self::ROUTE_FORGOT_PASSWORD.".post");
 
         $app->get("/pw/recovery", new RenderChangePassword($this))
+            ->add(new RequestValidator(RenderChangePassword::getParams()))
             ->setArgument(APIService::SERVICE_ID,$this->getServiceName())
             ->setName(self::ROUTE_PASSWORD_RECOVERY);
 
         $app->post("/pw/recovery", new ChangePasswordRequest($this))
+            ->add(new RequestValidator(ChangePasswordRequest::getParams()))
             ->setArgument(APIService::SERVICE_ID,$this->getServiceName())
             ->setName(self::ROUTE_PASSWORD_RECOVERY.".post");
     }
