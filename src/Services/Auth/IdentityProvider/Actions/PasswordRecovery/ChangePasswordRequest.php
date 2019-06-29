@@ -9,7 +9,9 @@
 namespace MedevAuth\Services\Auth\IdentityProvider\Actions\PasswordRecovery;
 
 
-use MedevAuth\Services\Auth\OAuth\Entity\Token\JWT\Signed\OAuthJWS;
+use MedevAuth\Services\Auth\OAuth\Actions\AuthCode\GetAuthCodeData;
+use MedevAuth\Services\Auth\OAuth\Actions\AuthCode\ValidateAuthCode;
+use MedevAuth\Services\Auth\OAuth\Entity\AuthCode;
 use MedevAuth\Services\Auth\OAuth\Entity\User;
 use MedevSlim\Core\Action\Servlet\APIServlet;
 use Slim\Http\Request;
@@ -27,10 +29,13 @@ class ChangePasswordRequest extends APIServlet
      */
     public function handleRequest(Request $request, Response $response, $args)
     {
-        /** @var OAuthJWS $accessToken */
-        $accessToken = $args["token"];
+        /** @var AuthCode $accessToken */
+        $authParams = [AuthCode::IDENTIFIER => $request->getParam("token")];
+        $authCode = (new GetAuthCodeData($this->service))->handleRequest($authParams);
+        (new ValidateAuthCode($this->service))->handleRequest($authParams);
+
         /** @var User $user */
-        $user = $accessToken->getUser();
+        $user = $authCode->getUser();
 
         $validatePws = new ValidatePasswords($this->service);
         $validateParams = $request->getParams(ChangePasswordRequest::getParams());
@@ -56,17 +61,9 @@ class ChangePasswordRequest extends APIServlet
     {
         return [
             "newPassword",
-            "newPasswordAgain"
+            "newPasswordAgain",
+            "token"
         ];
     }
-
-
-    static function getScopes()
-    {
-        return [
-            "update:userpw"
-        ];
-    }
-
 
 }

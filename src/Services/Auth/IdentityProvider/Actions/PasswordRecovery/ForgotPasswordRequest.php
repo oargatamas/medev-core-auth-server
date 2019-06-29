@@ -9,10 +9,10 @@
 namespace MedevAuth\Services\Auth\IdentityProvider\Actions\PasswordRecovery;
 
 
+use MedevAuth\Services\Auth\OAuth\Actions\AuthCode\GenerateAuthCode;
 use MedevAuth\Services\Auth\OAuth\Actions\Client\GetClientData;
-use MedevAuth\Services\Auth\OAuth\Actions\Token\AccessToken\GenerateAccessToken;
 use MedevAuth\Services\Auth\OAuth\Actions\User\GetUserData;
-use MedevAuth\Services\Auth\OAuth\Entity\Token\OAuthToken;
+use MedevAuth\Services\Auth\OAuth\Entity\AuthCode;
 use MedevSlim\Core\Action\Servlet\Twig\APITwigServlet;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -33,15 +33,14 @@ class ForgotPasswordRequest extends APITwigServlet
         $getClient = new GetClientData($this->service);
 
         $tokenParams = [
-            OAuthToken::USER => $getUser->handleRequest(["user_id" => $request->getParam("user")]),
-            OAuthToken::CLIENT => $getClient->handleRequest(["client_id" => "hu.medev.auth"]),
-            OAuthToken::EXPIRATION => 600,
-            OAuthToken::SCOPES => ChangePasswordRequest::getScopes()
+            AuthCode::USER => $getUser->handleRequest(["user_id" => $request->getParam("user")]),
+            AuthCode::CLIENT => $getClient->handleRequest(["client_id" => "hu.medev.auth"]),
+            AuthCode::EXPIRATION => 600
         ];
 
-        $accessToken = (new GenerateAccessToken($this->service))->handleRequest($tokenParams);
+        $authCode = (new GenerateAuthCode($this->service))->handleRequest($tokenParams);
 
-        (new SendForgotPasswordMail($this->service))->handleRequest([$accessToken]);
+        (new SendForgotPasswordMail($this->service))->handleRequest([AuthCode::IDENTIFIER => $authCode]);
 
 
         return $this->render($response,"PasswordNotificationSent.twig",[]);

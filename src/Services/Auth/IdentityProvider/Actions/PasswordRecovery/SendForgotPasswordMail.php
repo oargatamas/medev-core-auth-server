@@ -9,7 +9,7 @@
 namespace MedevAuth\Services\Auth\IdentityProvider\Actions\PasswordRecovery;
 
 
-use MedevAuth\Services\Auth\OAuth\Entity\Token\OAuthToken;
+use MedevAuth\Services\Auth\OAuth\Entity\AuthCode;
 use MedevSlim\Core\Action\Repository\APIRepositoryAction;
 use MedevSlim\Core\Service\APIService;
 use MedevSlim\Core\Service\Exceptions\BadRequestException;
@@ -37,9 +37,9 @@ class SendForgotPasswordMail extends APIRepositoryAction
      */
     public function handleRequest($args = [])
     {
-        /** @var OAuthToken $accessToken */
-        $accessToken = $args["token"];
-        $user = $accessToken->getUser();
+        /** @var AuthCode $authCode */
+        $authCode = $args[AuthCode::IDENTIFIER];
+        $user = $authCode->getUser();
 
         $mail = new PHPMailer(true);
 
@@ -54,7 +54,7 @@ class SendForgotPasswordMail extends APIRepositoryAction
 
             $mailData = [
                 "username" => $user->getUsername(),
-                "token" => $accessToken->finalizeToken()
+                "token" => $authCode->finalizeAuthCode()
             ];
 
             $mail->Body = $this->view->fetch("@".$this->service->getServiceName()."/"."ForgotPasswordMailTemplate.twig",$mailData);
