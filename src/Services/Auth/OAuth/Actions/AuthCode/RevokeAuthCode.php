@@ -9,6 +9,7 @@
 namespace MedevAuth\Services\Auth\OAuth\Actions\AuthCode;
 
 
+use MedevAuth\Services\Auth\OAuth\Entity;
 use MedevAuth\Services\Auth\OAuth\Entity\Persistables\AuthCode;
 use MedevAuth\Services\Auth\OAuth\Exceptions\OAuthException;
 use MedevSlim\Core\Action\Repository\APIRepositoryAction;
@@ -23,7 +24,7 @@ class RevokeAuthCode extends APIRepositoryAction
      */
     public function handleRequest($args = [])
     {
-        $authCodeId = $args["authcode_id"]; //Todo move to constant
+        $authCodeId = $args[Entity\AuthCode::IDENTIFIER];
 
         $result = $this->database->update(AuthCode::getTableName(),
             [

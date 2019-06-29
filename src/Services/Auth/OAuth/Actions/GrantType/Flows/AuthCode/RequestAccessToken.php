@@ -40,12 +40,12 @@ class RequestAccessToken extends GrantAccess
         parent::validateAccessRequest($request,$args);
 
         $getAuthCodeData = new GetAuthCodeData($this->service);
-        $this->authCode = $getAuthCodeData->handleRequest(["auth_code_id" => $request->getParam("code")]);
+        $this->authCode = $getAuthCodeData->handleRequest([AuthCode::IDENTIFIER => $request->getParam("code")]);
 
         $this->user = $this->authCode->getUser();
 
         $validateAuthCode = new ValidateAuthCode($this->service);
-        $validateAuthCode->handleRequest(["authcode" => $this->authCode]);
+        $validateAuthCode->handleRequest([AuthCode::IDENTIFIER => $this->authCode]);
     }
 
     /**
@@ -91,7 +91,7 @@ class RequestAccessToken extends GrantAccess
     {
         $this->info("Revoking authorization code to prevent multiple usage.");
         $action = new RevokeAuthCode($this->service);
-        $action->handleRequest(["authcode_id" => $this->authCode->getIdentifier()]);
+        $action->handleRequest([AuthCode::IDENTIFIER => $this->authCode->getIdentifier()]);
     }
 
 

@@ -51,17 +51,17 @@ class AuthorizeRequest extends Authorization
         $getAuthCode = new GenerateAuthCode($this->service);
         /** @var AuthCode $authCode */
         $authCode = $getAuthCode->handleRequest([
-            "client" => $this->client,
-            "user" => $this->user
+            AuthCode::CLIENT => $this->client,
+            AuthCode::USER => $this->user
         ]);
 
         $storeAuthCode = new PersistAuthCode($this->service);
-        $storeAuthCode->handleRequest(["authcode" => $authCode]);
+        $storeAuthCode->handleRequest([AuthCode::IDENTIFIER => $authCode]);
 
         $redirectUri = $authCode->getRedirectUri();
 
         $data = [
-            "code" => $authCode->getIdentifier(),
+            "code" => $authCode->finalizeAuthCode(),
             "state" => $this->csrfToken
         ];
 

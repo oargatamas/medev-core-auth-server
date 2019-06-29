@@ -27,7 +27,7 @@ class GetAuthCodeData extends APIRepositoryAction
      */
     public function handleRequest($args = [])
     {
-        $authCodeId = $args["auth_code_id"];
+        $authCodeId = $args[Entity\AuthCode::IDENTIFIER];
 
 
         $storedData = $this->database->get(AuthCode::getTableName()."(a)",

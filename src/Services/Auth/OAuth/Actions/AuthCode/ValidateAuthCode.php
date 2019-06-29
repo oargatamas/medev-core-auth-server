@@ -25,7 +25,7 @@ class ValidateAuthCode extends APIRepositoryAction
     public function handleRequest($args = [])
     {
         /** @var AuthCode $authCode */
-        $authCode = $args["authcode"]; //Todo move to constant
+        $authCode = $args[AuthCode::IDENTIFIER];
 
         if($authCode->isRevoked()){
             throw new UnauthorizedException("Auth code ".$authCode->getIdentifier()." revoked already.");
