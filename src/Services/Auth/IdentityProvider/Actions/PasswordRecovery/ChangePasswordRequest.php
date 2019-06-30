@@ -10,6 +10,7 @@ namespace MedevAuth\Services\Auth\IdentityProvider\Actions\PasswordRecovery;
 
 
 use MedevAuth\Services\Auth\OAuth\Actions\AuthCode\GetAuthCodeData;
+use MedevAuth\Services\Auth\OAuth\Actions\AuthCode\RevokeAuthCode;
 use MedevAuth\Services\Auth\OAuth\Actions\AuthCode\ValidateAuthCode;
 use MedevAuth\Services\Auth\OAuth\Entity\AuthCode;
 use MedevAuth\Services\Auth\OAuth\Entity\User;
@@ -48,6 +49,7 @@ class ChangePasswordRequest extends APIServlet
         $changeParams["user"] = $user;
         $changePw->handleRequest($changeParams);
 
+        (new RevokeAuthCode($this->service))->handleRequest([AuthCode::IDENTIFIER => $authCode]);
 
         $data = [
             "changed" => true
