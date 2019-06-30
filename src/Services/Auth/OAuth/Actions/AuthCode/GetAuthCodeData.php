@@ -15,6 +15,7 @@ use MedevAuth\Services\Auth\OAuth\Entity\Persistables\AuthCode;
 use MedevAuth\Services\Auth\OAuth\Entity\Persistables\Client;
 use MedevAuth\Services\Auth\OAuth\Entity\Persistables\User;
 use MedevSlim\Core\Action\Repository\APIRepositoryAction;
+use MedevSlim\Core\Service\Exceptions\UnauthorizedException;
 use Medoo\Medoo;
 
 class GetAuthCodeData extends APIRepositoryAction
@@ -57,6 +58,10 @@ class GetAuthCodeData extends APIRepositoryAction
         );
 
         $result = $this->database->error();
+
+        if(!$storedData){
+            throw new UnauthorizedException("Auth code ".$authCodeId." not existing in the database");
+        }
 
         $authCode = AuthCode::fromAssocArray($storedData);
 
