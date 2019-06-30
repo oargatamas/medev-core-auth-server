@@ -9,12 +9,15 @@
 namespace MedevAuth\Services\Auth\IdentityProvider\Actions\PasswordRecovery;
 
 
+use MedevAuth\Services\Auth\IdentityProvider\IdentityService;
 use MedevAuth\Services\Auth\OAuth\Entity\AuthCode;
 use MedevSlim\Core\Action\Repository\APIRepositoryAction;
+use MedevSlim\Core\Application\MedevApp;
 use MedevSlim\Core\Service\APIService;
-use MedevSlim\Core\Service\Exceptions\BadRequestException;
+use MedevSlim\Core\Service\Exceptions\APIException;
 use MedevSlim\Core\View\TwigView;
 use PHPMailer\PHPMailer\PHPMailer;
+use Slim\Interfaces\RouterInterface;
 use Slim\Views\Twig;
 
 class SendForgotPasswordMail extends APIRepositoryAction
@@ -25,15 +28,22 @@ class SendForgotPasswordMail extends APIRepositoryAction
      */
     private $view;
 
+    /**
+     * @var RouterInterface
+     */
+    private $router;
+
     public function __construct(APIService $service)
     {
         $this->view = $service->getContainer()->get(TwigView::class);
+        $this->router = $service->getContainer()->get(MedevApp::ROUTER);
         parent::__construct($service);
     }
 
     /**
      * @param $args
-     * @throws BadRequestException
+     * @throws \PHPMailer\PHPMailer\Exception
+     * @throws APIException
      */
     public function handleRequest($args = [])
     {
@@ -43,26 +53,26 @@ class SendForgotPasswordMail extends APIRepositoryAction
 
         $mail = new PHPMailer(true);
 
-        try {
-            $mail->setFrom("noreply@medev.hu", "Noreply-MedevServices");
-            $mail->addAddress($user->getEmail(), $user->getUsername());
-            $mail->addBCC("tudomtom@gmail.com", "Oarga Tamás");
+        $mail->setFrom("noreply@medev.hu", "Noreply-MedevServices");
+        $mail->addAddress($user->getEmail(), $user->getUsername());
+        $mail->addBCC("tudomtom@gmail.com", "Oarga Tamás");
 
-            $mail->isHTML(true);
-            $mail->CharSet = "UTF-8";
-            $mail->Subject = "MedevServices - Elfelejtett jelszó";
+        $mail->isHTML(true);
+        $mail->CharSet = "UTF-8";
+        $mail->Subject = "MedevServices - Elfelejtett jelszó";
 
-            $mailData = [
-                "username" => $user->getUsername(),
-                "token" => $authCode->finalizeAuthCode()
-            ];
+        $params = ["token" => $authCode->finalizeAuthCode()];
+        $changePwUrl = "https://auth.medev.local".$this->router->pathFor(IdentityService::ROUTE_PASSWORD_RECOVERY,[],$params);
 
-            $mail->Body = $this->view->fetch("@".$this->service->getServiceName()."/"."ForgotPasswordMailTemplate.twig",$mailData);
+        $mailData = [
+            "username" => $user->getUsername(),
+            "changePasswordUrl" => $changePwUrl
+        ];
 
-            $mail->send();
+        $mail->Body = $this->view->fetch("@" . $this->service->getServiceName() . "/ForgotPasswordMail.twig", $mailData);
 
-        } catch (\Exception $e) {
-            throw new BadRequestException("Mail to customer can not be sent. ". $mail->ErrorInfo);
+        if (!$mail->send()) {
+            throw new APIException($mail->ErrorInfo, 500, "Mail notification to user can not be sent.");
         }
     }
 }
