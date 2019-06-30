@@ -24,6 +24,6 @@ class RenderForgotPassword extends APITwigServlet
      */
     public function handleRequest(Request $request, Response $response, $args)
     {
-        return $this->render($response,"ForgotPassword.twig",[]);
+        return $this->render($response,"ForgotPassword.twig",["forgot_url" => "/idp/pw/forgot"]);
     }
 }

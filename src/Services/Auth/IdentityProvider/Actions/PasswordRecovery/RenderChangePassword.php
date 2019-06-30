@@ -9,6 +9,7 @@
 namespace MedevAuth\Services\Auth\IdentityProvider\Actions\PasswordRecovery;
 
 
+use MedevAuth\Services\Auth\IdentityProvider\IdentityService;
 use MedevSlim\Core\Action\Servlet\Twig\APITwigServlet;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -24,6 +25,17 @@ class RenderChangePassword extends APITwigServlet
      */
     public function handleRequest(Request $request, Response $response, $args)
     {
-        return $this->render($response,"ChangePassword.twig",[]);
+        $params = [
+            "changeUrl" => "https://auth.medev.local".$this->router->pathFor(IdentityService::ROUTE_PASSWORD_RECOVERY),
+            "token" => $request->getParam("token")
+        ];
+        return $this->render($response,"ChangePassword.twig",$params);
     }
+
+    static function getParams()
+    {
+        return ["token"];
+    }
+
+
 }

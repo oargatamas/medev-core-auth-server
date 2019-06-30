@@ -32,7 +32,7 @@ class ChangePasswordRequest extends APIServlet
         /** @var AuthCode $accessToken */
         $authParams = [AuthCode::IDENTIFIER => $request->getParam("token")];
         $authCode = (new GetAuthCodeData($this->service))->handleRequest($authParams);
-        (new ValidateAuthCode($this->service))->handleRequest($authParams);
+        (new ValidateAuthCode($this->service))->handleRequest([AuthCode::IDENTIFIER => $authCode]);
 
         /** @var User $user */
         $user = $authCode->getUser();
@@ -40,12 +40,13 @@ class ChangePasswordRequest extends APIServlet
         $validatePws = new ValidatePasswords($this->service);
         $validateParams = $request->getParams(ChangePasswordRequest::getParams());
         $validateParams["user"] = $user;
-        $validatePws->handleRequest([$validateParams]);
+        $validatePws->handleRequest($validateParams);
 
 
         $changePw = new ChangePassword($this->service);
         $changeParams = $request->getParams(ChangePasswordRequest::getParams());
-        $changePw->handleRequest([$changeParams]);
+        $changeParams["user"] = $user;
+        $changePw->handleRequest($changeParams);
 
 
         $data = [

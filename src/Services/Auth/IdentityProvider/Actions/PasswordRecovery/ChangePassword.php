@@ -38,6 +38,8 @@ class ChangePassword extends APIRepositoryAction
             ]
         );
 
+        //Todo update date as well!
+
         $error = $this->database->error();
         if(isset($error[2]) || $result->rowCount() <= 0){
             throw new APIException("Password can not be updated in database: ".implode(" - ",$error));
