@@ -10,35 +10,41 @@ namespace MedevAuth\Services\Auth\IdentityProvider\Actions\PasswordRecovery;
 
 
 use MedevSlim\Core\Action\Repository\APIRepositoryAction;
-use MedevSlim\Core\Service\Exceptions\BadRequestException;
 
 class ValidatePasswords extends APIRepositoryAction
 {
 
     /**
      * @param $args
-     * @return mixed
-     * @throws BadRequestException
+     * @return string[]
      */
     public function handleRequest($args = [])
     {
+        //Todo implement localization/language support.
         $newPassword = $args["newPassword"];
         $newPasswordAgain = $args["newPasswordAgain"];
 
+        $errors = [];
+
         if($newPassword != $newPasswordAgain){
-            throw new BadRequestException("Passwords did not match.");
+            $errors[] = "Passwords did not match.";
         }
 
         if(strlen($newPassword) < 8){
-            throw new BadRequestException("Password length must be at least 8 chars.");
+            $errors[] = "Password length must be at least 8 chars.";
         }
 
         if(!preg_match("#[0-9]+#", $newPassword)){
-            throw new BadRequestException("Password must contain at least one number.");
+            $errors[] = "Password must contain at least one number.";
         }
 
         if(!preg_match("#[a-zA-Z]+#", $newPassword)){
-            throw new BadRequestException("Password must contain at least one letter.");
+            $errors[] = "Password must contain at least one letter.";
         }
+
+        return [
+            "PasswordValid" => count($errors) == 0,
+            "Errors" => $errors
+        ];
     }
 }

@@ -41,7 +41,7 @@ class ChangePasswordRequest extends APIServlet
         $validatePws = new ValidatePasswords($this->service);
         $validateParams = $request->getParams(ChangePasswordRequest::getParams());
         $validateParams["user"] = $user;
-        $validatePws->handleRequest($validateParams);
+        $validationResult = $validatePws->handleRequest($validateParams);
 
 
         $changePw = new ChangePassword($this->service);
@@ -49,15 +49,12 @@ class ChangePasswordRequest extends APIServlet
         $changeParams["user"] = $user;
         $changePw->handleRequest($changeParams);
 
-        (new RevokeAuthCode($this->service))->handleRequest([AuthCode::IDENTIFIER => $authCode]);
+        (new RevokeAuthCode($this->service))->handleRequest([AuthCode::IDENTIFIER => $authCode->getIdentifier()]);
 
-        $data = [
-            "changed" => true
-        ];
 
         return $response
-            ->withStatus(201)
-            ->withJson($data);
+            ->withStatus(200)
+            ->withJson($validationResult);
     }
 
     static function getParams()
