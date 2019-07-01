@@ -9,6 +9,7 @@
 namespace MedevAuth\Services\Auth\IdentityProvider\Actions\PasswordRecovery;
 
 
+use MedevAuth\Services\Auth\IdentityProvider\IdentityService;
 use MedevSlim\Core\Action\Servlet\Twig\APITwigServlet;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -24,6 +25,10 @@ class RenderForgotPassword extends APITwigServlet
      */
     public function handleRequest(Request $request, Response $response, $args)
     {
-        return $this->render($response,"ForgotPassword.twig",["forgot_url" => "/idp/pw/forgot"]);
+        $data = [
+            "service" => $this->service->getServiceName(),
+            "forgot_url" => $this->router->pathFor(IdentityService::ROUTE_FORGOT_PASSWORD)
+        ];
+        return $this->render($response,"ForgotPassword.twig",$data);
     }
 }
