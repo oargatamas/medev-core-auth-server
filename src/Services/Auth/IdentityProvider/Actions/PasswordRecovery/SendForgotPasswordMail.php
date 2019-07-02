@@ -15,6 +15,7 @@ use MedevSlim\Core\Action\Repository\APIRepositoryAction;
 use MedevSlim\Core\Application\MedevApp;
 use MedevSlim\Core\Service\APIService;
 use MedevSlim\Core\Service\Exceptions\APIException;
+use MedevSlim\Core\Service\Exceptions\InternalServerException;
 use MedevSlim\Core\View\TwigView;
 use PHPMailer\PHPMailer\PHPMailer;
 use Slim\Interfaces\RouterInterface;
@@ -44,6 +45,7 @@ class SendForgotPasswordMail extends APIRepositoryAction
      * @param $args
      * @throws \PHPMailer\PHPMailer\Exception
      * @throws APIException
+     * @throws \Twig\Error\LoaderError
      */
     public function handleRequest($args = [])
     {
@@ -72,7 +74,7 @@ class SendForgotPasswordMail extends APIRepositoryAction
         $mail->Body = $this->view->fetch("@" . $this->service->getServiceName() . "/ForgotPasswordMail.twig", $mailData);
 
         if (!$mail->send()) {
-            throw new APIException($mail->ErrorInfo, 500, "Mail notification to user can not be sent.");
+            throw new InternalServerException($mail->ErrorInfo, 500, "Mail notification to user can not be sent.");
         }
     }
 }

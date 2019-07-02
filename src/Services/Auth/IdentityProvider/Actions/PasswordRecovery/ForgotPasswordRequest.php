@@ -45,7 +45,7 @@ class ForgotPasswordRequest extends APITwigServlet
 
         (new SendForgotPasswordMail($this->service))->handleRequest([AuthCode::IDENTIFIER => $authCode]);
 
-        return $this->render($response,"PasswordNotificationSent.twig",[]);
+        return $this->render($response,"PasswordNotificationSent.twig",["service" => $this->service->getServiceName()]);
     }
 
     static function getParams()

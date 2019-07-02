@@ -54,7 +54,7 @@ class ChangePasswordRequest extends APIServlet
 
         return $response
             ->withStatus(201)
-            ->withJson(["state" => "success"]);
+            ->withJson("Password changed correctly.");
     }
 
     static function getParams()

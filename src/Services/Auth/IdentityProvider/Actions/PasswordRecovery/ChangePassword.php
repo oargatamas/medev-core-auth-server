@@ -13,6 +13,7 @@ use MedevAuth\Services\Auth\OAuth\Entity;
 use MedevAuth\Services\Auth\OAuth\Entity\Persistables;
 use MedevSlim\Core\Action\Repository\APIRepositoryAction;
 use MedevSlim\Core\Service\Exceptions\APIException;
+use MedevSlim\Core\Service\Exceptions\InternalServerException;
 
 class ChangePassword extends APIRepositoryAction
 {
@@ -42,7 +43,7 @@ class ChangePassword extends APIRepositoryAction
 
         $error = $this->database->error();
         if(isset($error[2]) || $result->rowCount() <= 0){
-            throw new APIException("Password can not be updated in database: ".implode(" - ",$error));
+            throw new InternalServerException("Password can not be updated in database: ".implode(" - ",$error));
         }
     }
 }
