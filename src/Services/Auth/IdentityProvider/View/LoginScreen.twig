@@ -1,13 +1,15 @@
 {% extends ["@",service,"/Base.twig"]|join %}
 
 {% block content %}
-<h2>{{ session_id }}</h2>
-<h1 style="color:red">{{ error_msg }}</h1>
-<form method="post" action="{{ login_url }}">
-    Username<br/>
-    <input name="username" type="text"/><br/>
-    Password<br/>
-    <input name="password" type="password"/><br/>
-    <input type="submit" value="Sign in"/>
-</form>
+    <h2>{{ session_id }}</h2>
+    <h1 style="color:red">{{ errorMsg }}</h1>
+    <form method="post" action="{{ loginUrl }}">
+        Username<br/>
+        <input name="username" type="text"/><br/>
+        Password<br/>
+        <input name="password" type="password"/><br/>
+        <input type="submit" value="Sign in"/>
+    </form>
+
+    <a href="{{ forgotUrl }}">Forgot password</a>
 {% endblock %}

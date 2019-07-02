@@ -9,6 +9,7 @@
 namespace MedevAuth\Services\Auth\IdentityProvider\Actions\Login;
 
 
+use MedevAuth\Services\Auth\IdentityProvider\IdentityService;
 use MedevSlim\Core\Action\Servlet\Twig\APITwigServlet;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -26,9 +27,10 @@ class RenderLoginView extends APITwigServlet
     {
 
         $data = [
-            "login_url" => "/idp/login",
-            "session_id" => session_id(),
-            "error_msg" => $request->getParam("error")
+            "loginUrl" => "https://auth.medev.hu".$this->router->pathFor(IdentityService::ROUTE_LOGIN),
+            "forgotUrl" => "https://auth.medev.hu".$this->router->pathFor(IdentityService::ROUTE_FORGOT_PASSWORD),
+            "sessionId" => session_id(),
+            "errorMsg" => $request->getParam("error")
         ];
 
         return $this->render($response,"LoginScreen.twig",$data);
