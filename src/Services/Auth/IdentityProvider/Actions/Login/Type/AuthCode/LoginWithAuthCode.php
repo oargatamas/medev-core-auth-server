@@ -6,7 +6,7 @@
  * Time: 15:23
  */
 
-namespace MedevAuth\Services\Auth\IdentityProvider\Actions\Login\Type;
+namespace MedevAuth\Services\Auth\IdentityProvider\Actions\Login\Type\AuthCode;
 
 
 use MedevAuth\Services\Auth\IdentityProvider\IdentityService;

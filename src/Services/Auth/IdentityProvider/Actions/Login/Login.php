@@ -9,8 +9,8 @@
 namespace MedevAuth\Services\Auth\IdentityProvider\Actions\Login;
 
 
-use MedevAuth\Services\Auth\IdentityProvider\Actions\Login\Type\LoginWithAuthCode;
-use MedevAuth\Services\Auth\IdentityProvider\Actions\Login\Type\LoginWithPassword;
+use MedevAuth\Services\Auth\IdentityProvider\Actions\Login\Type\AuthCode\LoginWithAuthCode;
+use MedevAuth\Services\Auth\IdentityProvider\Actions\Login\Type\Password\LoginWithPassword;
 use MedevSlim\Core\Action\Servlet\APIServlet;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Request;

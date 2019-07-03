@@ -6,7 +6,7 @@
  * Time: 15:25
  */
 
-namespace MedevAuth\Services\Auth\IdentityProvider\Actions\Login\Type;
+namespace MedevAuth\Services\Auth\IdentityProvider\Actions\Login\Type\Password;
 
 
 use MedevAuth\Services\Auth\IdentityProvider\IdentityService;
