@@ -26,7 +26,7 @@ class PersistAuthCode extends APIRepositoryAction
     public function handleRequest($args = [])
     {
         /** @var Entity\AuthCode $authCode */
-        $authCode = $args["authcode"];
+        $authCode = $args[Entity\AuthCode::IDENTIFIER];
         //Todo move to constant
 
         $this->database->insert(AuthCode::getTableName(),[

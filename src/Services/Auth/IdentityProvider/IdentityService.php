@@ -9,14 +9,14 @@
 namespace MedevAuth\Services\Auth\IdentityProvider;
 
 
-use MedevAuth\Services\Auth\IdentityProvider\Actions\Login\LoginServlet;
+use MedevAuth\Services\Auth\IdentityProvider\Actions\Login\Login;
 use MedevAuth\Services\Auth\IdentityProvider\Actions\Login\RenderLoginView;
-use MedevAuth\Services\Auth\IdentityProvider\Actions\Logout\LogoutServlet;
+use MedevAuth\Services\Auth\IdentityProvider\Actions\Logout\Logout;
 use MedevAuth\Services\Auth\IdentityProvider\Actions\Logout\RenderLogoutView;
-use MedevAuth\Services\Auth\IdentityProvider\Actions\PasswordForgot\ForgotPasswordServlet;
-use MedevAuth\Services\Auth\IdentityProvider\Actions\PasswordForgot\RenderForgotPasswordView;
-use MedevAuth\Services\Auth\IdentityProvider\Actions\Register\RegisterServlet;
-use MedevAuth\Services\Auth\IdentityProvider\Actions\Register\RenderRegisterView;
+use MedevAuth\Services\Auth\IdentityProvider\Actions\PasswordRecovery\ChangePasswordRequest;
+use MedevAuth\Services\Auth\IdentityProvider\Actions\PasswordRecovery\ForgotPasswordRequest;
+use MedevAuth\Services\Auth\IdentityProvider\Actions\PasswordRecovery\RenderChangePassword;
+use MedevAuth\Services\Auth\IdentityProvider\Actions\PasswordRecovery\RenderForgotPassword;
 use MedevSlim\Core\Action\Middleware\RequestValidator;
 use MedevSlim\Core\Application\MedevApp;
 use MedevSlim\Core\Service\APIService;
@@ -31,6 +31,7 @@ class IdentityService extends TwigAPIService
     const ROUTE_LOGOUT = "logout";
     const ROUTE_REGISTER = "register";
     const ROUTE_FORGOT_PASSWORD = "forgot";
+    const ROUTE_PASSWORD_RECOVERY = "recovery";
 
     const ERROR_INVALID_CREDENTIALS = 0;
     const ERROR_NO_REDIRECT_URI = 1;
@@ -64,8 +65,8 @@ class IdentityService extends TwigAPIService
             ->setArgument(APIService::SERVICE_ID,$this->getServiceName())
             ->setName(self::ROUTE_LOGIN);
 
-        $app->post("/login",new LoginServlet($this))
-            ->add(new RequestValidator(LoginServlet::getParams()))
+        $app->post("/login",new Login($this))
+            ->add(new RequestValidator(Login::getParams()))
             ->setArgument(APIService::SERVICE_ID,$this->getServiceName())
             ->setName(self::ROUTE_LOGIN.".post");
 
@@ -73,28 +74,30 @@ class IdentityService extends TwigAPIService
             ->setArgument(APIService::SERVICE_ID,$this->getServiceName())
             ->setName(self::ROUTE_LOGOUT);
 
-        $app->post("/logout", new LogoutServlet($this))
-            ->add(new RequestValidator(LogoutServlet::getParams()))
+        $app->post("/logout", new Logout($this))
+            ->add(new RequestValidator(Logout::getParams()))
             ->setArgument(APIService::SERVICE_ID,$this->getServiceName())
             ->setName(self::ROUTE_LOGOUT.".post");
 
-        $app->get("/register", new RenderRegisterView($this))
-            ->setArgument(APIService::SERVICE_ID,$this->getServiceName())
-            ->setName(self::ROUTE_REGISTER);
-
-        $app->post("/register", new RegisterServlet($this))
-            ->add(new RequestValidator(RegisterServlet::getParams()))
-            ->setArgument(APIService::SERVICE_ID,$this->getServiceName())
-            ->setName(self::ROUTE_REGISTER.".post");
-
-        $app->get("/forgot", new RenderForgotPasswordView($this))
+        $app->get("/pw/forgot", new RenderForgotPassword($this))
+            ->add(new RequestValidator(RenderForgotPassword::getParams()))
             ->setArgument(APIService::SERVICE_ID,$this->getServiceName())
             ->setName(self::ROUTE_FORGOT_PASSWORD);
 
-        $app->post("/forgot", new ForgotPasswordServlet($this))
-            ->add(new RequestValidator(ForgotPasswordServlet::getParams()))
+        $app->post("/pw/forgot", new ForgotPasswordRequest($this))
+            ->add(new RequestValidator(ForgotPasswordRequest::getParams()))
             ->setArgument(APIService::SERVICE_ID,$this->getServiceName())
             ->setName(self::ROUTE_FORGOT_PASSWORD.".post");
+
+        $app->get("/pw/reset", new RenderChangePassword($this))
+            ->add(new RequestValidator(RenderChangePassword::getParams()))
+            ->setArgument(APIService::SERVICE_ID,$this->getServiceName())
+            ->setName(self::ROUTE_PASSWORD_RECOVERY);
+
+        $app->post("/pw/reset", new ChangePasswordRequest($this))
+            ->add(new RequestValidator(ChangePasswordRequest::getParams()))
+            ->setArgument(APIService::SERVICE_ID,$this->getServiceName())
+            ->setName(self::ROUTE_PASSWORD_RECOVERY.".post");
     }
 
 

@@ -19,6 +19,11 @@ use Defuse\Crypto\Key;
  */
 class AuthCode extends DatabaseEntity
 {
+    const IDENTIFIER = "auth_code_id";
+    const USER = "issuer_user";
+    const CLIENT = "issuer_client";
+    const REDIRECT_URI = "redirect_uri";
+    const EXPIRATION = "expiration";
 
     /**
      * @var Client
@@ -102,7 +107,7 @@ class AuthCode extends DatabaseEntity
     /**
      * @param User $user
      */
-    public function setUser(User $user): void
+    public function setUser(User $user)
     {
         $this->user = $user;
     }
@@ -129,17 +134,10 @@ class AuthCode extends DatabaseEntity
     }
 
     /**
-     * @param Key $encryptionKey
      * @return string
-     * @throws \Defuse\Crypto\Exception\EnvironmentIsBrokenException
      */
-    public function finalizeAuthCode(Key $encryptionKey){
-        $json = json_encode([
-            "user_id" => $this->user->getIdentifier(),
-            "client_id" => $this->client->getIdentifier(),
-            "redirect_uri" => $this->redirectUri
-        ]);
-        return Crypto::encrypt($json,$encryptionKey);
+    public function finalizeAuthCode(){
+        return $this->getIdentifier();
     }
 
     /**

@@ -11,7 +11,6 @@ namespace MedevAuth\Services\Auth\IdentityProvider\Actions\Login;
 
 use MedevAuth\Services\Auth\IdentityProvider\IdentityService;
 use MedevAuth\Services\Auth\OAuth\Actions\User\ValidateUser;
-use MedevAuth\Services\Auth\OAuth\Entity\User;
 use MedevAuth\Services\Auth\OAuth\OAuthService;
 use MedevSlim\Core\Action\Servlet\APIServlet;
 use MedevSlim\Core\Service\Exceptions\UnauthorizedException;
@@ -19,7 +18,7 @@ use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-class LoginServlet extends APIServlet
+class Login extends APIServlet
 {
 
     /**

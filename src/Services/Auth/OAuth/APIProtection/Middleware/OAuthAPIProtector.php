@@ -64,9 +64,7 @@ class OAuthAPIProtector implements ComponentLogger
         $this->info("Enriching inbound request with access meta data.");
         $authorizedRequest = $request->withAttributes(
             [
-                "scopes" => $parsedToken->getScopes(),
-                "user_id" => $parsedToken->getUser()->getIdentifier(),
-                "client_id" => $parsedToken->getClient()->getIdentifier()
+                "token" => $parsedToken
             ]
         );
 
