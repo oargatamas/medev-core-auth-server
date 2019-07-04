@@ -9,7 +9,7 @@
 namespace MedevAuth\Services\Auth\IdentityProvider\Actions\Login;
 
 
-use MedevAuth\Services\Auth\IdentityProvider\Actions\Login\Type\AuthCode\LoginWithAuthCode;
+use MedevAuth\Services\Auth\IdentityProvider\Actions\Login\Type\AuthCode\LoginWithCode;
 use MedevAuth\Services\Auth\IdentityProvider\Actions\Login\Type\Password\LoginWithPassword;
 use MedevSlim\Core\Action\Servlet\APIServlet;
 use Psr\Http\Message\ResponseInterface;
@@ -36,7 +36,7 @@ class Login extends APIServlet
         $handler = null;
         switch ($loginType) {
             case self::AUTHCODE:
-                return (new LoginWithAuthCode($this->service))->handleRequest($request,$response,$args);
+                return (new LoginWithCode($this->service))->handleRequest($request,$response,$args);
             default :
                 return (new LoginWithPassword($this->service))->handleRequest($request,$response,$args);
         }
