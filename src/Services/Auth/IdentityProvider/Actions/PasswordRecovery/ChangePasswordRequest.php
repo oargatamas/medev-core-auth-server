@@ -49,7 +49,7 @@ class ChangePasswordRequest extends APIServlet
         $changeParams["user"] = $user;
         $changePw->handleRequest($changeParams);
 
-        (new RevokeAuthCode($this->service))->handleRequest([AuthCode::IDENTIFIER => $authCode->getIdentifier()]);
+        (new RevokeAuthCode($this->service))->handleRequest([AuthCode::IDENTIFIER => $authCode]);
 
 
         return $response
