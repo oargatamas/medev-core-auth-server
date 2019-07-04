@@ -74,7 +74,7 @@ class SendForgotPasswordMail extends APIRepositoryAction
         $mail->Body = $this->view->fetch("@" . $this->service->getServiceName() . "/ForgotPasswordMail.twig", $mailData);
 
         if (!$mail->send()) {
-            throw new InternalServerException($mail->ErrorInfo, 500, "Mail notification to user can not be sent.");
+            throw new InternalServerException("Mail notification to user can not be sent. ". $mail->ErrorInfo);
         }
     }
 }
