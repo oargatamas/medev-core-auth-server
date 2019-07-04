@@ -11,6 +11,7 @@ namespace MedevAuth\Services\Auth\IdentityProvider\Actions\Login\Type\AuthCode;
 
 use MedevAuth\Services\Auth\IdentityProvider\IdentityService;
 use MedevAuth\Services\Auth\OAuth\Actions\AuthCode\GetAuthCodeData;
+use MedevAuth\Services\Auth\OAuth\Actions\AuthCode\RevokeAuthCode;
 use MedevAuth\Services\Auth\OAuth\Actions\AuthCode\ValidateAuthCode;
 use MedevAuth\Services\Auth\OAuth\Actions\User\GetUserData;
 use MedevAuth\Services\Auth\OAuth\Entity\AuthCode;
@@ -42,6 +43,8 @@ class LoginWithAuthCode extends APIServlet
             $user = (new GetUserData($this->service))->handleRequest(["user_id" => $userMail]);
 
             $_SESSION["user"] = $user;
+
+            (new RevokeAuthCode($this->service))->handleRequest([AuthCode::IDENTIFIER => $authCode]);
 
         }catch (UnauthorizedException $e){
             $this->error($e->__toString());
