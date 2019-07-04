@@ -21,7 +21,7 @@ use MedevSlim\Core\Service\Exceptions\UnauthorizedException;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-class LoginWithAuthCode extends APIServlet
+class LoginWithCode extends APIServlet
 {
 
     /**
