@@ -13,7 +13,6 @@ use MedevAuth\Services\Auth\IdentityProvider\IdentityService;
 use MedevAuth\Services\Auth\OAuth\Actions\AuthCode\GetAuthCodeData;
 use MedevAuth\Services\Auth\OAuth\Actions\AuthCode\RevokeAuthCode;
 use MedevAuth\Services\Auth\OAuth\Actions\AuthCode\ValidateAuthCode;
-use MedevAuth\Services\Auth\OAuth\Actions\User\GetUserData;
 use MedevAuth\Services\Auth\OAuth\Entity\AuthCode;
 use MedevAuth\Services\Auth\OAuth\OAuthService;
 use MedevSlim\Core\Action\Servlet\APIServlet;
@@ -33,16 +32,13 @@ class LoginWithCode extends APIServlet
      */
     public function handleRequest(Request $request, Response $response, $args)
     {
-        $userMail = $request->getParam("username");
         $authCodeId = $request->getParam("code");
         try{
             $authCode = (new GetAuthCodeData($this->service))->handleRequest([AuthCode::IDENTIFIER => $authCodeId]);
 
             (new ValidateAuthCode($this->service))->handleRequest([AuthCode::IDENTIFIER => $authCode]);
 
-            $user = (new GetUserData($this->service))->handleRequest(["user_id" => $userMail]);
-
-            $_SESSION["user"] = $user;
+            $_SESSION["user"] = $authCode->getUser();
 
             (new RevokeAuthCode($this->service))->handleRequest([AuthCode::IDENTIFIER => $authCode]);
 
