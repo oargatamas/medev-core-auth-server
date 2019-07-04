@@ -27,6 +27,7 @@ class RenderLoginView extends APITwigServlet
     {
 
         $data = [
+            "service" => $this->service->getServiceName(),
             "loginUrl" => $this->router->pathFor(IdentityService::ROUTE_LOGIN),
             "forgotUrl" => "https://auth.medev.hu".$this->router->pathFor(IdentityService::ROUTE_FORGOT_PASSWORD),
             "sessionId" => session_id(),
