@@ -9,6 +9,7 @@
 namespace MedevAuth\Services\Auth\IdentityProvider\Actions\Login\Type\Password;
 
 
+use MedevAuth\Services\Auth\IdentityProvider\Actions\Login\Login;
 use MedevAuth\Services\Auth\IdentityProvider\IdentityService;
 use MedevAuth\Services\Auth\OAuth\Actions\User\ValidateUser;
 use MedevAuth\Services\Auth\OAuth\OAuthService;
@@ -42,7 +43,11 @@ class LoginWithPassword extends APIServlet
 
         }catch (UnauthorizedException $e){
             $this->error($e->__toString());
-            $loginUrl = $this->router->pathFor(IdentityService::ROUTE_LOGIN,[],["error" => IdentityService::ERROR_INVALID_CREDENTIALS]);
+            $errorParams = [
+                "opened_at" => Login::PASSWORD,
+                "error" => "Invalid username or password." //Todo integrate it with the localisation framework
+            ];
+            $loginUrl = $this->router->pathFor(IdentityService::ROUTE_LOGIN,[],$errorParams);
             return $response->withRedirect($loginUrl);
         }
 

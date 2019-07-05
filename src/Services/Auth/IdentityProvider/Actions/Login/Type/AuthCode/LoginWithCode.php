@@ -9,6 +9,7 @@
 namespace MedevAuth\Services\Auth\IdentityProvider\Actions\Login\Type\AuthCode;
 
 
+use MedevAuth\Services\Auth\IdentityProvider\Actions\Login\Login;
 use MedevAuth\Services\Auth\IdentityProvider\IdentityService;
 use MedevAuth\Services\Auth\OAuth\Actions\AuthCode\GetAuthCodeData;
 use MedevAuth\Services\Auth\OAuth\Actions\AuthCode\RevokeAuthCode;
@@ -44,7 +45,11 @@ class LoginWithCode extends APIServlet
 
         }catch (UnauthorizedException $e){
             $this->error($e->__toString());
-            $loginUrl = $this->router->pathFor(IdentityService::ROUTE_LOGIN,[],["error" => IdentityService::ERROR_INVALID_CREDENTIALS]);
+            $errorParams = [
+                "opened_at" => Login::AUTHCODE,
+                "error" => "Invalid or expired token." //Todo integrate it with the localisation framework
+            ];
+            $loginUrl = $this->router->pathFor(IdentityService::ROUTE_LOGIN,[],$errorParams);
             return $response->withRedirect($loginUrl);
         }
 
