@@ -25,12 +25,16 @@ class RenderLoginView extends APITwigServlet
      */
     public function handleRequest(Request $request, Response $response, $args)
     {
+        $urlBase = $request->getServerParam("REQUEST_SCHEME")."://".$request->getServerParam("SERVER_NAME");
 
         $data = [
             "service" => $this->service->getServiceName(),
+            "passwordLogin" => Login::PASSWORD,
+            "codeLogin" => Login::AUTHCODE,
             "loginUrl" => $this->router->pathFor(IdentityService::ROUTE_LOGIN),
-            "forgotUrl" => "https://auth.medev.hu".$this->router->pathFor(IdentityService::ROUTE_FORGOT_PASSWORD),
-            "sessionId" => session_id(),
+            "forgotUrl" => $urlBase.$this->router->pathFor(IdentityService::ROUTE_FORGOT_PASSWORD),
+            "codeUrl" => $urlBase.$this->router->pathFor(IdentityService::ROUTE_LOGIN_CODE),
+            "openedAt" => $request->getParam("opened_at",Login::PASSWORD),
             "errorMsg" => $request->getParam("error")
         ];
 
