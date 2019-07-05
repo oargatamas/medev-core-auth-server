@@ -75,7 +75,7 @@ class IdentityService extends TwigAPIService
         $app->post("/login/code",new RequestLoginCode($this))
             ->add(new RequestValidator(RequestLoginCode::getParams()))
             ->setArgument(APIService::SERVICE_ID,$this->getServiceName())
-            ->setName(self::ROUTE_LOGIN.".post");
+            ->setName(self::ROUTE_LOGIN_CODE);
 
         $app->get("/logout", new RenderLogoutView($this))
             ->setArgument(APIService::SERVICE_ID,$this->getServiceName())
