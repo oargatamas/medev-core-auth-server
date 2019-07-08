@@ -2,7 +2,7 @@
 
 {% block content %}
     <center>
-        <h1 style="color:red">{{ errorMsg }}</h1>
+        <h1 id="errorBox" style="color:red">{{ errorMsg }}</h1>
         <div id="loginWithPassword">
             <form method="post" action="{{ loginUrl }}">
                 Username<br/>
@@ -17,7 +17,7 @@
         <br/>
         <div id="requestLoginCode">
             Username<br/>
-            <input name="usermail" type="text"/><br/>
+            <input id="usermail" type="text"/><br/>
             <button id="requestCode">Request code</button>
         </div>
         <br/>
@@ -36,6 +36,28 @@
 
 {% block scripts %}
     <script>
+        $(document).ready(function () {
+            $("button#requestCode").click((event) => {
+                event.preventDefault();
 
+                console.log($("input#usermail").val());
+
+                $.ajax({
+                    url: "{{ codeUrl }}",
+                    method: "post",
+                    data: {
+                        "usermail": $("input#usermail").val(),
+                    },
+                    success: (data, status, jqxhr) => {
+                        console.log(data);
+                        alert(data.message);
+                    },
+                    error: (data, status, jqxhr) => {
+                        console.log(data);
+                        $("h1#errorBox").html(data.responseJSON);
+                    },
+                });
+            })
+        });
     </script>
 {% endblock %}
