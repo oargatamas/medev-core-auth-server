@@ -1,15 +1,41 @@
 {% extends ["@",service,"/Base.twig"]|join %}
 
 {% block content %}
-    <h2>{{ session_id }}</h2>
-    <h1 style="color:red">{{ errorMsg }}</h1>
-    <form method="post" action="{{ loginUrl }}">
-        Username<br/>
-        <input name="username" type="text"/><br/>
-        Password<br/>
-        <input name="password" type="password"/><br/>
-        <input type="submit" value="Sign in"/>
-    </form>
+    <center>
+        <h1 style="color:red">{{ errorMsg }}</h1>
+        <div id="loginWithPassword">
+            <form method="post" action="{{ loginUrl }}">
+                Username<br/>
+                <input name="username" type="text"/><br/>
+                Password<br/>
+                <input name="password" type="password"/><br/>
+                <input type="submit" value="Sign in"/>
+            </form>
+            <a href="{{ forgotUrl }}">Forgot password</a>
+        </div>
+        <br/>
+        <br/>
+        <div id="requestLoginCode">
+            Username<br/>
+            <input name="usermail" type="text"/><br/>
+            <button id="requestCode">Request code</button>
+        </div>
+        <br/>
+        <br/>
+        <div id="loginWithAuthCode">
+            <form method="post" action="{{ loginUrl }}">
+                Verification code<br/>
+                <input name="code" type="text"/><br/>
+                <input type="submit" value="Sign in"/>
+                <input type="hidden" name="type" value="{{ codeLogin }}"/>
+            </form>
+        </div>
+    </center>
+{% endblock %}
 
-    <a href="{{ forgotUrl }}">Forgot password</a>
+
+{% block scripts %}
+    <script>
+
+    </script>
 {% endblock %}
