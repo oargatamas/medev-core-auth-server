@@ -91,7 +91,7 @@ class RequestAccessToken extends GrantAccess
     {
         $this->info("Revoking authorization code to prevent multiple usage.");
         $action = new RevokeAuthCode($this->service);
-        $action->handleRequest([AuthCode::IDENTIFIER => $this->authCode->getIdentifier()]);
+        $action->handleRequest([AuthCode::IDENTIFIER => $this->authCode]);
     }
 
 
