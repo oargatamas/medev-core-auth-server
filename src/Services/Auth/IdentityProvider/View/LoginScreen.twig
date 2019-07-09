@@ -6,14 +6,14 @@
 
 
 
-    <div class="card animated" style="position:absolute;">
+    <div id="loginWithPassword" class="card animated fadeInRight" style="position:absolute;">
 
         <h1 class="errorBox" style="color:red">{{ errorMsg }}</h1>
 
         <!-- Card content -->
         <div class="card-body">
 
-            <div id="loginWithPassword" style="height:200px;">
+            <div  style="height:200px;">
                 <form method="post" action="{{ loginUrl }}">
                     Username<br/>
                     <input name="username" type="text"/><br/>
@@ -27,14 +27,14 @@
 
     </div>
 
-    <div class="card animated" style="position:absolute;">
+    <div id="requestLoginCode" class="card d-none animated fadeOutLeft" style="position:absolute;">
 
         <h1 class="errorBox" style="color:red">{{ errorMsg }}</h1>
 
         <!-- Card content -->
         <div class="card-body">
 
-            <div id="requestLoginCode">
+            <div >
                 Username<br/>
                 <input id="usermail" type="text"/><br/>
                 <button id="requestCode">Request code</button>
@@ -45,7 +45,7 @@
     </div>
 
 
-    <div class="card animated" style="position:absolute;">
+    <div id="loginWithAuthCode" class="card d-none animated fadeOutLeft" style="position:absolute;">
 
         <h1 class="errorBox" style="color:red">{{ errorMsg }}</h1>
 
@@ -62,12 +62,37 @@
         </div>
     </div>
 
+<div style="position:absolute;top:10px;left:10px">
+    <button class="to_card_1">card#1</button>
+    <button class="to_card_2">card#2</button>
+    <button class="to_card_3">card#3</button>
+</div>
+
 
 {% endblock %}
 
 
 {% block scripts %}
     <script>
+
+        var cardStates = [
+            {
+                loginWithPassword : true,
+                requestLoginCode : false,
+                loginWithAuthCode : false,
+            },
+            {
+                loginWithPassword : false,
+                requestLoginCode : true,
+                loginWithAuthCode : false,
+            },
+            {
+                loginWithPassword : false,
+                requestLoginCode : false,
+                loginWithAuthCode : true,
+            }
+        ];
+
         $(document).ready(function () {
             initLoginCodeRequest();
             initCardLinks();
@@ -75,11 +100,6 @@
 
 
         function initLoginCodeRequest(){
-            $("div#loginWithPassword_Container").show();
-            $("div#requestLoginCode_Container").hide();
-            $("div#loginWithAuthCode_Container").hide();
-
-
             $("button#requestCode").click((event) => {
                 event.preventDefault();
 
@@ -104,7 +124,25 @@
         }
 
         function initCardLinks(){
+            $(".to_card_1").click(function(){showCard(cardStates[0])});
+            $(".to_card_2").click(function(){showCard(cardStates[1])});
+            $(".to_card_3").click(function(){showCard(cardStates[2])});
+        }
 
+        function showCard(stateAnimation){
+            Object.entries(stateAnimation).forEach(entry => {
+                let key = entry[0];
+                let value = entry[1];
+
+                let card = $("div#"+key);
+                let lastClass = $(card).attr("class").split(' ').pop()
+                $(card).removeClass(lastClass);
+                if(value){
+                    $(card).removeClass("d-none").addClass("fadeInRight");
+                }else{
+                    $(card).addClass("fadeOutLeft");
+                }
+            });
         }
     </script>
 {% endblock %}
