@@ -4,10 +4,16 @@
 
 {% block content %}
 
-    <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
 
-        <div class="mdl-tabs__panel is-active" id="login-password-panel">
-            <div id="loginWithPassword">
+
+    <div class="card animated" style="position:absolute;">
+
+        <h1 class="errorBox" style="color:red">{{ errorMsg }}</h1>
+
+        <!-- Card content -->
+        <div class="card-body">
+
+            <div id="loginWithPassword" style="height:200px;">
                 <form method="post" action="{{ loginUrl }}">
                     Username<br/>
                     <input name="username" type="text"/><br/>
@@ -19,47 +25,61 @@
             </div>
         </div>
 
-        <div class="mdl-tabs__panel" id="login-code-panel">
+    </div>
+
+    <div class="card animated" style="position:absolute;">
+
+        <h1 class="errorBox" style="color:red">{{ errorMsg }}</h1>
+
+        <!-- Card content -->
+        <div class="card-body">
+
             <div id="requestLoginCode">
                 Username<br/>
                 <input id="usermail" type="text"/><br/>
                 <button id="requestCode">Request code</button>
             </div>
-            <br/>
-            <br/>
-            <div id="loginWithAuthCode">
-                <form method="post" action="{{ loginUrl }}">
-                    Verification code<br/>
-                    <input name="code" type="text"/><br/>
-                    <input type="submit" value="Sign in"/>
-                    <input type="hidden" name="type" value="{{ codeLogin }}"/>
-                </form>
-            </div>
-        </div>
 
-        <div class="mdl-tabs__tab-bar">
-            <a href="#login-password-panel" class="mdl-tabs__tab is-active"></a>
-            <a href="#login-code-panel" class="mdl-tabs__tab"></a>
         </div>
 
     </div>
 
 
+    <div class="card animated" style="position:absolute;">
 
-    <center>
-        <h1 id="errorBox" style="color:red">{{ errorMsg }}</h1>
+        <h1 class="errorBox" style="color:red">{{ errorMsg }}</h1>
 
-        <br/>
-        <br/>
+        <!-- Card content -->
+        <div class="card-body">
+
+            <form method="post" action="{{ loginUrl }}">
+                Verification code<br/>
+                <input name="code" type="text"/><br/>
+                <input type="submit" value="Sign in"/>
+                <input type="hidden" name="type" value="{{ codeLogin }}"/>
+            </form>
+
+        </div>
+    </div>
 
 
-    </center>
 {% endblock %}
 
 
 {% block scripts %}
     <script>
         $(document).ready(function () {
+            initLoginCodeRequest();
+            initCardLinks();
+        });
+
+
+        function initLoginCodeRequest(){
+            $("div#loginWithPassword_Container").show();
+            $("div#requestLoginCode_Container").hide();
+            $("div#loginWithAuthCode_Container").hide();
+
+
             $("button#requestCode").click((event) => {
                 event.preventDefault();
 
@@ -80,7 +100,11 @@
                         $("h1#errorBox").html(data.responseJSON);
                     },
                 });
-            })
-        });
+            });
+        }
+
+        function initCardLinks(){
+
+        }
     </script>
 {% endblock %}
