@@ -5,14 +5,11 @@
 {% block content %}
 
 
+    <h1 class="errorBox" style="color:red">{{ errorMsg }}</h1>
 
-    <div id="loginWithPassword" class="card animated fadeInRight" style="position:absolute;">
-
-        <h1 class="errorBox" style="color:red">{{ errorMsg }}</h1>
-
+    <div id="loginWithPassword" class="{{ passwordLogin }} d-none card animated fadeInRight" style="position:absolute;">
         <!-- Card content -->
         <div class="card-body">
-
             <div  style="height:200px;">
                 <form method="post" action="{{ loginUrl }}">
                     Username<br/>
@@ -22,33 +19,25 @@
                     <input type="submit" value="Sign in"/>
                 </form>
                 <a href="{{ forgotUrl }}">Forgot password</a>
+                <br/>
+                <span class="to_card_2">Other login method</span>
             </div>
         </div>
-
     </div>
 
-    <div id="requestLoginCode" class="card d-none animated fadeOutLeft" style="position:absolute;">
-
-        <h1 class="errorBox" style="color:red">{{ errorMsg }}</h1>
-
+    <div id="requestLoginCode" class="d-none card animated fadeOutLeft" style="position:absolute;">
         <!-- Card content -->
         <div class="card-body">
-
             <div >
                 Username<br/>
                 <input id="usermail" type="text"/><br/>
                 <button id="requestCode">Request code</button>
             </div>
-
         </div>
-
     </div>
 
 
-    <div id="loginWithAuthCode" class="card d-none animated fadeOutLeft" style="position:absolute;">
-
-        <h1 class="errorBox" style="color:red">{{ errorMsg }}</h1>
-
+    <div id="loginWithAuthCode" class="{{ codeLogin }} d-none card animated fadeOutLeft" style="position:absolute;">
         <!-- Card content -->
         <div class="card-body">
 
@@ -58,15 +47,11 @@
                 <input type="submit" value="Sign in"/>
                 <input type="hidden" name="type" value="{{ codeLogin }}"/>
             </form>
-
+            <span class="to_card_1">Back to password login</span>
         </div>
     </div>
 
-<div style="position:absolute;top:10px;left:10px">
-    <button class="to_card_1">card#1</button>
-    <button class="to_card_2">card#2</button>
-    <button class="to_card_3">card#3</button>
-</div>
+
 
 
 {% endblock %}
@@ -94,9 +79,19 @@
         ];
 
         $(document).ready(function () {
-            initLoginCodeRequest();
+            initCardVisibility();
             initCardLinks();
+            initLoginCodeRequest();
         });
+
+        function initCardVisibility(){
+            let currentCard = "{{ openedAt }}";
+            switch (currentCard) {
+                case "{{ passwordLogin }}" : showCard(cardStates[0]); break;
+                case "{{ codeLogin }}" : showCard(cardStates[2]); break;
+                default : console.log("invalid value for currentCard: " + currentCard ); break;
+            }
+        }
 
 
         function initLoginCodeRequest(){
@@ -114,6 +109,7 @@
                     success: (data, status, jqxhr) => {
                         console.log(data);
                         alert(data);
+                        showCard(cardStates[2]);
                     },
                     error: (data, status, jqxhr) => {
                         console.log(data);
