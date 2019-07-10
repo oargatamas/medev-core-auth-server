@@ -11,10 +11,17 @@
     <!-- Material Design Bootstrap -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.5/css/mdb.min.css" rel="stylesheet">
 </head>
-<body>
+<body class="blue">
+
+
 <!-- Start your project here-->
-<div style="height: 100vh">
-    <div class="flex-center flex-column">
+<div style="height: 100vh;">
+    <div class="flex-center flex-column ">
+        <div class="flex-center flex-row" style="height:auto">
+            <image class="d-inline" src="https://medev.hu/static/media/medev_logo.618e982e.svg" style="max-width:100px;"/>
+            <h1 class="text-white">Medev</h1>
+        </div>
+
         {% block content %}
 
         {% endblock %}
