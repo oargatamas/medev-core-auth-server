@@ -51,6 +51,8 @@
 
 
 {% block scripts %}
+    {{ parent() }}
+
     <script>
         $.urlParams = function(name){
             let results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
@@ -168,14 +170,6 @@
                     $(card).addClass("d-none fadeOutLeft");
                 }
             });
-        }
-
-        function toggleSpinner(visible){
-            if(visible){
-                $("button").prop('disabled', true);
-            }else{
-                $("button").prop('disabled', false);
-            }
         }
     </script>
 {% endblock %}
