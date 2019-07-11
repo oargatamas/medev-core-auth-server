@@ -24,14 +24,15 @@ class RevokeAuthCode extends APIRepositoryAction
      */
     public function handleRequest($args = [])
     {
-        $authCodeId = $args[Entity\AuthCode::IDENTIFIER];
+        /** @var Entity\AuthCode $authCode */
+        $authCode = $args[Entity\AuthCode::IDENTIFIER];
 
         $result = $this->database->update(AuthCode::getTableName(),
             [
                 "IsRevoked" => true
             ],
             [
-                "Id" => $authCodeId
+                "Id" => $authCode->getIdentifier()
             ]);
 
         $error = $this->database->error();

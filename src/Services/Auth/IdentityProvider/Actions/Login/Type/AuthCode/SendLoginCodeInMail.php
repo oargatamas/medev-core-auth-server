@@ -2,28 +2,24 @@
 /**
  * Created by PhpStorm.
  * User: OargaTamas
- * Date: 2019. 06. 28.
- * Time: 13:51
+ * Date: 2019. 07. 04.
+ * Time: 11:03
  */
 
-namespace MedevAuth\Services\Auth\IdentityProvider\Actions\PasswordRecovery;
+namespace MedevAuth\Services\Auth\IdentityProvider\Actions\Login\Type\AuthCode;
 
-
-use MedevAuth\Services\Auth\IdentityProvider\IdentityService;
 use MedevAuth\Services\Auth\OAuth\Entity\AuthCode;
 use MedevSlim\Core\Action\Repository\APIRepositoryAction;
 use MedevSlim\Core\Application\MedevApp;
 use MedevSlim\Core\Service\APIService;
-use MedevSlim\Core\Service\Exceptions\APIException;
 use MedevSlim\Core\Service\Exceptions\InternalServerException;
 use MedevSlim\Core\View\TwigView;
 use PHPMailer\PHPMailer\PHPMailer;
 use Slim\Interfaces\RouterInterface;
 use Slim\Views\Twig;
 
-class SendForgotPasswordMail extends APIRepositoryAction
+class SendLoginCodeInMail extends APIRepositoryAction
 {
-
     /**
      * @var Twig
      */
@@ -42,10 +38,10 @@ class SendForgotPasswordMail extends APIRepositoryAction
     }
 
     /**
-     * @param $args
+     * @param array $args
      * @throws \PHPMailer\PHPMailer\Exception
-     * @throws APIException
      * @throws \Twig\Error\LoaderError
+     * @throws InternalServerException
      */
     public function handleRequest($args = [])
     {
@@ -61,17 +57,15 @@ class SendForgotPasswordMail extends APIRepositoryAction
 
         $mail->isHTML(true);
         $mail->CharSet = "UTF-8";
-        $mail->Subject = "MedevServices - Elfelejtett jelszó"; // Todo integrate with localization string
+        $mail->Subject = "MedevServices - Ideiglenes jelszó"; //Todo integrate with localization string
 
-        $params = ["token" => $authCode->finalizeAuthCode()];
-        $changePwUrl = "https://auth.medev.local".$this->router->pathFor(IdentityService::ROUTE_PASSWORD_RECOVERY,[],$params);
 
         $mailData = [
             "username" => $user->getUsername(),
-            "changePasswordUrl" => $changePwUrl
+            "code" => $authCode->finalizeAuthCode()
         ];
 
-        $mail->Body = $this->view->fetch("@" . $this->service->getServiceName() . "/ForgotPasswordMail.twig", $mailData);
+        $mail->Body = $this->view->fetch("@" . $this->service->getServiceName() . "/LoginCodeMail.twig", $mailData);
 
         if (!$mail->send()) {
             throw new InternalServerException("Mail notification to user can not be sent. ". $mail->ErrorInfo);
