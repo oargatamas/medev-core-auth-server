@@ -39,7 +39,7 @@ class Client extends ScopedEntity
     /**
      * @var string
      */
-    private $tokenResponseType;
+    private $tokenPlace;
 
     /**
      * @return string
@@ -103,17 +103,17 @@ class Client extends ScopedEntity
     /**
      * @return string
      */
-    public function getTokenResponseType()
+    public function getTokenPlace()
     {
-        return $this->tokenResponseType;
+        return $this->tokenPlace;
     }
 
     /**
-     * @param string $tokenResponseType
+     * @param string $tokenPlace
      */
-    public function setTokenResponseType(string $tokenResponseType)
+    public function setTokenPlace(string $tokenPlace)
     {
-        $this->tokenResponseType = $tokenResponseType;
+        $this->tokenPlace = $tokenPlace;
     }
 
 
