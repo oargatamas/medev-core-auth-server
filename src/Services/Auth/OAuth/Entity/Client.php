@@ -16,6 +16,8 @@ namespace MedevAuth\Services\Auth\OAuth\Entity;
  */
 class Client extends ScopedEntity
 {
+    const TOKEN_AS_BODY = "req-body";
+    const TOKEN_AS_COOKIE = "cookie";
 
     /**
      * @var string
@@ -33,6 +35,11 @@ class Client extends ScopedEntity
      * @var string[]
      */
     private $grantTypes;
+
+    /**
+     * @var string
+     */
+    private $tokenResponseType;
 
     /**
      * @return string
@@ -91,6 +98,22 @@ class Client extends ScopedEntity
      */
     public function hasGrantType($grantType){
         return in_array($grantType,$this->grantTypes);
+    }
+
+    /**
+     * @return string
+     */
+    public function getTokenResponseType()
+    {
+        return $this->tokenResponseType;
+    }
+
+    /**
+     * @param string $tokenResponseType
+     */
+    public function setTokenResponseType(string $tokenResponseType)
+    {
+        $this->tokenResponseType = $tokenResponseType;
     }
 
 
