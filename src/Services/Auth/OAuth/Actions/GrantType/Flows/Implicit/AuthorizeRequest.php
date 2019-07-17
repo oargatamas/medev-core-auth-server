@@ -9,6 +9,8 @@
 namespace MedevAuth\Services\Auth\OAuth\Actions\GrantType\Flows\Implicit;
 
 
+use Dflydev\FigCookies\FigResponseCookies;
+use Dflydev\FigCookies\SetCookie;
 use MedevAuth\Services\Auth\OAuth\Actions\Client\ValidateClient;
 use MedevAuth\Services\Auth\OAuth\Actions\GrantType\AccessGrant\GrantAccess;
 use MedevAuth\Services\Auth\OAuth\Actions\GrantType\Authorization\Authorization;
@@ -19,6 +21,8 @@ use Slim\Http\Response;
 
 class AuthorizeRequest extends Authorization
 {
+
+    const COOKIE_ACCESS_TOKEN = "X-MEDEV-TOKEN";
 
     private $scopes;
 
@@ -63,15 +67,25 @@ class AuthorizeRequest extends Authorization
 
         $accessToken->setExpiration(600);
 
-        $data = [
+        $tokens = [
             GrantAccess::ACCESS_TOKEN => $accessToken->finalizeToken(),
             GrantAccess::ACCESS_TOKEN_TYPE => "bearer",
             GrantAccess::EXPIRES_IN => $accessToken->getExpiration(),
         ];
 
-        $redirectUri = $this->client->getRedirectUri();
 
-        return  $response->withRedirect($redirectUri."?".http_build_query($data,"","&",PHP_QUERY_RFC3986));
+        $accessTokenCookie = SetCookie::create(self::COOKIE_ACCESS_TOKEN)
+            ->withValue($tokens[GrantAccess::ACCESS_TOKEN])
+            ->withHttpOnly(true)
+            ->withSecure(true)
+            ->withDomain($_SERVER["HTTP_HOST"])
+            ->withPath("/")
+            ->rememberForever();
+
+
+        $response = $response->withRedirect($this->client->getRedirectUri());
+
+        return  FigResponseCookies::set($response,$accessTokenCookie);
     }
 
 
