@@ -9,6 +9,7 @@
 namespace MedevAuth\Services\Auth\OAuth\APIProtection\Middleware;
 
 
+use MedevAuth\Services\Auth\OAuth\Actions\GrantType\AccessGrant\GrantAccess;
 use MedevAuth\Services\Auth\OAuth\Actions\Token\AccessToken\ParseAccessToken;
 use MedevAuth\Services\Auth\OAuth\Actions\Token\ValidateToken;
 use MedevSlim\Core\Logging\ComponentLogger;
@@ -48,12 +49,20 @@ class OAuthAPIProtector implements ComponentLogger
     public function __invoke(Request $request, Response $response, callable $next)
     {
         $this->info("Validating client access");
-        if (!$request->hasHeader("Authorization")) {
-            throw new UnauthorizedException("Authorization header not set");
+
+        if ($request->hasHeader("Authorization")) {
+            $this->info("Authorization data provided in request header. Extracting access token from request");
+            $accessTokenString = str_replace("Bearer ", "", $request->getHeader("Authorization")[0]);
+        }else{
+            $this->info("Authorization header not found. Extracting token from ".GrantAccess::COOKIE_ACCESS_TOKEN." cookie.");
+            $accessTokenString = $request->getCookieParam(GrantAccess::COOKIE_ACCESS_TOKEN,"");
         }
 
-        $this->info("Authorization data provided. Extracting access token from request");
-        $accessTokenString = str_replace("Bearer ", "", $request->getHeader("Authorization")[0]);
+        if(!$accessTokenString){
+            throw new UnauthorizedException("Authorization data not provided for the request.");
+        }
+
+
         $this->info("Access token: " . $accessTokenString);
 
 
