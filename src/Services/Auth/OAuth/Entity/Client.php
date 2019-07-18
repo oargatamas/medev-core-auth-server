@@ -18,6 +18,7 @@ class Client extends ScopedEntity
 {
     const TOKEN_AS_BODY = "req-body";
     const TOKEN_AS_COOKIE = "cookie";
+    const TOKEN_AS_URL = "url";
 
     /**
      * @var string

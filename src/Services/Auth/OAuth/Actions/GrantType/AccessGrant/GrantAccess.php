@@ -31,6 +31,8 @@ abstract class GrantAccess extends APIServlet
     const EXPIRES_IN = "expires_in";
     const REFRESH_TOKEN = "refresh_token";
 
+    const COOKIE_ACCESS_TOKEN = "X-MEDEV-TOKEN";
+
     /**
      * @var User
      */

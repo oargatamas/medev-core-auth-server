@@ -15,14 +15,18 @@ use MedevAuth\Services\Auth\OAuth\Actions\Client\ValidateClient;
 use MedevAuth\Services\Auth\OAuth\Actions\GrantType\AccessGrant\GrantAccess;
 use MedevAuth\Services\Auth\OAuth\Actions\GrantType\Authorization\Authorization;
 use MedevAuth\Services\Auth\OAuth\Actions\Token\AccessToken\GenerateAccessToken;
+use MedevAuth\Services\Auth\OAuth\Entity\Client;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\OAuthToken;
+use MedevAuth\Services\Auth\OAuth\OAuthService;
+use MedevSlim\Core\Service\Exceptions\InternalServerException;
+use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
 class AuthorizeRequest extends Authorization
 {
 
-    const COOKIE_ACCESS_TOKEN = "X-MEDEV-TOKEN";
+
 
     private $scopes;
 
@@ -54,6 +58,12 @@ class AuthorizeRequest extends Authorization
         ]);
     }
 
+    /**
+     * @param Response $response
+     * @param $args
+     * @return ResponseInterface|Response
+     * @throws InternalServerException
+     */
     public function buildSuccessResponse(Response $response, $args)
     {
         $this->info("Generating access token.");
@@ -67,26 +77,39 @@ class AuthorizeRequest extends Authorization
 
         $accessToken->setExpiration(600);
 
-        $tokens = [
+        $data = [
             GrantAccess::ACCESS_TOKEN => $accessToken->finalizeToken(),
             GrantAccess::ACCESS_TOKEN_TYPE => "bearer",
             GrantAccess::EXPIRES_IN => $accessToken->getExpiration(),
+            OAuthService::CSRF_TOKEN => "" //Todo implement logic behind
         ];
 
 
-        $accessTokenCookie = SetCookie::create(self::COOKIE_ACCESS_TOKEN)
-            ->withValue($tokens[GrantAccess::ACCESS_TOKEN])
+        switch ($this->client->getTokenPlace()){
+            case Client::TOKEN_AS_COOKIE : return $this->mapTokensToCookie($response,$data);
+            case Client::TOKEN_AS_URL : return $this->mapTokensToUrl($response,$data);
+            default : throw new InternalServerException("Token type '". $this->client->getTokenPlace() ."' not implemented for implicit grant.");
+        }
+    }
+
+
+    private function mapTokensToCookie(Response $response, $data){
+        $accessTokenCookie = SetCookie::create(GrantAccess::COOKIE_ACCESS_TOKEN)
+            ->withValue($data[GrantAccess::ACCESS_TOKEN])
             ->withHttpOnly(true)
             ->withSecure(true)
             ->withDomain($_SERVER["HTTP_HOST"])
             ->withPath("/")
             ->rememberForever();
 
+        $redirectUri = $this->client->getRedirectUri()."?".http_build_query($data[OAuthService::CSRF_TOKEN],"","&",PHP_QUERY_RFC3986);
 
-        $response = $response->withRedirect($this->client->getRedirectUri());
-
-        return  FigResponseCookies::set($response,$accessTokenCookie);
+        return  FigResponseCookies::set($response->withRedirect($redirectUri),$accessTokenCookie);
     }
 
+    private function mapTokensToUrl(Response $response, $data){
+        $redirectUri = $this->client->getRedirectUri()."?".http_build_query($data,"","&",PHP_QUERY_RFC3986);
 
+        return $response->withRedirect($redirectUri);
+    }
 }
