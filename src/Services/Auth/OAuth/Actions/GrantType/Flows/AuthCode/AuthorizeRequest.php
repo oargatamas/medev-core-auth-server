@@ -40,7 +40,7 @@ class AuthorizeRequest extends Authorization
     {
         $validateClient = new ValidateClient($this->service);
         $validateClient->handleRequest([
-            "client" => $this->client,
+            "client" => $this->client, //Todo move to constant
             "validate_secret" => false,
             "grant_type" => "authorization_code"
         ]);
@@ -62,9 +62,9 @@ class AuthorizeRequest extends Authorization
 
         $data = [
             "code" => $authCode->finalizeAuthCode(),
-            "state" => $this->csrfToken
+            "state" => $this->csrfToken //Todo move to constant
         ];
 
-        return $response->withRedirect($redirectUri."?".http_build_query($data,"","&",PHP_QUERY_RFC3986));
+        return $response->withRedirect($redirectUri."?".http_build_query($data,"","&",PHP_QUERY_RFC3986)); // Todo move to util function
     }
 }
