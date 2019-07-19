@@ -11,9 +11,7 @@ namespace MedevAuth\Services\Auth\OAuth\Actions\GrantType\Authorization;
 
 use MedevAuth\Services\Auth\IdentityProvider\IdentityService;
 use MedevAuth\Services\Auth\OAuth\Actions\Client\GetClientData;
-use MedevAuth\Services\Auth\OAuth\Entity\Client;
-use MedevAuth\Services\Auth\OAuth\Entity\User;
-use MedevSlim\Core\Action\Servlet\APIServlet;
+use MedevAuth\Services\Auth\OAuth\Actions\GrantType\OAuthRequest;
 use MedevSlim\Core\Application\MedevApp;
 use MedevSlim\Core\Service\APIService;
 use Slim\Http\Request;
@@ -24,23 +22,8 @@ use Slim\Interfaces\RouterInterface;
  * Class Authorization
  * @package MedevAuth\Services\Auth\OAuth\Actions\GrantType\Authorization
  */
-abstract class Authorization extends APIServlet
+abstract class Authorization extends OAuthRequest
 {
-
-    /**
-     * @var User
-     */
-    protected $user;
-    /**
-     * @var Client
-     */
-    protected $client;
-
-    /**
-     * @var string
-     */
-    protected $csrfToken;
-
     /**
      * @var RouterInterface
      */
@@ -58,6 +41,7 @@ abstract class Authorization extends APIServlet
 
     /**
      * @inheritDoc
+     * @throws \Exception
      */
     public function handleRequest(Request $request, Response $response, $args)
     {

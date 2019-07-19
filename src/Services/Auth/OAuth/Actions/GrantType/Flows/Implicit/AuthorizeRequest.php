@@ -9,8 +9,6 @@
 namespace MedevAuth\Services\Auth\OAuth\Actions\GrantType\Flows\Implicit;
 
 
-use Dflydev\FigCookies\FigResponseCookies;
-use Dflydev\FigCookies\SetCookie;
 use MedevAuth\Services\Auth\OAuth\Actions\Client\ValidateClient;
 use MedevAuth\Services\Auth\OAuth\Actions\GrantType\AccessGrant\GrantAccess;
 use MedevAuth\Services\Auth\OAuth\Actions\GrantType\Authorization\Authorization;
@@ -92,24 +90,4 @@ class AuthorizeRequest extends Authorization
         }
     }
 
-
-    private function mapTokensToCookie(Response $response, $data){
-        $accessTokenCookie = SetCookie::create(GrantAccess::COOKIE_ACCESS_TOKEN)
-            ->withValue($data[GrantAccess::ACCESS_TOKEN])
-            ->withHttpOnly(true)
-            ->withSecure(true)
-            ->withDomain($_SERVER["HTTP_HOST"])
-            ->withPath("/")
-            ->rememberForever();
-
-        $redirectUri = $this->client->getRedirectUri()."?".http_build_query($data[OAuthService::CSRF_TOKEN],"","&",PHP_QUERY_RFC3986);
-
-        return  FigResponseCookies::set($response->withRedirect($redirectUri),$accessTokenCookie);
-    }
-
-    private function mapTokensToUrl(Response $response, $data){
-        $redirectUri = $this->client->getRedirectUri()."?".http_build_query($data,"","&",PHP_QUERY_RFC3986);
-
-        return $response->withRedirect($redirectUri);
-    }
 }
