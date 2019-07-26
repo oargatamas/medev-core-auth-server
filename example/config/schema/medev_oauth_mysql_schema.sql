@@ -41,6 +41,7 @@ CREATE TABLE IF NOT EXISTS OAuth_Clients (
 	Secret VARCHAR(255), 
 	RedirectURI VARCHAR(255),
 	Status INT NOT NULL DEFAULT 0,
+	TokenPlace VARCHAR(10) NOT NULL DEFAULT 'req-body',
 	CreatedAt DATETIME,
 	UpdatedAt DATETIME,
 	PRIMARY KEY (Id)
