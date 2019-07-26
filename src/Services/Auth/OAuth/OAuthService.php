@@ -9,75 +9,55 @@
 namespace MedevAuth\Services\Auth\OAuth;
 
 
-
-use MedevAuth\Services\Auth\OAuth\Action\GrantAccess;
-use MedevAuth\Services\Auth\OAuth\GrantType\GrantType;
-use MedevSlim\Core\APIService\APIService;
-use MedevSlim\Core\APIService\Interfaces\ServiceConfiguration;
-use Psr\Container\ContainerInterface;
+use MedevAuth\Services\Auth\IdentityProvider\IdentityService;
+use MedevAuth\Services\Auth\OAuth\Actions\GrantType\AccessGrant\GrantAccessHandler;
+use MedevAuth\Services\Auth\OAuth\Actions\GrantType\AccessGrant\GrantFlowIdentifier;
+use MedevAuth\Services\Auth\OAuth\Actions\GrantType\Authorization\AuthorizationFlowIdentifier;
+use MedevAuth\Services\Auth\OAuth\Actions\GrantType\Authorization\AuthorizationHandler;
+use MedevSlim\Core\Application\MedevApp;
+use MedevSlim\Core\Service\APIService;
 use Slim\App;
-use Slim\Interfaces\RouteGroupInterface;
+
 
 class OAuthService extends APIService
 {
+    const ROUTE_AUTHORIZE = "authorize";
+    const ROUTE_TOKEN = "token";
 
-    /**
-     * @var GrantType[]
-     */
-    private $grantTypes;
+    const CSRF_TOKEN = "state";
 
-
-    /**
-     * OAuthService constructor.
-     * @param App $app
-     */
-    public function __construct(App $app)
+    public function __construct(MedevApp $app)
     {
-        $this->grantTypes = [];
         parent::__construct($app);
     }
 
 
     /**
+     * @return mixed
+     */
+    public function getServiceName()
+    {
+        return "AuthorizationService";
+    }
+
+    /**
      * @param App $app
-     * @param ContainerInterface $container
+     * @throws \Exception
      */
-    protected function registerRoutes(App $app, ContainerInterface $container)
+    protected function registerRoutes(App $app)
     {
-        $app->post("/token",new GrantAccess($container, $this));
+        //Todo consider to move it to another application
+        $idp = new IdentityService($this->application);
+        $idp->registerService("/idp");
+
+        $app->get("/authorize", new AuthorizationHandler($this))
+            ->add(new AuthorizationFlowIdentifier($this))
+            ->setArgument(APIService::SERVICE_ID,$this->getServiceName())
+            ->setName(self::ROUTE_AUTHORIZE);
+
+        $app->post("/token", new GrantAccessHandler($this))
+            ->add(new GrantFlowIdentifier($this))
+            ->setArgument(APIService::SERVICE_ID,$this->getServiceName())
+            ->setName(self::ROUTE_TOKEN);
     }
-
-    /**
-     * @param RouteGroupInterface $group
-     * @param ContainerInterface $container
-     */
-    protected function registerMiddlewares(RouteGroupInterface $group, ContainerInterface $container)
-    {
-        //No middleware needed for this service
-    }
-
-
-    /**
-     * @param GrantType $grantType
-     */
-    public function addGrantType(GrantType $grantType){
-        $this->grantTypes[$grantType->getName()] = $grantType;
-    }
-
-    /**
-     * @param string $grantType
-     * @return bool
-     */
-    public function hasGrantType($grantType = ""){
-        return isset($this->grantTypes[$grantType]);
-    }
-
-    /**
-     * @param $type
-     * @return GrantType
-     */
-    public function getGrantType($type){
-        return $this->grantTypes[$type];
-    }
-
 }

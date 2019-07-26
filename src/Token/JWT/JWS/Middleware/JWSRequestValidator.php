@@ -6,50 +6,51 @@
  * Time: 9:50
  */
 
-namespace MedevSuite\Application\Auth\OAuth\Token\JWT\Middleware;
+namespace MedevAuth\Token\JWT\JWS\Middleware;
 
-use Exception;
-use Lcobucci\JWT\Token\Parser;
-use MedevAuth\APIService\Exceptions\UnauthorizedException;
-use MedevAuth\Token\JWT\JWS\JWSValidator;
-use MedevSuite\Application\Auth\OAuth\Token\JWT\JWS\JWS;
-use MedevSuite\Application\Auth\OAuth\Token\JWT\JWS\JWSRepository;
+use MedevAuth\Token\JWT\JWS\Repository\JWSRepository;
+use MedevSlim\Core\APIService\Exceptions\UnauthorizedException;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
 
 class JWSRequestValidator
 {
+
+    /**
+     * @var JWSRepository
+     */
     private $jwsRepo;
 
-    public function __construct(JWSRepository $jwsRepository)
+    public function __construct(JWSRepository $repository)
     {
-        $this->jwsRepo = $jwsRepository;
+        $this->jwsRepo = $repository;
     }
 
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @param callable $next
+     * @return Response
+     * @throws UnauthorizedException
+     */
     public function __invoke(Request $request, Response $response, callable $next)
     {
-        try {
-            if (!$request->hasHeader("Authorization")) {
-                throw new Exception("Authorization header missing");
-            }
 
-            $tokenString = substr($request->getHeader("Authorization"), strlen("Bearer "));
-
-
-            $jws = $this->jwsRepo->validateToken($tokenString);
-
-            $request->withAttribute("token", $jws);
-            $request->withAttribute("scopes", $jws->getClaim("scopes"));
-
-            $response = $next($request, $response);
-            return $response;
-
-
-        } catch (\Exception $e) {
-            //Todo log error message before printing out the response with 401
-            throw new UnauthorizedException();
+        if (!$request->hasHeader("Authorization")) {
+            throw new UnauthorizedException("Authorization header missing");
         }
+
+        $tokenString = substr($request->getHeader("Authorization"), strlen("Bearer "));
+
+        //this will throw Exception if the token not valid.
+        $jws = $this->jwsRepo->validateSerializedToken($tokenString);
+
+        //$request->withAttribute("access_token", $jws); //Todo move key to static field
+        $request->withAttribute("scopes", $jws->getScopes()); //Todo move key to static field
+
+        $response = $next($request, $response);
+        return $response;
     }
 }
