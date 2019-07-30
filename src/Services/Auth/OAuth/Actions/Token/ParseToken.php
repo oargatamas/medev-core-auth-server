@@ -55,7 +55,7 @@ abstract class ParseToken extends APIRepositoryAction
         $user->setIdentifier($userClaim["id"]);
         $user->setEmail($userClaim["email"]);
 
-        $token = new OAuthJWS($jwt,$privateKey,$publicKey);
+        $token = new OAuthJWS($jwt,$publicKey,$privateKey);
 
         $token->setIdentifier($jwt->claims["jti"]);
         $token->setCreatedAt((new DateTime())->setTimestamp($jwt->claims["iat"]));

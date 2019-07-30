@@ -27,7 +27,7 @@ class OAuthJWS extends OAuthJWT
     protected $verificationKey;
 
 
-    public function __construct(JOSE_JWT $jwt, RSA $privateKey, RSA $publicKey)
+    public function __construct(JOSE_JWT $jwt, RSA $publicKey = null, RSA $privateKey = null)
     {
         $this->signingKey = $privateKey;
         $this->verificationKey = $publicKey;
