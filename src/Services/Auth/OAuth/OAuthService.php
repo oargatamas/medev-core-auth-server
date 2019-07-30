@@ -24,6 +24,7 @@ class OAuthService extends APIService
     const ROUTE_AUTHORIZE = "authorize";
     const ROUTE_TOKEN = "token";
 
+    const AUTH_TOKEN = "auth_token";
     const CSRF_TOKEN = "state";
 
     public function __construct(MedevApp $app)
