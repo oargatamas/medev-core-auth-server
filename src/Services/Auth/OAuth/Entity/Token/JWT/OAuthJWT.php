@@ -68,13 +68,23 @@ class OAuthJWT extends OAuthToken
 
     public function setClient(Client $client)
     {
-        $this->jwt->claims["cli"] = $client->getIdentifier();
+        $clientData = [
+            "id" => $client->getIdentifier(),
+            "name" => $client->getName(),
+            "redirectUri" => $client->getRedirectUri(),
+        ];
+        $this->jwt->claims["client"] = $clientData;
+
         parent::setClient($client);
     }
 
     public function setUser(User $user)
     {
-        $this->jwt->claims["usr"] = $user->getIdentifier();
+        $userData = [
+            "id" => $user->getIdentifier(),
+            "email" => $user->getEmail()
+        ];
+        $this->jwt->claims["user"] = $userData;
         parent::setUser($user);
     }
 
