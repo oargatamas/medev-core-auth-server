@@ -12,6 +12,7 @@ namespace MedevAuth\Services\Auth\OAuth\APIProtection\Middleware;
 use MedevAuth\Services\Auth\OAuth\Actions\GrantType\AccessGrant\GrantAccess;
 use MedevAuth\Services\Auth\OAuth\Actions\Token\AccessToken\ParseAccessToken;
 use MedevAuth\Services\Auth\OAuth\Actions\Token\ValidateToken;
+use MedevAuth\Services\Auth\OAuth\OAuthService;
 use MedevSlim\Core\Logging\ComponentLogger;
 use MedevSlim\Core\Service\APIService;
 use MedevSlim\Core\Service\Exceptions\UnauthorizedException;
@@ -73,7 +74,7 @@ class OAuthAPIProtector implements ComponentLogger
         $this->info("Enriching inbound request with access meta data.");
         $authorizedRequest = $request->withAttributes(
             [
-                "token" => $parsedToken
+                OAuthService::AUTH_TOKEN => $parsedToken
             ]
         );
 
