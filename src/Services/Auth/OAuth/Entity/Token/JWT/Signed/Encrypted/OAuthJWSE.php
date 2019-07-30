@@ -24,7 +24,13 @@ class OAuthJWSE extends OAuthJWS
      */
     protected $decryptionKey;
 
-    public function __construct(JOSE_JWT $jwt,RSA $publicKey = null, RSA $privateKey = null)
+    /**
+     * OAuthJWSE constructor.
+     * @param JOSE_JWT $jwt
+     * @param RSA|null $publicKey
+     * @param RSA|null $privateKey
+     */
+    public function __construct(JOSE_JWT $jwt, RSA $publicKey = null, RSA $privateKey = null)
     {
         $this->encryptionKey = $publicKey;
         $this->decryptionKey = $privateKey;

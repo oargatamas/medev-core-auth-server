@@ -43,17 +43,18 @@ abstract class ParseToken extends APIRepositoryAction
             $jwt = JOSE_JWT::decode($decryptedJwt);
         }
 
-        $clientClaim = $jwt->claims["client"];
-        $userClaim = $jwt->claims["user"];
+        $jwtClient = $jwt->claims["client"];
+        $jwtUser = $jwt->claims["user"];
 
         $client = new Client();
-        $client->setIdentifier($clientClaim["id"]);
-        $client->setName($clientClaim["name"]);
-        $client->setRedirectUri($clientClaim["redirectUri"]);
+        $client->setIdentifier($jwtClient->id);
+        $client->setName($jwtClient->name);
+        $client->setRedirectUri($jwtClient->redirectUri);
 
         $user = new User();
-        $user->setIdentifier($userClaim["id"]);
-        $user->setEmail($userClaim["email"]);
+        $user->setIdentifier($jwtUser->id);
+        $user->setUsername($jwtUser->username);
+        $user->setEmail($jwtUser->email);
 
         $token = new OAuthJWS($jwt,$publicKey,$privateKey);
 

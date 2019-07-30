@@ -82,6 +82,7 @@ class OAuthJWT extends OAuthToken
     {
         $userData = [
             "id" => $user->getIdentifier(),
+            "username" => $user->getUsername(),
             "email" => $user->getEmail()
         ];
         $this->jwt->claims["user"] = $userData;
