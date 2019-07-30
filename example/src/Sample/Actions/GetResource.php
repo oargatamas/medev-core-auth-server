@@ -9,6 +9,8 @@
 namespace MedevAuthExample\Sample\Actions;
 
 
+use MedevAuth\Services\Auth\OAuth\Entity\Token\OAuthToken;
+use MedevAuth\Services\Auth\OAuth\OAuthService;
 use MedevSlim\Core\Action\Servlet\APIServlet;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -24,12 +26,15 @@ class GetResource extends APIServlet
      */
     public function handleRequest(Request $request, Response $response, $args)
     {
+        /** @var OAuthToken $authToken */
+        $authToken = $request->getAttribute(OAuthService::AUTH_TOKEN);
+
         $data = [
             "status" => "success",
             "message" => "megy ez!",
-            "user" => $request->getAttribute("user_id"),
-            "client" => $request->getAttribute("client_id"),
-            "scopes" => $request->getAttribute("scopes")
+            "user" => $authToken->getUser(),
+            "client" => $authToken->getClient(),
+            "scopes" => $authToken->getScopes()
         ];
 
         return $response->withJson($data,200);

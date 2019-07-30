@@ -23,10 +23,7 @@ use Slim\Http\Response;
 
 class AuthorizeRequest extends Authorization
 {
-
-
-
-    private $scopes;
+    protected $scopes;
 
     public function isLoginRequired(Request $request, $args)
     {
