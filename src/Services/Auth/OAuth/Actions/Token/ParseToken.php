@@ -12,9 +12,9 @@ namespace MedevAuth\Services\Auth\OAuth\Actions\Token;
 use DateTime;
 use JOSE_JWE;
 use JOSE_JWT;
-use MedevAuth\Services\Auth\OAuth\Actions\Client\GetClientData;
-use MedevAuth\Services\Auth\OAuth\Actions\User\GetUserData;
+use MedevAuth\Services\Auth\OAuth\Entity\Client;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\JWT\Signed\OAuthJWS;
+use MedevAuth\Services\Auth\OAuth\Entity\User;
 use MedevAuth\Utils\CryptUtils;
 use MedevSlim\Core\Action\Repository\APIRepositoryAction;
 use MedevSlim\Core\Service\Exceptions\UnauthorizedException;
@@ -45,10 +45,17 @@ abstract class ParseToken extends APIRepositoryAction
             $jwt = JOSE_JWT::decode($decryptedJwt);
         }
 
+        $clientClaim = $jwt->claims["client"];
+        $userClaim = $jwt->claims["user"];
 
-        $client = (new GetClientData($this->service))->handleRequest(["client_id" => $jwt->claims["cli"]]);
-        $user = (new GetUserData($this->service))->handleRequest(["user_id" => $jwt->claims["usr"]]);;
+        $client = new Client();
+        $client->setIdentifier($clientClaim["id"]);
+        $client->setName($clientClaim["name"]);
+        $client->setRedirectUri($clientClaim["redirectUri"]);
 
+        $user = new User();
+        $user->setIdentifier($userClaim["id"]);
+        $user->setEmail($userClaim["email"]);
 
         $token = new OAuthJWS($jwt,$privateKey,$publicKey);
 
