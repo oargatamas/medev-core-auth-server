@@ -70,8 +70,6 @@ class AuthorizeRequest extends Authorization
         $action = new GenerateAccessToken($this->service);
         $accessToken = $action->handleRequest($tokenInfo);
 
-        $accessToken->setExpiration(600);
-
         $data = [
             GrantAccess::ACCESS_TOKEN => $accessToken->finalizeToken(),
             GrantAccess::ACCESS_TOKEN_TYPE => "bearer",
