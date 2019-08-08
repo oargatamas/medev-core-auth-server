@@ -9,7 +9,7 @@
     "collation": "utf8mb4_general_ci"
   },
   "authorization": {
-    "server" : "http://auth.medev.local",
+    "server" : "https://auth.medev.local",
     "session" : {
       "lifetime" : 360,
       "path" : "/",
