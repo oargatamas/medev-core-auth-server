@@ -72,11 +72,7 @@ class OAuthAPIProtector implements ComponentLogger
         (new ValidateToken($this->service))->handleRequest(["token" => $parsedToken]);
 
         $this->info("Enriching inbound request with access meta data.");
-        $authorizedRequest = $request->withAttributes(
-            [
-                OAuthService::AUTH_TOKEN => $parsedToken
-            ]
-        );
+        $authorizedRequest = $request->withAttribute(OAuthService::AUTH_TOKEN, $parsedToken);
 
         $this->info("Authorization successful. Sending request to next stage");
         return $next($authorizedRequest, $response);
