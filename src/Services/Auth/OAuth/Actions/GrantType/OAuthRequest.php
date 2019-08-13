@@ -10,7 +10,6 @@ namespace MedevAuth\Services\Auth\OAuth\Actions\GrantType;
 
 
 use Dflydev\FigCookies\FigResponseCookies;
-use Dflydev\FigCookies\Modifier\SameSite;
 use Dflydev\FigCookies\SetCookie;
 use MedevAuth\Services\Auth\OAuth\Entity\Client;
 use MedevAuth\Services\Auth\OAuth\Entity\User;
@@ -58,9 +57,8 @@ abstract class OAuthRequest extends APIServlet
             ->withValue($data[self::ACCESS_TOKEN])
             ->withHttpOnly(true)
             ->withSecure(true)
-            ->withDomain(UrlUtils::getTopLevelDomain($_SERVER["HTTP_HOST"]))
+            ->withDomain(".".UrlUtils::getTopLevelDomain($_SERVER["HTTP_HOST"]))
             ->withPath("/")
-            ->withSameSite(SameSite::lax())
             ->rememberForever();
 
         $redirectUri = $this->client->getRedirectUri()."?".http_build_query($data[OAuthService::CSRF_TOKEN],"","&",PHP_QUERY_RFC3986);
