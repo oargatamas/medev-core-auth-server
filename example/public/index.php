@@ -2,6 +2,7 @@
 
 
 use MedevAuth\Services\Auth\OAuth\OAuthService;
+use MedevAuth\Services\Auth\User\UserService;
 use MedevAuthExample\Sample\ProtectedResourceService;
 use MedevSlim\Core\View\TwigView;
 
@@ -16,6 +17,9 @@ TwigView::inject($container);
 
 $authServer = new OAuthService($application);
 $authServer->registerService("");
+
+$userService = new UserService($application);
+$userService->registerService("/users");
 
 
 $protectedService = new ProtectedResourceService($application);
