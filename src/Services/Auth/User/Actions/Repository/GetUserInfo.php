@@ -24,12 +24,12 @@ class GetUserInfo extends APIRepositoryAction
     public function handleRequest($args = [])
     {
         $storedData = $this->database->select(
-            User::getTableName(),
+            User::getTableName()."(u)",
             User::getColumnNames(),
             [
                 "AND" => [
-                    "Verified" => true,
-                    "Disabled" => false
+                    "u.Verified" => true,
+                    "u.Disabled" => false
                 ],
             ]
         );
