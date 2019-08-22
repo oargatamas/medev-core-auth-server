@@ -19,7 +19,7 @@ $authServer = new OAuthService($application);
 $authServer->registerService("");
 
 $userService = new UserService($application);
-$userService->registerService("/users");
+$userService->registerService("/user");
 
 
 $protectedService = new ProtectedResourceService($application);
