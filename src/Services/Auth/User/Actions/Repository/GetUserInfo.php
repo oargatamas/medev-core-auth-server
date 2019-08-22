@@ -42,6 +42,7 @@ class GetUserInfo extends APIRepositoryAction
         $users = [];
 
         foreach ($storedData as $record){
+            $record["UserScopes"] = "";
             $users[] = User::fromAssocArray($record);
         }
 
