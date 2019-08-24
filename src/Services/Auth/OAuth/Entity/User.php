@@ -40,6 +40,11 @@ class User extends ScopedEntity implements \JsonSerializable
     private $verified;
 
     /**
+     * @var bool
+     */
+    private $isLoggedIn;
+
+    /**
      * @return bool
      */
     public function isDisabled()
@@ -126,6 +131,24 @@ class User extends ScopedEntity implements \JsonSerializable
         $this->lastName = $lastName;
     }
 
+    /**
+     * @return bool
+     */
+    public function isLoggedIn()
+    {
+        return $this->isLoggedIn;
+    }
+
+    /**
+     * @param bool $isLoggedIn
+     */
+    public function setLoggedIn($isLoggedIn)
+    {
+        $this->isLoggedIn = $isLoggedIn;
+    }
+
+
+
 
 
     /**
@@ -142,7 +165,8 @@ class User extends ScopedEntity implements \JsonSerializable
             "firstName" => $this->getFirstName(),
             "lastName" => $this->getLastName(),
             "username" => $this->getUsername(),
-            "email" => $this->getEmail()
+            "email" => $this->getEmail(),
+            "loggedIn" => $this->isLoggedIn(),
         ];
     }
 }
