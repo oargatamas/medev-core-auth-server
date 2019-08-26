@@ -20,6 +20,16 @@ class User extends ScopedEntity implements \JsonSerializable
      * @var string
      */
     private $email;
+
+    /**
+     * @var string
+     */
+    private $firstName;
+
+    /**
+     * @var string
+     */
+    private $lastName;
     /**
      * @var bool
      */
@@ -28,6 +38,11 @@ class User extends ScopedEntity implements \JsonSerializable
      * @var bool
      */
     private $verified;
+
+    /**
+     * @var bool
+     */
+    private $isLoggedIn;
 
     /**
      * @return bool
@@ -85,6 +100,58 @@ class User extends ScopedEntity implements \JsonSerializable
     }
 
     /**
+     * @return string
+     */
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * @param string $firstName
+     */
+    public function setFirstName($firstName)
+    {
+        $this->firstName = $firstName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
+
+    /**
+     * @param string $lastName
+     */
+    public function setLastName($lastName)
+    {
+        $this->lastName = $lastName;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isLoggedIn()
+    {
+        return $this->isLoggedIn;
+    }
+
+    /**
+     * @param bool $isLoggedIn
+     */
+    public function setLoggedIn($isLoggedIn)
+    {
+        $this->isLoggedIn = $isLoggedIn;
+    }
+
+
+
+
+
+    /**
      * Specify data which should be serialized to JSON
      * @link https://php.net/manual/en/jsonserializable.jsonserialize.php
      * @return mixed data which can be serialized by <b>json_encode</b>,
@@ -95,8 +162,11 @@ class User extends ScopedEntity implements \JsonSerializable
     {
         return [
             "id" => $this->getIdentifier(),
+            "firstName" => $this->getFirstName(),
+            "lastName" => $this->getLastName(),
             "username" => $this->getUsername(),
-            "email" => $this->getEmail()
+            "email" => $this->getEmail(),
+            "loggedIn" => $this->isLoggedIn(),
         ];
     }
 }

@@ -14,6 +14,7 @@ use Dflydev\FigCookies\SetCookie;
 use MedevAuth\Services\Auth\OAuth\Entity\Client;
 use MedevAuth\Services\Auth\OAuth\Entity\User;
 use MedevAuth\Services\Auth\OAuth\OAuthService;
+use MedevAuth\Utils\UrlUtils;
 use MedevSlim\Core\Action\Servlet\APIServlet;
 use MedevSlim\Core\Service\APIService;
 use Slim\Http\Response;
@@ -56,7 +57,7 @@ abstract class OAuthRequest extends APIServlet
             ->withValue($data[self::ACCESS_TOKEN])
             ->withHttpOnly(true)
             ->withSecure(true)
-            ->withDomain($_SERVER["HTTP_HOST"])
+            ->withDomain(".".UrlUtils::getTopLevelDomain($_SERVER["HTTP_HOST"]))
             ->withPath("/")
             ->rememberForever();
 

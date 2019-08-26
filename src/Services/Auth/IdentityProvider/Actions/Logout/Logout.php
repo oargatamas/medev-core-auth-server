@@ -9,6 +9,10 @@
 namespace MedevAuth\Services\Auth\IdentityProvider\Actions\Logout;
 
 
+use Dflydev\FigCookies\FigResponseCookies;
+use Dflydev\FigCookies\SetCookie;
+use MedevAuth\Services\Auth\OAuth\Actions\GrantType\OAuthRequest;
+use MedevAuth\Utils\UrlUtils;
 use MedevSlim\Core\Action\Servlet\APIServlet;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -20,15 +24,21 @@ class Logout extends APIServlet
      * @param Request $request
      * @param Response $response
      * @param $args
-     * @return Response
+     * @return \Psr\Http\Message\ResponseInterface
      */
     public function handleRequest(Request $request, Response $response, $args)
     {
         session_destroy();
 
-        //Todo implement functionality which invalidates the access and refresh tokens for the related user
+        $invalidAccessTokenCookie = SetCookie::create(OAuthRequest::COOKIE_ACCESS_TOKEN)
+            ->withValue("")
+            ->withHttpOnly(true)
+            ->withSecure(true)
+            ->withDomain(".".UrlUtils::getTopLevelDomain($_SERVER["HTTP_HOST"]))
+            ->withPath("/")
+            ->expire();
 
-        return $response;
+        return FigResponseCookies::set($response,$invalidAccessTokenCookie);
     }
 
 
