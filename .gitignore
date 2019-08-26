@@ -1,5 +1,6 @@
 /vendor
 /log
 composer.phar
+/build
 /.idea
 /_ide_helper.php
