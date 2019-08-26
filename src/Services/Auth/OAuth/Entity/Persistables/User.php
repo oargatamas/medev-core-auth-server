@@ -24,6 +24,8 @@ class User implements MedooPersistable
         $user->setIdentifier($storedData["UserId"]);
         $user->setUsername($storedData["UserName"]);
         $user->setEmail($storedData["UserEmail"]);
+        $user->setFirstName($storedData["UserFirstName"]);
+        $user->setLastName($storedData["UserLastName"]);
         $user->setDisabled($storedData["UserDisabled"]);
         $user->setVerified($storedData["UserVerified"]);
         $user->setScopes(explode(",",$storedData["UserScopes"]));

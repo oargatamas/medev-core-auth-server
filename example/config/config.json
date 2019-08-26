@@ -8,8 +8,12 @@
     "charset": "utf8mb4",
     "collation": "utf8mb4_general_ci"
   },
+  "cors" : {
+    "allowed_origins" : ["https://auth.medev.local"],
+    "allowed_headers" : ["Content-Type","Accept","Origin"]
+  },
   "authorization": {
-    "server" : "https://auth.medev.local",
+    "host" : "auth.medev.local",
     "session" : {
       "lifetime" : 360,
       "path" : "/",
