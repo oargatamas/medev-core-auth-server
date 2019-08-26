@@ -52,6 +52,7 @@ class SendForgotPasswordMail extends APIRepositoryAction
         /** @var AuthCode $authCode */
         $authCode = $args[AuthCode::IDENTIFIER];
         $user = $authCode->getUser();
+        $authConfig= $this->config["authorization"];
 
         $mail = new PHPMailer(true);
 
@@ -64,7 +65,7 @@ class SendForgotPasswordMail extends APIRepositoryAction
         $mail->Subject = "MedevServices - Elfelejtett jelszó"; // Todo integrate with localization string
 
         $params = ["token" => $authCode->finalizeAuthCode()];
-        $changePwUrl = "https://auth.medev.local".$this->router->pathFor(IdentityService::ROUTE_PASSWORD_RECOVERY,[],$params);
+        $changePwUrl = "https://".$authConfig["host"].$this->router->pathFor(IdentityService::ROUTE_PASSWORD_RECOVERY,[],$params);
 
         $mailData = [
             "username" => $user->getUsername(),

@@ -25,11 +25,13 @@ class RenderChangePassword extends APITwigServlet
      */
     public function handleRequest(Request $request, Response $response, $args)
     {
+        $urlBase = $request->getServerParam("REQUEST_SCHEME")."://".$request->getServerParam("SERVER_NAME");
+
         $params = [
             "service" => $this->service->getServiceName(),
-            "changeUrl" => "https://auth.medev.local".$this->router->pathFor(IdentityService::ROUTE_PASSWORD_RECOVERY),
-            "loginUrl" => "https://auth.medev.local".$this->router->pathFor(IdentityService::ROUTE_LOGIN),
-            "forgotUrl" => "https://auth.medev.local".$this->router->pathFor(IdentityService::ROUTE_FORGOT_PASSWORD),
+            "changeUrl" => $urlBase.$this->router->pathFor(IdentityService::ROUTE_PASSWORD_RECOVERY),
+            "loginUrl" => $urlBase.$this->router->pathFor(IdentityService::ROUTE_LOGIN),
+            "forgotUrl" => $urlBase.$this->router->pathFor(IdentityService::ROUTE_FORGOT_PASSWORD),
             "token" => $request->getParam("token")
         ];
         return $this->render($response,"ChangePassword.twig",$params);
