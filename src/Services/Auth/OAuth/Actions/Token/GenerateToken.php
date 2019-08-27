@@ -42,7 +42,7 @@ abstract class GenerateToken extends APIRepositoryAction
         /** @var RSA $verificationKey */
         $publicKey = CryptUtils::getRSAKeyFromConfig($tokenConfig["public_key"]);
         /** @var OAuthJWSE $token */
-        $token = new OAuthJWSE(new JOSE_JWT(),$privateKey,$publicKey);
+        $token = new OAuthJWSE(new JOSE_JWT(),$publicKey,$privateKey);
 
         $expiration = $args[OAuthToken::EXPIRATION];
 

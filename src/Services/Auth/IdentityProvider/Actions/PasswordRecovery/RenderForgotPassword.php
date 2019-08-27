@@ -27,7 +27,8 @@ class RenderForgotPassword extends APITwigServlet
     {
         $data = [
             "service" => $this->service->getServiceName(),
-            "forgot_url" => $this->router->pathFor(IdentityService::ROUTE_FORGOT_PASSWORD)
+            "loginUrl" => $this->router->pathFor(IdentityService::ROUTE_LOGIN),
+            "forgotUrl" => $this->router->pathFor(IdentityService::ROUTE_FORGOT_PASSWORD)
         ];
         return $this->render($response,"ForgotPassword.twig",$data);
     }

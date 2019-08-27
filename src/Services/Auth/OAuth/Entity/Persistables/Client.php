@@ -27,6 +27,7 @@ class Client implements MedooPersistable
         $client->setName($storedData["ClientName"]);
         $client->setSecret($storedData["ClientSecret"]);
         $client->setRedirectUri($storedData["ClientRedirect"]);
+        $client->setTokenPlace($storedData["ClientTokenPlace"]);
         $client->setScopes(explode(",", $storedData["ClientScopes"]));
         $client->setGrantTypes(explode(",", $storedData["ClientGrantTypes"]));
 
@@ -51,6 +52,7 @@ class Client implements MedooPersistable
             "ClientName" => Medoo::raw("<c.Name>"),
             "ClientSecret" => Medoo::raw("<c.Secret>"),
             "ClientRedirect" => Medoo::raw("<c.RedirectURI>"),
+            "ClientTokenPlace" => Medoo::raw("<c.TokenPlace>"),
             "ClientStatus" => Medoo::raw("<c.Status>"),
             "ClientCreated" => Medoo::raw("<c.CreatedAt>"),
             "ClientUpdated" => Medoo::raw("<c.UpdatedAt>")

@@ -36,6 +36,7 @@ class AuthorizationFlowIdentifier extends RequestValidator
 
     /**
      * @inheritDoc
+     * @throws \Exception
      */
     public function __invoke(Request $request, Response $response, callable $next)
     {

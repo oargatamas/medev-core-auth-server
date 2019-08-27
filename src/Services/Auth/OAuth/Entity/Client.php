@@ -14,8 +14,11 @@ namespace MedevAuth\Services\Auth\OAuth\Entity;
  * Class Client
  * @package MedevAuth\Services\Auth\OAuth\Entity
  */
-class Client extends ScopedEntity
+class Client extends ScopedEntity implements \JsonSerializable
 {
+    const TOKEN_AS_BODY = "req-body";
+    const TOKEN_AS_COOKIE = "cookie";
+    const TOKEN_AS_URL = "url";
 
     /**
      * @var string
@@ -33,6 +36,11 @@ class Client extends ScopedEntity
      * @var string[]
      */
     private $grantTypes;
+
+    /**
+     * @var string
+     */
+    private $tokenPlace;
 
     /**
      * @return string
@@ -93,5 +101,36 @@ class Client extends ScopedEntity
         return in_array($grantType,$this->grantTypes);
     }
 
+    /**
+     * @return string
+     */
+    public function getTokenPlace()
+    {
+        return $this->tokenPlace;
+    }
 
+    /**
+     * @param string $tokenPlace
+     */
+    public function setTokenPlace(string $tokenPlace)
+    {
+        $this->tokenPlace = $tokenPlace;
+    }
+
+
+    /**
+     * Specify data which should be serialized to JSON
+     * @link https://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     * @since 5.4.0
+     */
+    public function jsonSerialize()
+    {
+        return [
+            "id" => $this->getIdentifier(),
+            "name" => $this->getName(),
+            "redirectUri" => $this->getRedirectUri(),
+        ];
+    }
 }

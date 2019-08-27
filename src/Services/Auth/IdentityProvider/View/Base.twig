@@ -38,7 +38,15 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.5/js/mdb.min.js"></script>
 
 {% block scripts %}
-
+    <script>
+        function toggleSpinner(visible){
+            if(visible){
+                $("button").prop('disabled', true);
+            }else{
+                $("button").prop('disabled', false);
+            }
+        }
+    </script>
 {% endblock %}
 
 

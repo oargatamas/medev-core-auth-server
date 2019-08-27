@@ -2,20 +2,21 @@
 /**
  * Created by PhpStorm.
  * User: OargaTamas
- * Date: 2019. 03. 06.
- * Time: 14:19
+ * Date: 2019. 08. 19.
+ * Time: 15:46
  */
 
-namespace MedevAuthExample\Sample\Actions;
+namespace MedevAuth\Services\Auth\User\Actions\Api;
 
 
 use MedevAuth\Services\Auth\OAuth\Entity\Token\OAuthToken;
 use MedevAuth\Services\Auth\OAuth\OAuthService;
+use MedevAuth\Services\Auth\User\Actions\Repository\GetUserInfo;
 use MedevSlim\Core\Action\Servlet\APIServlet;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-class GetResource extends APIServlet
+class UserInfo extends APIServlet
 {
 
     /**
@@ -23,19 +24,19 @@ class GetResource extends APIServlet
      * @param Response $response
      * @param $args
      * @return Response
+     * @throws \Exception
      */
     public function handleRequest(Request $request, Response $response, $args)
     {
         /** @var OAuthToken $authToken */
         $authToken = $request->getAttribute(OAuthService::AUTH_TOKEN);
+        $getUsers = new GetUserInfo($this->service);
 
-        $data = [
-            "status" => "success",
-            "message" => "megy ez!",
-            "user" => $authToken->getUser(),
-            "client" => $authToken->getClient(),
-            "scopes" => $authToken->getScopes()
-        ];
+        $data = $getUsers->handleRequest();
+
+        foreach ($data as $user){
+            $user->setLoggedIn($user->getIdentifier() === $authToken->getUser()->getIdentifier());
+        }
 
         return $response->withJson($data,200);
     }

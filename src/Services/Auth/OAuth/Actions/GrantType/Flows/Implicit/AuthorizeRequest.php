@@ -13,14 +13,17 @@ use MedevAuth\Services\Auth\OAuth\Actions\Client\ValidateClient;
 use MedevAuth\Services\Auth\OAuth\Actions\GrantType\AccessGrant\GrantAccess;
 use MedevAuth\Services\Auth\OAuth\Actions\GrantType\Authorization\Authorization;
 use MedevAuth\Services\Auth\OAuth\Actions\Token\AccessToken\GenerateAccessToken;
+use MedevAuth\Services\Auth\OAuth\Entity\Client;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\OAuthToken;
+use MedevAuth\Services\Auth\OAuth\OAuthService;
+use MedevSlim\Core\Service\Exceptions\InternalServerException;
+use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
 class AuthorizeRequest extends Authorization
 {
-
-    private $scopes;
+    protected $scopes;
 
     public function isLoginRequired(Request $request, $args)
     {
@@ -50,6 +53,12 @@ class AuthorizeRequest extends Authorization
         ]);
     }
 
+    /**
+     * @param Response $response
+     * @param $args
+     * @return ResponseInterface|Response
+     * @throws InternalServerException
+     */
     public function buildSuccessResponse(Response $response, $args)
     {
         $this->info("Generating access token.");
@@ -61,18 +70,19 @@ class AuthorizeRequest extends Authorization
         $action = new GenerateAccessToken($this->service);
         $accessToken = $action->handleRequest($tokenInfo);
 
-        $accessToken->setExpiration(600);
-
         $data = [
             GrantAccess::ACCESS_TOKEN => $accessToken->finalizeToken(),
             GrantAccess::ACCESS_TOKEN_TYPE => "bearer",
             GrantAccess::EXPIRES_IN => $accessToken->getExpiration(),
+            OAuthService::CSRF_TOKEN => "" //Todo implement logic behind
         ];
 
-        $redirectUri = $this->client->getRedirectUri();
 
-        return  $response->withRedirect($redirectUri."?".http_build_query($data,"","&",PHP_QUERY_RFC3986));
+        switch ($this->client->getTokenPlace()){
+            case Client::TOKEN_AS_COOKIE : return $this->mapTokensToCookie($response,$data);
+            case Client::TOKEN_AS_URL : return $this->mapTokensToUrl($response,$data);
+            default : throw new InternalServerException("Token type '". $this->client->getTokenPlace() ."' not implemented for implicit grant.");
+        }
     }
-
 
 }

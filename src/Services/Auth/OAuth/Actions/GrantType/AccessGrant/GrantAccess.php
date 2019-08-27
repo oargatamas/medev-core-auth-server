@@ -11,10 +11,10 @@ namespace MedevAuth\Services\Auth\OAuth\Actions\GrantType\AccessGrant;
 
 use MedevAuth\Services\Auth\OAuth\Actions\Client\GetClientData;
 use MedevAuth\Services\Auth\OAuth\Actions\Client\ValidateClient;
+use MedevAuth\Services\Auth\OAuth\Actions\GrantType\OAuthRequest;
 use MedevAuth\Services\Auth\OAuth\Entity\Client;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\OAuthToken;
-use MedevAuth\Services\Auth\OAuth\Entity\User;
-use MedevSlim\Core\Action\Servlet\APIServlet;
+use MedevSlim\Core\Service\Exceptions\InternalServerException;
 use MedevSlim\Core\Service\Exceptions\UnauthorizedException;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -24,26 +24,8 @@ use Slim\Http\Response;
  * @inheritdoc
  * @package MedevAuth\Services\Auth\OAuth\Actions\GrantType
  */
-abstract class GrantAccess extends APIServlet
+abstract class GrantAccess extends OAuthRequest
 {
-    const ACCESS_TOKEN = "access_token";
-    const ACCESS_TOKEN_TYPE = "token_type";
-    const EXPIRES_IN = "expires_in";
-    const REFRESH_TOKEN = "refresh_token";
-
-    /**
-     * @var User
-     */
-    protected $user;
-    /**
-     * @var Client
-     */
-    protected $client;
-    /**
-     * @var string[]
-     */
-    protected $scopes;
-
     /**
      * @param Request $request
      * @param Response $response
@@ -72,7 +54,12 @@ abstract class GrantAccess extends APIServlet
 
         $this->invalidateAuthData();
 
-        return $response->withJson($data, 200);
+        switch ($this->client->getTokenPlace()){
+            case Client::TOKEN_AS_COOKIE : return $this->mapTokensToCookie($response,$data);
+            case Client::TOKEN_AS_URL : return $this->mapTokensToUrl($response,$data);
+            case Client::TOKEN_AS_BODY : return $this->mapTokensToRequestBody($response,$data);
+            default : throw new InternalServerException("Token type '". $this->client->getTokenPlace() ."' not implemented.");
+        }
     }
 
 
