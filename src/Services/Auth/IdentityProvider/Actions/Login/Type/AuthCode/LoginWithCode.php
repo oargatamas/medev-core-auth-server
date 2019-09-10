@@ -47,7 +47,7 @@ class LoginWithCode extends APIServlet
             $this->error($e->__toString());
             $errorParams = [
                 "opened_at" => Login::AUTHCODE,
-                "error" => "Invalid or expired token." //Todo integrate it with the localisation framework
+                "error" => "Invalid or expired code." //Todo integrate it with the localisation framework
             ];
             $loginUrl = $this->router->pathFor(IdentityService::ROUTE_LOGIN,[],$errorParams);
             return $response->withRedirect($loginUrl);

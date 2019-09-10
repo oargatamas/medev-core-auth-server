@@ -24,6 +24,7 @@ class GetAuthCodeData extends APIRepositoryAction
     /**
      * @param $args
      * @return Entity\AuthCode
+     * @throws UnauthorizedException
      * @throws \Exception
      */
     public function handleRequest($args = [])
