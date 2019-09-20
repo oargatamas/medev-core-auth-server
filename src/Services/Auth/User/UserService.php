@@ -11,7 +11,7 @@ namespace MedevAuth\Services\Auth\User;
 
 use MedevAuth\Services\Auth\OAuth\APIProtection\Service\OAuthProtectedAPIService;
 use MedevAuth\Services\Auth\User\Actions\Api\UserInfo;
-use MedevAuth\Services\Auth\User\Actions\Api\UserReqistration;
+use MedevAuth\Services\Auth\User\Actions\Api\UserRegistration;
 use MedevSlim\Core\Action\Middleware\ReCaptchaValidator;
 use MedevSlim\Core\Action\Middleware\RequestValidator;
 use MedevSlim\Core\Action\Middleware\ScopeValidator;
@@ -33,11 +33,11 @@ class UserService extends OAuthProtectedAPIService
             ->setArgument(APIService::SERVICE_ID,$this->getServiceName())
             ->setName(self::ROUTE_USER_INFO);
 
-        $app->post("/register", new UserReqistration($this))
+        $app->post("/register", new UserRegistration($this))
             ->setArgument(APIService::SERVICE_ID,$this->getServiceName())
             ->add(new ReCaptchaValidator($this->application))
-            ->add(new RequestValidator(UserReqistration::getParams()))
-            ->add(new ScopeValidator(UserReqistration::getScopes()))
+            ->add(new RequestValidator(UserRegistration::getParams()))
+            ->add(new ScopeValidator(UserRegistration::getScopes()))
             ->setName(self::ROUTE_REGISTER);
     }
 }
