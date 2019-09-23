@@ -15,6 +15,7 @@ use MedevAuth\Services\Auth\User\Actions\Api\VerifyRegistration;
 use MedevSlim\Core\Action\Middleware\ReCaptchaValidator;
 use MedevSlim\Core\Action\Middleware\RequestValidator;
 use MedevSlim\Core\Action\Middleware\ScopeValidator;
+use MedevSlim\Core\Application\MedevApp;
 use MedevSlim\Core\Service\APIService;
 use MedevSlim\Core\Service\View\TwigAPIService;
 use Slim\App;
@@ -31,14 +32,16 @@ class UserService extends TwigAPIService
      */
     protected function registerRoutes(App $app)
     {
-        $app->group("/",function () use ($app){
-            $app->get("/info", new UserInfo($this))
-                ->setArgument(APIService::SERVICE_ID,$this->getServiceName())
+        $service = $this;
+        /** @var MedevApp $app */
+        $app->group("/",function () use ($app,$service){
+            $app->get("/info", new UserInfo($service))
+                ->setArgument(APIService::SERVICE_ID,$service->getServiceName())
                 ->setName(self::ROUTE_USER_INFO);
 
-            $app->post("/register", new UserRegistration($this))
-                ->setArgument(APIService::SERVICE_ID,$this->getServiceName())
-                ->add(new ReCaptchaValidator($this->application))
+            $app->post("/register", new UserRegistration($service))
+                ->setArgument(APIService::SERVICE_ID,$service->getServiceName())
+                ->add(new ReCaptchaValidator($app))
                 ->add(new RequestValidator(UserRegistration::getParams()))
                 ->add(new ScopeValidator(UserRegistration::getScopes()))
                 ->setName(self::ROUTE_REGISTER);
