@@ -8,7 +8,7 @@
 
 namespace MedevAuth\Services\Auth\User;
 
-use MedevAuth\Services\Auth\OAuth\APIProtection\Service\OAuthProtectedTwigAPIService;
+use MedevAuth\Services\Auth\OAuth\APIProtection\Middleware\OAuthAPIProtector;
 use MedevAuth\Services\Auth\User\Actions\Api\UserInfo;
 use MedevAuth\Services\Auth\User\Actions\Api\UserRegistration;
 use MedevAuth\Services\Auth\User\Actions\Api\VerifyRegistration;
@@ -16,9 +16,10 @@ use MedevSlim\Core\Action\Middleware\ReCaptchaValidator;
 use MedevSlim\Core\Action\Middleware\RequestValidator;
 use MedevSlim\Core\Action\Middleware\ScopeValidator;
 use MedevSlim\Core\Service\APIService;
+use MedevSlim\Core\Service\View\TwigAPIService;
 use Slim\App;
 
-class UserService extends OAuthProtectedTwigAPIService
+class UserService extends TwigAPIService
 {
     const ROUTE_USER_INFO = "userInfo";
     const ROUTE_REGISTER = "userRegistration";
@@ -30,16 +31,19 @@ class UserService extends OAuthProtectedTwigAPIService
      */
     protected function registerRoutes(App $app)
     {
-        $app->get("/info", new UserInfo($this))
-            ->setArgument(APIService::SERVICE_ID,$this->getServiceName())
-            ->setName(self::ROUTE_USER_INFO);
+        $app->group("/",function () use ($app){
+            $app->get("/info", new UserInfo($this))
+                ->setArgument(APIService::SERVICE_ID,$this->getServiceName())
+                ->setName(self::ROUTE_USER_INFO);
 
-        $app->post("/register", new UserRegistration($this))
-            ->setArgument(APIService::SERVICE_ID,$this->getServiceName())
-            ->add(new ReCaptchaValidator($this->application))
-            ->add(new RequestValidator(UserRegistration::getParams()))
-            ->add(new ScopeValidator(UserRegistration::getScopes()))
-            ->setName(self::ROUTE_REGISTER);
+            $app->post("/register", new UserRegistration($this))
+                ->setArgument(APIService::SERVICE_ID,$this->getServiceName())
+                ->add(new ReCaptchaValidator($this->application))
+                ->add(new RequestValidator(UserRegistration::getParams()))
+                ->add(new ScopeValidator(UserRegistration::getScopes()))
+                ->setName(self::ROUTE_REGISTER);
+        })->add(new OAuthAPIProtector($this));
+
 
         $app->get("/verify", new VerifyRegistration($this))
             ->setArgument(APIService::SERVICE_ID,$this->getServiceName())
