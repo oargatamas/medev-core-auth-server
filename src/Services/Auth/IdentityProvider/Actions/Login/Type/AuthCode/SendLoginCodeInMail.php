@@ -57,7 +57,7 @@ class SendLoginCodeInMail extends APIRepositoryAction
 
         $mail->isHTML(true);
         $mail->CharSet = "UTF-8";
-        $mail->Subject = "MedevServices - Ideiglenes jelszó"; //Todo integrate with localization string
+        $mail->Subject = "MedevServices - Authorization code"; //Todo integrate with localization string
 
 
         $mailData = [
