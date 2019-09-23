@@ -9,12 +9,16 @@
 namespace MedevAuth\Services\Auth\User\Actions\Api;
 
 
+use MedevAuth\Services\Auth\OAuth\Actions\AuthCode\GenerateAuthCode;
+use MedevAuth\Services\Auth\OAuth\Entity\AuthCode;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\OAuthToken;
 use MedevAuth\Services\Auth\OAuth\Entity\User;
 use MedevAuth\Services\Auth\OAuth\OAuthService;
 use MedevAuth\Services\Auth\User\Actions\Repository\AddUser;
+use MedevAuth\Services\Auth\User\Actions\Repository\Registration\SendVerificationMail;
 use MedevAuth\Services\Auth\User\UserServiceScopes;
 use MedevSlim\Core\Action\Servlet\APIServlet;
+use MedevSlim\Core\Service\View\TwigAPIService;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -47,7 +51,24 @@ class UserRegistration extends APIServlet
             AddUser::PASSWORD => $request->getParam("password")
         ]);
 
-        return $response->withJson("User ".$user->getUsername()." registered.",201);
+
+        $getAuthCode = new GenerateAuthCode($this->service);
+
+        $authCode = $getAuthCode->handleRequest([
+            AuthCode::USER => $authToken->getUser(),
+            AuthCode::CLIENT => $authToken->getClient(),
+            AuthCode::EXPIRATION => 600
+        ]);
+
+        /** @var TwigAPIService $service */
+        $service = $this->service;
+        (new SendVerificationMail($service))->handleRequest([
+            SendVerificationMail::USER => $user,
+            SendVerificationMail::VERIFICATION_TOKEN => $authCode->finalizeAuthCode()
+        ]);
+
+
+        return $response->withJson("User " . $user->getUsername() . " registered. Verification mail sent to registered email.", 201);
     }
 
     static function getScopes()
