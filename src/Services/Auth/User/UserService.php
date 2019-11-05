@@ -33,6 +33,7 @@ class UserService extends TwigAPIService
     protected function registerRoutes(App $app)
     {
         $service = $this;
+
         /** @var MedevApp $app */
         $app->group("/",function () use ($app,$service){
             $app->get("/info", new UserInfo($service))
