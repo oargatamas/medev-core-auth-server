@@ -34,10 +34,12 @@ class RequestLoginCode extends APIServlet
         $getUser = new GetUserData($this->service);
         $getClient = new GetClientData($this->service);
 
+        $client = $getClient->handleRequest(["client_id" => "hu.medev.auth"]); // Todo move to constant
+        $client->setRedirectUri($_SESSION["AuthParams"]["redirect_uri"] ?? $client->getRedirectUri());
+
         $codeParams = [
             AuthCode::USER => $getUser->handleRequest(["user_id" => $request->getParam("usermail")]),  // Todo move to constant
-            AuthCode::CLIENT => $getClient->handleRequest(["client_id" => "hu.medev.auth"]),                // Todo move to constant
-            AuthCode::REDIRECT_URI => $_SESSION["AuthParams"]["redirect_uri"] ?? null,
+            AuthCode::CLIENT => $client,
             AuthCode::EXPIRATION => 600
         ];
         $authCode  = (new GenerateAuthCode($this->service))->handleRequest($codeParams);
