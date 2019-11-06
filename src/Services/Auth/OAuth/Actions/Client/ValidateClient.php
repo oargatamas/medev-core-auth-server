@@ -33,6 +33,13 @@ class ValidateClient extends APIRepositoryAction
             ["Id" => $client->getIdentifier()]
         );
 
+        $clientURIHost = parse_url($client->getRedirectUri(),PHP_URL_HOST);
+        $storedURIHost = parse_url($storedData["RedirectURI"],PHP_URL_HOST);
+
+        if($clientURIHost !== $storedURIHost){
+            throw new UnauthorizedException("Client URL hosts do not match! Stored uri: " .$storedData["RedirectURI"]. ", received uri: ".$client->getRedirectUri());
+        }
+
         if(!$storedData || empty($storedData) || is_null($storedData)){
             throw new UnauthorizedException("Client not registered");
         }
