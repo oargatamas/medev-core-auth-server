@@ -29,7 +29,7 @@ class ValidateClient extends APIRepositoryAction
         $grantType = $args["grant_type"]; //Todo move to constant
 
         $storedData = $this->database->get("OAuth_Clients",
-            ["Secret"],
+            ["Secret","RedirectURI"],
             ["Id" => $client->getIdentifier()]
         );
 
