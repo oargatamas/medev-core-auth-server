@@ -49,6 +49,7 @@ abstract class Authorization extends OAuthRequest
         $clientDataAction = new GetClientData($this->service);
 
         $this->client = $clientDataAction->handleRequest(["client_id" => $request->getParam("client_id")]);
+        $this->client->setRedirectUri($request->getParam("redirect_uri",$this->client->getRedirectUri()));
         $this->csrfToken = $request->getParam("state");
 
 
@@ -65,7 +66,7 @@ abstract class Authorization extends OAuthRequest
 
         if($this->isPermissionRequired($request,$args)){
             $this->info("Permmissions required for client ".$this->client->getIdentifier());
-            return $response->withRedirect("/authorization/permission");
+            return $response->withRedirect("/authorization/permission"); // Todo move path to constant
         }
 
 
