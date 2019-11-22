@@ -38,6 +38,11 @@ class Client extends ScopedEntity implements \JsonSerializable
     private $grantTypes;
 
     /**
+     * @var string[]
+     */
+    private $loginTypes;
+
+    /**
      * @var string
      */
     private $tokenPlace;
@@ -99,6 +104,23 @@ class Client extends ScopedEntity implements \JsonSerializable
      */
     public function hasGrantType($grantType){
         return in_array($grantType,$this->grantTypes);
+    }
+
+    /**
+     * @param string[] $loginTypes
+     */
+    public function setLoginTypes($loginTypes)
+    {
+        $this->loginTypes = $loginTypes;
+    }
+
+
+    /**
+     * @param string $loginType
+     * @return bool
+     */
+    public function hasLoginType($loginType){
+        return in_array($loginType,$this->loginTypes);
     }
 
     /**
