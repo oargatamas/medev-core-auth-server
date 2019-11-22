@@ -7,7 +7,7 @@
         <strong>{{ errorMsg }}</strong>
     </div>
 
-    <div id="requestLoginCodeCard" class="card animated">
+    <div id="requestLoginCodeCard" class=" d-none card animated">
         <!-- Card content -->
         <div class="card-body">
             <h4 class="card-title">Sign in</h4><br/>
@@ -18,7 +18,7 @@
     </div>
 
 
-    <div id="loginWithAuthCodeCard" class="{{ codeLogin }} d-none card animated" style="max-width:300px;">
+    <div id="loginWithAuthCodeCard" class=" d-none card animated" style="max-width:300px;">
         <!-- Card content -->
         <div class="card-body">
             <form method="post" action="{{ loginUrl }}" class="text-center">
@@ -62,7 +62,7 @@
                 event.preventDefault();
                 toggleSpinner(true);
                 $.ajax({
-                    url: "{{ codeUrl }}",
+                    url: "{{ requestCodeUrl }}",
                     method: "post",
                     data: {
                         "usermail": $("input#usermail").val(),
@@ -90,8 +90,9 @@
             $(".to_card_1").click(function () {
                 showCard(cardStates[0]);
             });
-        });
 
+            showCard(cardStates[0]);
+        });
 
         function showCard(stateAnimation) {
             Object.entries(stateAnimation).forEach(entry => {

@@ -18,7 +18,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use Slim\Interfaces\RouterInterface;
 use Slim\Views\Twig;
 
-class SendLoginCodeInMail extends APIRepositoryAction
+class SendLoginCodeInMail extends APIRepositoryAction //Todo refactor it to TwigAction
 {
     /**
      * @var Twig

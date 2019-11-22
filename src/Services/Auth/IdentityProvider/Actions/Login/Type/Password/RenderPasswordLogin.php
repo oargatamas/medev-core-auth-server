@@ -2,20 +2,21 @@
 /**
  * Created by PhpStorm.
  * User: OargaTamas
- * Date: 2019. 06. 28.
- * Time: 10:15
+ * Date: 2019. 02. 18.
+ * Time: 15:02
  */
 
-namespace MedevAuth\Services\Auth\IdentityProvider\Actions\PasswordRecovery;
+namespace MedevAuth\Services\Auth\IdentityProvider\Actions\Login\Type\Password;
 
 
+use MedevAuth\Services\Auth\IdentityProvider\AuthCodeLoginService;
 use MedevAuth\Services\Auth\IdentityProvider\PasswordLoginService;
 use MedevAuth\Services\Auth\IdentityProvider\PasswordRecoveryService;
 use MedevSlim\Core\Action\Servlet\Twig\APITwigServlet;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-class RenderChangePassword extends APITwigServlet
+class RenderPasswordLogin extends APITwigServlet
 {
 
     /**
@@ -28,20 +29,14 @@ class RenderChangePassword extends APITwigServlet
     {
         $urlBase = $request->getServerParam("REQUEST_SCHEME")."://".$request->getServerParam("SERVER_NAME");
 
-        $params = [
+        $data = [
             "service" => $this->service->getServiceName(),
-            "changeUrl" => $urlBase.$this->router->pathFor(PasswordRecoveryService::ROUTE_PASSWORD_RECOVERY_VIEW),
-            "loginUrl" => $urlBase.$this->router->pathFor(PasswordLoginService::ROUTE_LOGIN_VIEW),
+            "authCodeLoginUrl" => $urlBase.$this->router->pathFor(AuthCodeLoginService::ROUTE_LOGIN_VIEW),
             "forgotUrl" => $urlBase.$this->router->pathFor(PasswordRecoveryService::ROUTE_FORGOT_PASSWORD_VIEW),
-            "token" => $request->getParam("token")
+            "loginUrl" => $urlBase.$this->router->pathFor(PasswordLoginService::ROUTE_LOGIN),
+            "errorMsg" => $request->getParam("error")
         ];
-        return $this->render($response,"ChangePassword.twig",$params);
+
+        return $this->render($response,"PasswordLoginScreen.twig",$data);
     }
-
-    static function getParams()
-    {
-        return ["token"];
-    }
-
-
 }

@@ -6,15 +6,16 @@
  * Time: 15:02
  */
 
-namespace MedevAuth\Services\Auth\IdentityProvider\Actions\Login;
+namespace MedevAuth\Services\Auth\IdentityProvider\Actions\Login\Type\AuthCode;
 
 
-use MedevAuth\Services\Auth\IdentityProvider\IdentityService;
+use MedevAuth\Services\Auth\IdentityProvider\AuthCodeLoginService;
+use MedevAuth\Services\Auth\IdentityProvider\PasswordLoginService;
 use MedevSlim\Core\Action\Servlet\Twig\APITwigServlet;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-class RenderLoginView extends APITwigServlet
+class RenderAuthCodeLogin extends APITwigServlet
 {
 
     /**
@@ -29,15 +30,12 @@ class RenderLoginView extends APITwigServlet
 
         $data = [
             "service" => $this->service->getServiceName(),
-            "passwordLogin" => Login::PASSWORD,
-            "codeLogin" => Login::AUTHCODE,
-            "loginUrl" => $this->router->pathFor(IdentityService::ROUTE_LOGIN),
-            "forgotUrl" => $urlBase.$this->router->pathFor(IdentityService::ROUTE_FORGOT_PASSWORD),
-            "codeUrl" => $urlBase.$this->router->pathFor(IdentityService::ROUTE_LOGIN_CODE),
-            "openedAt" => $request->getParam("opened_at",Login::PASSWORD),
+            "passwordLoginUrl" => $urlBase.$this->router->pathFor(PasswordLoginService::ROUTE_LOGIN_VIEW),
+            "loginUrl" => $urlBase.$this->router->pathFor(AuthCodeLoginService::ROUTE_LOGIN),
+            "requestCodeUrl" => $urlBase.$this->router->pathFor(AuthCodeLoginService::ROUTE_CODE_REQUEST),
             "errorMsg" => $request->getParam("error")
         ];
 
-        return $this->render($response,"LoginScreen.twig",$data);
+        return $this->render($response,"AuthCodeLoginScreen.twig",$data);
     }
 }
