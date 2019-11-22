@@ -114,6 +114,14 @@ class Client extends ScopedEntity implements \JsonSerializable
         $this->loginTypes = $loginTypes;
     }
 
+    /**
+     * @return string[]
+     */
+    public function getLoginTypes(): array
+    {
+        return $this->loginTypes;
+    }
+
 
     /**
      * @param string $loginType

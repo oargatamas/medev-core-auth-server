@@ -56,7 +56,8 @@ abstract class Authorization extends OAuthRequest
         $this->info("Checking user login state.");
         if($this->isLoginRequired($request,$args)){
             $this->info("End-User not logged in. Redirecting to identity provider.");
-            $_SESSION["AuthParams"] = $request->getParams();
+            $_SESSION["AuthParams"] = $request->getParams(); //Todo replace session data with Id tokens!
+            $_SESSION["AuthParams"]["client_auth_types"] = $this->client->getLoginTypes();
             return $response->withRedirect($this->router->pathFor(AuthCodeLoginService::ROUTE_LOGIN_VIEW,[],[]));
         }
 
