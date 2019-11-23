@@ -54,6 +54,8 @@
 
 
         $(document).ready(function () {
+            showCard(cardStates[{{ openedAt }}]);
+
             if($.urlParams("error")){
                 $(".message-box").removeClass("d-none").addClass("fadeInRight");
             }
@@ -90,8 +92,6 @@
             $(".to_card_1").click(function () {
                 showCard(cardStates[0]);
             });
-
-            showCard(cardStates[0]);
         });
 
         function showCard(stateAnimation) {

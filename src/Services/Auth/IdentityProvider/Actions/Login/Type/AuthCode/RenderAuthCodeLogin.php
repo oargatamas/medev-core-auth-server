@@ -33,6 +33,7 @@ class RenderAuthCodeLogin extends APITwigServlet
             "passwordLoginUrl" => $urlBase.$this->router->pathFor(PasswordLoginService::ROUTE_LOGIN_VIEW),
             "loginUrl" => $urlBase.$this->router->pathFor(AuthCodeLoginService::ROUTE_LOGIN),
             "requestCodeUrl" => $urlBase.$this->router->pathFor(AuthCodeLoginService::ROUTE_CODE_REQUEST),
+            "openedAt" => $request->getParam("opened_at", 0),
             "errorMsg" => $request->getParam("error")
         ];
 

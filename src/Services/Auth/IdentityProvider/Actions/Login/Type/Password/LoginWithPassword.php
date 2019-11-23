@@ -39,12 +39,13 @@ class LoginWithPassword extends APIServlet
             $validateAction = new ValidateUser($this->service);
             $user = $validateAction->handleRequest($userInfo);
 
-            $_SESSION["user"] = $user;
+            $_SESSION["user"] = $user; //Todo replace it with Id Token
 
         }catch (UnauthorizedException $e){
             $this->error($e->__toString());
             $errorParams = [
-                "error" => "Invalid username or password." //Todo integrate it with the localisation framework
+                "error" => "Invalid username or password.", //Todo integrate it with the localisation framework
+                "opened_at" => ""
             ];
             $loginUrl = $this->router->pathFor(PasswordLoginService::ROUTE_LOGIN_VIEW,[],$errorParams);
             return $response->withRedirect($loginUrl);
