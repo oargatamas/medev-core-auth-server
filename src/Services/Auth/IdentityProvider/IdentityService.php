@@ -27,6 +27,7 @@ class IdentityService extends TwigAPIService
     const ERROR_NO_REDIRECT_URI = 1;
     const ERROR_INVALID_STATE = 2;
 
+
     public function __construct(MedevApp $app)
     {
         parent::__construct($app);

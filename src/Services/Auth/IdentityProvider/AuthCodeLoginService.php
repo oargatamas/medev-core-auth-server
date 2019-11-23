@@ -9,6 +9,8 @@
 namespace MedevAuth\Services\Auth\IdentityProvider;
 
 
+use MedevAuth\Services\Auth\IdentityProvider\Actions\Login\LoginTypes;
+use MedevAuth\Services\Auth\IdentityProvider\Actions\Login\LoginTypeValidator;
 use MedevAuth\Services\Auth\IdentityProvider\Actions\Login\Type\AuthCode\LoginWithCode;
 use MedevAuth\Services\Auth\IdentityProvider\Actions\Login\Type\AuthCode\RenderAuthCodeLogin;
 use MedevAuth\Services\Auth\IdentityProvider\Actions\Login\Type\AuthCode\RequestLoginCode;
@@ -34,6 +36,7 @@ class AuthCodeLoginService extends TwigAPIService
             ->setName(self::ROUTE_LOGIN_VIEW);
 
         $app->post("[/]", new LoginWithCode($this))
+            ->add(new LoginTypeValidator($this, LoginTypes::AUTHCODE))
             ->setArgument(APIService::SERVICE_ID,$this->getServiceName())
             ->setName(self::ROUTE_LOGIN);
 

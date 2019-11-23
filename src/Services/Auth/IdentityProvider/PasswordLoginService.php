@@ -9,6 +9,8 @@
 namespace MedevAuth\Services\Auth\IdentityProvider;
 
 
+use MedevAuth\Services\Auth\IdentityProvider\Actions\Login\LoginTypes;
+use MedevAuth\Services\Auth\IdentityProvider\Actions\Login\LoginTypeValidator;
 use MedevAuth\Services\Auth\IdentityProvider\Actions\Login\Type\Password\LoginWithPassword;
 use MedevAuth\Services\Auth\IdentityProvider\Actions\Login\Type\Password\RenderPasswordLogin;
 use MedevSlim\Core\Service\APIService;
@@ -31,6 +33,7 @@ class PasswordLoginService extends TwigAPIService
             ->setName(self::ROUTE_LOGIN_VIEW);
 
         $app->post("[/]", new LoginWithPassword($this))
+            ->add(new LoginTypeValidator($this,LoginTypes::PASSWORD))
             ->setArgument(APIService::SERVICE_ID,$this->getServiceName())
             ->setName(self::ROUTE_LOGIN);
     }
