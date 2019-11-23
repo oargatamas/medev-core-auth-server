@@ -28,9 +28,8 @@ class RenderPasswordLogin extends APITwigServlet
      */
     public function handleRequest(Request $request, Response $response, $args)
     {
-        $clientLoginTypes = $request->getAttribute(LoginTypeValidator::CLIENT_LOGIN_TYPES);
-
         $urlBase = $request->getServerParam("REQUEST_SCHEME")."://".$request->getServerParam("SERVER_NAME");
+        $clientLoginTypes = $_SESSION["AuthParams"]["client_auth_types"]; //Todo replace it with ID token
 
         $data = [
             "service" => $this->service->getServiceName(),

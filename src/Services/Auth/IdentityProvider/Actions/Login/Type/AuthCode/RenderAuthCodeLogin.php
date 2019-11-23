@@ -10,7 +10,6 @@ namespace MedevAuth\Services\Auth\IdentityProvider\Actions\Login\Type\AuthCode;
 
 
 use MedevAuth\Services\Auth\IdentityProvider\Actions\Login\LoginTypes;
-use MedevAuth\Services\Auth\IdentityProvider\Actions\Login\LoginTypeValidator;
 use MedevAuth\Services\Auth\IdentityProvider\AuthCodeLoginService;
 use MedevAuth\Services\Auth\IdentityProvider\PasswordLoginService;
 use MedevSlim\Core\Action\Servlet\Twig\APITwigServlet;
@@ -29,7 +28,7 @@ class RenderAuthCodeLogin extends APITwigServlet
     public function handleRequest(Request $request, Response $response, $args)
     {
         $urlBase = $request->getServerParam("REQUEST_SCHEME")."://".$request->getServerParam("SERVER_NAME");
-        $clientLoginTypes = $request->getAttribute(LoginTypeValidator::CLIENT_LOGIN_TYPES);
+        $clientLoginTypes = $_SESSION["AuthParams"]["client_auth_types"]; //Todo replace it with ID token
 
         $data = [
             "service" => $this->service->getServiceName(),
