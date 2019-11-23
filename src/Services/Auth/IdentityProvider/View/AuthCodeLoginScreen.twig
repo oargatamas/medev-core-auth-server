@@ -13,7 +13,9 @@
             <h4 class="card-title">Sign in</h4><br/>
             <input id="usermail" type="text" class="form-control mb-4" placeholder="E-mail or Username"/>
             <button id="requestLoginCode" type="button" class="btn btn-indigo my-4 btn-block">Request code</button>
-            <a href="{{ passwordLoginUrl }}">Login with password</a>
+            {% if passwordLoginEnabled %}
+                <a href="{{ passwordLoginUrl }}">Login with password</a>
+            {% endif %}
         </div>
     </div>
 
@@ -30,7 +32,9 @@
                 <a href="javascript:void(0);" class="to_card_1">Request another code</a>
                 <br/>
                 <br/>
-                <a href="{{ passwordLoginUrl }}">Login with password</a>
+                {% if passwordLoginEnabled %}
+                    <a href="{{ passwordLoginUrl }}">Login with password</a>
+                {% endif %}
             </form>
         </div>
     </div>

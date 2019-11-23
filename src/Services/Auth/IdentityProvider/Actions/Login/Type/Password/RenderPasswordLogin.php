@@ -9,6 +9,7 @@
 namespace MedevAuth\Services\Auth\IdentityProvider\Actions\Login\Type\Password;
 
 
+use MedevAuth\Services\Auth\IdentityProvider\Actions\Login\LoginTypes;
 use MedevAuth\Services\Auth\IdentityProvider\AuthCodeLoginService;
 use MedevAuth\Services\Auth\IdentityProvider\PasswordLoginService;
 use MedevAuth\Services\Auth\IdentityProvider\PasswordRecoveryService;
@@ -27,6 +28,8 @@ class RenderPasswordLogin extends APITwigServlet
      */
     public function handleRequest(Request $request, Response $response, $args)
     {
+        $clientLoginTypes = $request->getAttribute(LoginTypeValidator::CLIENT_LOGIN_TYPES);
+
         $urlBase = $request->getServerParam("REQUEST_SCHEME")."://".$request->getServerParam("SERVER_NAME");
 
         $data = [
@@ -34,6 +37,7 @@ class RenderPasswordLogin extends APITwigServlet
             "authCodeLoginUrl" => $urlBase.$this->router->pathFor(AuthCodeLoginService::ROUTE_LOGIN_VIEW),
             "forgotUrl" => $urlBase.$this->router->pathFor(PasswordRecoveryService::ROUTE_FORGOT_PASSWORD_VIEW),
             "loginUrl" => $urlBase.$this->router->pathFor(PasswordLoginService::ROUTE_LOGIN),
+            "codeLoginEnabled" => in_array(LoginTypes::AUTHCODE, $clientLoginTypes),
             "errorMsg" => $request->getParam("error")
         ];
 

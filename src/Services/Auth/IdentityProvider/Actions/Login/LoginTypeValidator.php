@@ -21,6 +21,8 @@ use Slim\Interfaces\RouterInterface;
 
 class LoginTypeValidator implements ComponentLogger
 {
+    const CLIENT_LOGIN_TYPES = "clientLoginTypes";
+
     /**
      * @var APIService
      */
@@ -81,7 +83,7 @@ class LoginTypeValidator implements ComponentLogger
             return $response->withRedirect($loginUrl);
         }
 
-        return $next($request, $response);
+        return $next($request->withAttribute(self::CLIENT_LOGIN_TYPES,$clientLoginTypes), $response);
     }
 
     /**
