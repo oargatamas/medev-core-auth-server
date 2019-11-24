@@ -32,8 +32,8 @@ class GetClientData extends APIRepositoryAction
                 "[>]OAuth_ClientScopes(cs)" => ["c.Id" => "ClientId"],
                 "[>]OAuth_ClientGrantTypes(cg)" => [ "c.Id" => "ClientId" ],
                 "[>]OAuth_GrantTypes(g)" => [ "cg.GrantId" => "Id" ],
-                "[>]Oauth_Client_LoginTypes(cl)" => [ "c.Id" => "ClientId" ],
-                "[>]Oauth_LoginTypes(l)" => [ "cl.LoginId" => "Id" ],
+                "[>]OAuth_Client_LoginTypes(cl)" => [ "c.Id" => "ClientId" ],
+                "[>]OAuth_LoginTypes(l)" => [ "cl.LoginId" => "Id" ],
             ],
             array_merge(
                 Client::getColumnNames(),
@@ -49,6 +49,8 @@ class GetClientData extends APIRepositoryAction
 
 
         if(empty($storedData) || is_null($storedData)){
+            $result = $this->database->error();
+            $this->error(json_encode($result));
             throw new UnauthorizedException("Client ".$clientId." not existing in the database.");
         }
 
