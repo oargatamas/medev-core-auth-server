@@ -35,6 +35,7 @@ class RenderLoginView extends APITwigServlet
             "forgotUrl" => $urlBase.$this->router->pathFor(IdentityService::ROUTE_FORGOT_PASSWORD),
             "codeUrl" => $urlBase.$this->router->pathFor(IdentityService::ROUTE_LOGIN_CODE),
             "openedAt" => $request->getParam("opened_at",Login::PASSWORD),
+            "notification" => $request->getParam("message"),
             "errorMsg" => $request->getParam("error")
         ];
 
