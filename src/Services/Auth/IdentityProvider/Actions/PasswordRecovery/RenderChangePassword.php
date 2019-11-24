@@ -9,7 +9,8 @@
 namespace MedevAuth\Services\Auth\IdentityProvider\Actions\PasswordRecovery;
 
 
-use MedevAuth\Services\Auth\IdentityProvider\IdentityService;
+use MedevAuth\Services\Auth\IdentityProvider\PasswordLoginService;
+use MedevAuth\Services\Auth\IdentityProvider\PasswordRecoveryService;
 use MedevSlim\Core\Action\Servlet\Twig\APITwigServlet;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -29,9 +30,9 @@ class RenderChangePassword extends APITwigServlet
 
         $params = [
             "service" => $this->service->getServiceName(),
-            "changeUrl" => $urlBase.$this->router->pathFor(IdentityService::ROUTE_PASSWORD_RECOVERY),
-            "loginUrl" => $urlBase.$this->router->pathFor(IdentityService::ROUTE_LOGIN),
-            "forgotUrl" => $urlBase.$this->router->pathFor(IdentityService::ROUTE_FORGOT_PASSWORD),
+            "changeUrl" => $urlBase.$this->router->pathFor(PasswordRecoveryService::ROUTE_PASSWORD_RECOVERY_VIEW),
+            "loginUrl" => $urlBase.$this->router->pathFor(PasswordLoginService::ROUTE_LOGIN_VIEW),
+            "forgotUrl" => $urlBase.$this->router->pathFor(PasswordRecoveryService::ROUTE_FORGOT_PASSWORD_VIEW),
             "token" => $request->getParam("token")
         ];
         return $this->render($response,"ChangePassword.twig",$params);

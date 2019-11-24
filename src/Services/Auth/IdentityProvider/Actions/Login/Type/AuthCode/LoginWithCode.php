@@ -9,8 +9,7 @@
 namespace MedevAuth\Services\Auth\IdentityProvider\Actions\Login\Type\AuthCode;
 
 
-use MedevAuth\Services\Auth\IdentityProvider\Actions\Login\Login;
-use MedevAuth\Services\Auth\IdentityProvider\IdentityService;
+use MedevAuth\Services\Auth\IdentityProvider\AuthCodeLoginService;
 use MedevAuth\Services\Auth\OAuth\Actions\AuthCode\GetAuthCodeData;
 use MedevAuth\Services\Auth\OAuth\Actions\AuthCode\RevokeAuthCode;
 use MedevAuth\Services\Auth\OAuth\Actions\AuthCode\ValidateAuthCode;
@@ -46,10 +45,9 @@ class LoginWithCode extends APIServlet
         }catch (UnauthorizedException $e){
             $this->error($e->__toString());
             $errorParams = [
-                "opened_at" => Login::AUTHCODE,
                 "error" => "Invalid or expired code." //Todo integrate it with the localisation framework
             ];
-            $loginUrl = $this->router->pathFor(IdentityService::ROUTE_LOGIN,[],$errorParams);
+            $loginUrl = $this->router->pathFor(AuthCodeLoginService::ROUTE_LOGIN_VIEW,[],$errorParams);
             return $response->withRedirect($loginUrl);
         }
 

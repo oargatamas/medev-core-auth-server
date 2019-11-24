@@ -32,11 +32,14 @@ class GetClientData extends APIRepositoryAction
                 "[>]OAuth_ClientScopes(cs)" => ["c.Id" => "ClientId"],
                 "[>]OAuth_ClientGrantTypes(cg)" => [ "c.Id" => "ClientId" ],
                 "[>]OAuth_GrantTypes(g)" => [ "cg.GrantId" => "Id" ],
+                "[>]Oauth_Client_LoginTypes(cl)" => [ "c.Id" => "ClientId" ],
+                "[>]Oauth_LoginTypes(l)" => [ "cl.LoginId" => "Id" ],
             ],
             array_merge(
                 Client::getColumnNames(),
                 ["ClientScopes" => Medoo::raw("GROUP_CONCAT(Distinct(<cs.ScopeId>))")],
-                ["ClientGrantTypes" => Medoo::raw("GROUP_CONCAT(<g.GrantName>)")]
+                ["ClientGrantTypes" => Medoo::raw("GROUP_CONCAT(Distinct(<g.GrantName>))")],
+                ["ClientLoginTypes" => Medoo::raw("GROUP_CONCAT(Distinct(<l.LoginName>))")]
             ),
             [
                 "c.Id" => $clientId,

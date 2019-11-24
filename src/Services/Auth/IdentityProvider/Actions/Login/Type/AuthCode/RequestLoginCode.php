@@ -51,7 +51,7 @@ class RequestLoginCode extends APIServlet
 
         return $response
             ->withStatus(201)
-            ->withJson("Verification code sent to the mail"); // Todo move to localization string
+            ->withJson("Verification code sent via e-mail"); // Todo move to localization string
     }
 
 }

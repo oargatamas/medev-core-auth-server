@@ -119,6 +119,21 @@ CREATE TABLE IF NOT EXISTS OAuth_ClientGrantTypes(
   PRIMARY KEY (ClientId, GrantId)
 ) ENGINE=INNODB;
 
+CREATE TABLE IF NOT EXISTS OAuth_LoginTypes(
+  Id INT NOT NULL,
+  LoginName VARCHAR(20) NOT NULL,
+  PRIMARY  KEY (Id),
+  UNIQUE (LoginName)
+) ENGINE=INNODB;
+
+CREATE TABLE IF NOT EXISTS OAuth_Client_LoginTypes(
+  ClientId VARCHAR(100) NOT NULL,
+  LoginId INT NOT NULL,
+  PRIMARY KEY (ClientId, LoginId)
+) ENGINE=INNODB;
+
+INSERT INTO OAuth_LoginTypes VALUES (1,'password');
+INSERT INTO OAuth_LoginTypes VALUES (2,'authcode');
 
 INSERT INTO OAuth_GrantTypes VALUES (1,'authorization_code');
 INSERT INTO OAuth_GrantTypes VALUES (2,'password');
