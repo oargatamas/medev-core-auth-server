@@ -62,7 +62,8 @@ class SendForgotPasswordMail extends APIRepositoryAction
 
         $mail->isHTML(true);
         $mail->CharSet = "UTF-8";
-        $mail->Subject = "MedevAuth - Account Recovery"; // Todo integrate with localization string
+
+        $mail->Subject = "MedevServices - Password recovery"; // Todo integrate with localization string
 
         $params = ["token" => $authCode->finalizeAuthCode()];
         $changePwUrl = "https://".$authConfig["host"].$this->router->pathFor(IdentityService::ROUTE_PASSWORD_RECOVERY,[],$params);

@@ -1,0 +1,35 @@
+<html>
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+</head>
+<body style="margin:0;padding:0;font-family: 'Roboto', sans-serif;">
+
+<div id="header" style="display:table;width:100%;height:auto;margin:0;padding:10px;border-bottom:1px solid black">
+    <img style="display:inline;width:50px;height:50px;" src="https://api.medev.hu/img/medev_logo.svg"/>
+    <h1 style="display:inline;vertical-align:top;color:black;">MEDEV</h1>
+</div>
+
+<div id="content" style="padding:10px;width:100%;margin:0;color:black">
+
+    <h2>Hello {{ username }},</h2>
+
+    <p>To complete your registration please click on the following link:</p>
+
+    <a style="text-decoration:none;" href={{ verificationUrl }} >
+        <div style="padding:10px;width:200px;background-color:#beef20;color:black;text-align:center;cursor:pointer;">
+            <b>VERIFY ACCOUNT</b>
+        </div>
+    </a>
+
+    <p>
+        Regards,
+    </p>
+    <p>
+        MEDEV Services <br/>
+        office@medev.hu <br/>
+        <a href="https://medev.hu">medev.hu</a>
+    </p>
+</div>
+
+</body>
+</html>
