@@ -1,0 +1,118 @@
+{% extends ["@",service,"/Base.twig"]|join %}
+
+
+
+{% block content %}
+    <div class="message-box d-none animated alert alert-danger " role="alert">
+        <strong>{{ errorMsg }}</strong>
+    </div>
+
+    <div id="requestLoginCodeCard" class=" d-none card animated">
+        <!-- Card content -->
+        <div class="card-body">
+            <h4 class="card-title">Sign in</h4><br/>
+            <input id="usermail" type="text" class="form-control mb-4" placeholder="E-mail or Username"/>
+            <button id="requestLoginCode" type="button" class="btn btn-indigo my-4 btn-block">Request code</button>
+            {% if passwordLoginEnabled %}
+                <a href="{{ passwordLoginUrl }}">Login with password</a>
+            {% endif %}
+        </div>
+    </div>
+
+
+    <div id="loginWithAuthCodeCard" class=" d-none card animated" style="max-width:300px;">
+        <!-- Card content -->
+        <div class="card-body">
+            <form method="post" action="{{ loginUrl }}" class="text-center">
+                <h4 class="card-title">Sign in</h4><br/>
+                <p class="mb-4">Copy and paste the verification code from the e-mail you received earlier.</p>
+                <input id="code" name="code" type="text" class="form-control mb-4" placeholder="Verification code"/>
+                <input id="type" name="type" type="hidden"  value="{{ codeLogin }}"/>
+                <button id="loginWithCode" name="submitCode" type="submit" class="btn btn-indigo my-4 btn-block">Verify</button>
+                <a href="javascript:void(0);" class="to_card_1">Request another code</a>
+                <br/>
+                <br/>
+                {% if passwordLoginEnabled %}
+                    <a href="{{ passwordLoginUrl }}">Login with password</a>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block scripts %}
+    {{ parent() }}
+
+    <script>
+        const cardStates = [
+            {
+                requestLoginCodeCard: true,
+                loginWithAuthCodeCard: false,
+            },
+            {
+                requestLoginCodeCard: false,
+                loginWithAuthCodeCard: true,
+            },
+        ];
+
+
+        $(document).ready(function () {
+            showCard(cardStates[{{ openedAt }}]);
+
+            if($.urlParams("error")){
+                $(".message-box").removeClass("d-none").addClass("fadeInRight");
+            }
+
+            $("button#requestLoginCode").click((event) => {
+                event.preventDefault();
+                toggleSpinner(true);
+                $.ajax({
+                    url: "{{ requestCodeUrl }}",
+                    method: "post",
+                    data: {
+                        "usermail": $("input#usermail").val(),
+                    },
+                    success: (data, status, jqxhr) => {
+                        console.log(data);
+                        toggleSpinner(false);
+                        showCard(cardStates[1]);
+                        $(".message-box")
+                            .removeClass("d-none alert-danger")
+                            .addClass("alert-info")
+                            .html(data);
+                    },
+                    error: (data, status, jqxhr) => {
+                        console.log(data);
+                        toggleSpinner(false);
+                        $(".message-box")
+                            .removeClass("d-none alert-info")
+                            .addClass("alert-danger")
+                            .html(data.responseJSON);
+                    },
+                });
+            });
+
+            $(".to_card_1").click(function () {
+                showCard(cardStates[0]);
+            });
+        });
+
+        function showCard(stateAnimation) {
+            Object.entries(stateAnimation).forEach(entry => {
+                let key = entry[0];
+                let value = entry[1];
+
+                let card = $("div#" + key);
+                $(card).removeClass("fadeOutLeft fadeInRight");
+                if (value) {
+                    $(card).removeClass("d-none").addClass("fadeInRight");
+                } else {
+                    $(card).addClass("d-none fadeOutLeft");
+                }
+            });
+            $(".message-box").addClass("d-none");
+        }
+    </script>
+
+{% endblock %}

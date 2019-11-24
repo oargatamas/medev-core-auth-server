@@ -30,6 +30,7 @@ class Client implements MedooPersistable
         $client->setTokenPlace($storedData["ClientTokenPlace"]);
         $client->setScopes(explode(",", $storedData["ClientScopes"]));
         $client->setGrantTypes(explode(",", $storedData["ClientGrantTypes"]));
+        $client->setLoginTypes(explode(",", $storedData["ClientLoginTypes"]));
 
         return $client;
     }
