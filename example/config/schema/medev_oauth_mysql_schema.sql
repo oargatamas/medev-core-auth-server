@@ -126,4 +126,4 @@ INSERT INTO OAuth_GrantTypes VALUES (3,'client_credentials');
 INSERT INTO OAuth_GrantTypes VALUES (4,'refresh_token');
 
 INSERT INTO OAuth_Users VALUES ('1','Tamás','Oarga','Tangomajom','toarga@medev.hu','$2y$12$PtR0KlIvg22oI.y.ukJ0A.s5JsalVCNkKE.wGz5R/9nz5cs3mxBJm','1','0','2019-02-26','2019-02-26');
-INSERT INTO OAuth_Clients VALUES ('hu.medev.test.webclient','TestWebApplication','$2y$12$1TUfojssKlhWYaRKLG0wq.8mxt/ErN.9HUZza0MniFRYCK9tsY6He','http://api.medev.local','1','2019-02-26','2019-02-26');
+INSERT INTO OAuth_Clients VALUES ('hu.medev.office.webclient', 'OfficeMedevApplication', '$2y$12$1TUfojssKlhWYaRKLG0wq.8mxt/ErN.9HUZza0MniFRYCK9tsY6He', 'https://office.medev.local', '1', 'req-body', '2021-05-21 15:46:54.000000', '2021-05-21 15:46:54.000000')

@@ -35,7 +35,7 @@ class UserService extends TwigAPIService
         $service = $this;
 
         /** @var MedevApp $app */
-        $app->group("/",function () use ($app,$service){
+        $app->group("",function () use ($app,$service){
             $app->get("/info", new UserInfo($service))
                 ->setArgument(APIService::SERVICE_ID,$service->getServiceName())
                 ->setName(self::ROUTE_USER_INFO);
