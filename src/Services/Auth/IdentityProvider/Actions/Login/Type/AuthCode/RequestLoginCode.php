@@ -34,9 +34,12 @@ class RequestLoginCode extends APIServlet
         $getUser = new GetUserData($this->service);
         $getClient = new GetClientData($this->service);
 
+        $client = $getClient->handleRequest(["client_id" => "hu.medev.auth"]); // Todo move to constant
+        $client->setRedirectUri($_SESSION["AuthParams"]["redirect_uri"] ?? $client->getRedirectUri());
+
         $codeParams = [
             AuthCode::USER => $getUser->handleRequest(["user_id" => $request->getParam("usermail")]),  // Todo move to constant
-            AuthCode::CLIENT => $getClient->handleRequest(["client_id" => "hu.medev.auth"]),                // Todo move to constant
+            AuthCode::CLIENT => $client,
             AuthCode::EXPIRATION => 600
         ];
         $authCode  = (new GenerateAuthCode($this->service))->handleRequest($codeParams);
@@ -48,7 +51,7 @@ class RequestLoginCode extends APIServlet
 
         return $response
             ->withStatus(201)
-            ->withJson("Verification code sent to the mail"); // Todo move to localization string
+            ->withJson("Verification code sent via e-mail"); // Todo move to localization string
     }
 
 }

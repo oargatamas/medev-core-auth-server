@@ -9,7 +9,7 @@
 namespace MedevAuth\Services\Auth\OAuth\Actions\GrantType\Authorization;
 
 
-use MedevAuth\Services\Auth\IdentityProvider\IdentityService;
+use MedevAuth\Services\Auth\IdentityProvider\AuthCodeLoginService;
 use MedevAuth\Services\Auth\OAuth\Actions\Client\GetClientData;
 use MedevAuth\Services\Auth\OAuth\Actions\GrantType\OAuthRequest;
 use MedevSlim\Core\Application\MedevApp;
@@ -49,14 +49,16 @@ abstract class Authorization extends OAuthRequest
         $clientDataAction = new GetClientData($this->service);
 
         $this->client = $clientDataAction->handleRequest(["client_id" => $request->getParam("client_id")]);
+        $this->client->setRedirectUri($request->getParam("redirect_uri",$this->client->getRedirectUri()));
         $this->csrfToken = $request->getParam("state");
 
 
         $this->info("Checking user login state.");
         if($this->isLoginRequired($request,$args)){
             $this->info("End-User not logged in. Redirecting to identity provider.");
-            $_SESSION["AuthParams"] = $request->getParams();
-            return $response->withRedirect($this->router->pathFor(IdentityService::ROUTE_LOGIN,[],[]));
+            $_SESSION["AuthParams"] = $request->getParams(); //Todo replace session data with Id tokens!
+            $_SESSION["AuthParams"]["client_auth_types"] = $this->client->getLoginTypes();
+            return $response->withRedirect($this->router->pathFor(AuthCodeLoginService::ROUTE_LOGIN_VIEW,[],[]));
         }
 
         $this->info("End-User logged in as ".$this->user->getUsername());
@@ -65,7 +67,7 @@ abstract class Authorization extends OAuthRequest
 
         if($this->isPermissionRequired($request,$args)){
             $this->info("Permmissions required for client ".$this->client->getIdentifier());
-            return $response->withRedirect("/authorization/permission");
+            return $response->withRedirect("/authorization/permission"); // Todo move path to constant
         }
 
 

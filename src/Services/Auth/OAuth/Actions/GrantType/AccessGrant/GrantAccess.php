@@ -14,6 +14,7 @@ use MedevAuth\Services\Auth\OAuth\Actions\Client\ValidateClient;
 use MedevAuth\Services\Auth\OAuth\Actions\GrantType\OAuthRequest;
 use MedevAuth\Services\Auth\OAuth\Entity\Client;
 use MedevAuth\Services\Auth\OAuth\Entity\Token\OAuthToken;
+use MedevAuth\Services\Auth\OAuth\OAuthService;
 use MedevSlim\Core\Service\Exceptions\InternalServerException;
 use MedevSlim\Core\Service\Exceptions\UnauthorizedException;
 use Slim\Http\Request;
@@ -51,6 +52,7 @@ abstract class GrantAccess extends OAuthRequest
         if ($refreshToken != null) {
             $data[self::REFRESH_TOKEN] = $refreshToken->finalizeToken();
         }
+        $data[OAuthService::CSRF_TOKEN] = ""; //Todo implement logic behind
 
         $this->invalidateAuthData();
 

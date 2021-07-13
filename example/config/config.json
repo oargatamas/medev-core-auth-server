@@ -9,7 +9,7 @@
     "collation": "utf8bin"
   },
   "cors" : {
-    "allowed_origins" : ["https://auth.medev.local","https://api.office.medev.local"],
+    "allowed_origins" : ["https://auth.medev.local","https://office.medev.local:3000","null"],
     "allowed_headers" : ["Content-Type","Accept","Origin"]
   },
   "authorization": {

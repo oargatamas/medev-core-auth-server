@@ -9,7 +9,7 @@
 namespace MedevAuth\Services\Auth\IdentityProvider\Actions\PasswordRecovery;
 
 
-use MedevAuth\Services\Auth\IdentityProvider\IdentityService;
+use MedevAuth\Services\Auth\IdentityProvider\PasswordRecoveryService;
 use MedevAuth\Services\Auth\OAuth\Entity\AuthCode;
 use MedevSlim\Core\Action\Repository\APIRepositoryAction;
 use MedevSlim\Core\Application\MedevApp;
@@ -62,10 +62,11 @@ class SendForgotPasswordMail extends APIRepositoryAction
 
         $mail->isHTML(true);
         $mail->CharSet = "UTF-8";
+
         $mail->Subject = "MedevServices - Password recovery"; // Todo integrate with localization string
 
         $params = ["token" => $authCode->finalizeAuthCode()];
-        $changePwUrl = "https://".$authConfig["host"].$this->router->pathFor(IdentityService::ROUTE_PASSWORD_RECOVERY,[],$params);
+        $changePwUrl = "https://".$authConfig["host"].$this->router->pathFor(PasswordRecoveryService::ROUTE_PASSWORD_RECOVERY,[],$params);
 
         $mailData = [
             "username" => $user->getUsername(),
