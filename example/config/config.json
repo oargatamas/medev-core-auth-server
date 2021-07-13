@@ -5,8 +5,8 @@
     "server": "localhost",
     "username": "oauth_server",
     "password": "ygYu$871",
-    "charset": "utf8mb4",
-    "collation": "utf8mb4_general_ci"
+    "charset": "utf8bin",
+    "collation": "utf8bin"
   },
   "cors" : {
     "allowed_origins" : ["https://auth.medev.local","https://office.medev.local:3000","null"],
